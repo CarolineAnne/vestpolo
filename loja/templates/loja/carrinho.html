@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrinho</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+        }
+
+        .topo {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+
+        .item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-qtd {
+            background: #ddd;
+            color: black;
+        }
+
+        .total {
+            font-size: 20px;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .finalizar {
+            background: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- TOPO COM CONTADOR -->
+<div class="topo">
+
+    <!-- VOLTAR -->
+    <a href="{% url 'home' %}">
+        <button>⬅ Voltar</button>
+    </a>
+
+    <!-- CARRINHO COM CONTADOR -->
+    <div style="position:relative; display:inline-block;">
+        
+        <a href="{% url 'carrinho' %}">
+            <button>🛒</button>
+        </a>
+
+        {% if total_itens > 0 %}
+        <span style="
+            position:absolute;
+            top:-8px;
+            right:-8px;
+            background:red;
+            color:white;
+            border-radius:50%;
+            padding:3px 7px;
+            font-size:12px;
+        ">
+            {{ total_itens }}
+        </span>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    {% for item in itens %}
+    <div class="item">
+        
+        <div>
+            <h3>{{ item.produto.nome }}</h3>
+
+            <p>
+                Quantidade: 
+
+                <a href="{% url 'menos' item.produto.id %}">
+                    <button class="btn-qtd">-</button>
+                </a>
+
+                <strong>{{ item.quantidade }}</strong>
+
+                <a href="{% url 'mais' item.produto.id %}">
+                    <button class="btn-qtd">+</button>
+                </a>
+            </p>
+
+            <p>Subtotal: R$ {{ item.subtotal }}</p>
+        </div>
+
+        <a href="{% url 'remover_carrinho' item.produto.id %}">
+            <button>❌ Remover</button>
+        </a>
+
+    </div>
+
+    {% empty %}
+        <p style="text-align:center;">Seu carrinho está vazio 😢</p>
+    {% endfor %}
+
+    <div class="total">
+        <strong>Total: R$ {{ total }}</strong>
+    </div>
+
+    {% if itens %}
+    <div style="text-align:right;">
+        <button class="finalizar">💳 Finalizar Compra</button>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

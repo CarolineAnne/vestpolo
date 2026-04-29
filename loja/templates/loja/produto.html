@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ produto.nome }}</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            gap: 20px;
+        }
+
+        img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .info {
+            flex: 1;
+        }
+
+        .price {
+            color: green;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        button {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        .voltar {
+            display: block;
+            margin: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛍️ VestPolo</h1>
+</header>
+
+<div class="voltar">
+    <a href="/"><button>⬅ Voltar</button></a>
+</div>
+
+<div class="container">
+
+    {% if produto.imagem %}
+        <img src="{{ produto.imagem.url }}">
+    {% else %}
+        <img src="https://via.placeholder.com/300x300?text=Sem+Imagem">
+    {% endif %}
+
+    <div class="info">
+        <h2>{{ produto.nome }}</h2>
+
+        <p class="price">R$ {{ produto.preco }}</p>
+
+        <p>{{ produto.descricao }}</p>
+
+        <p><strong>Tamanho:</strong> {{ produto.tamanho }}</p>
+
+        <button>🛒 Comprar</button>
+    </div>
+
+</div>
+
+</body>
+</html>

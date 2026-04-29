@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .topo {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px;
+        }
+
+        .topo button {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filtros button {
+            background: #eee;
+            color: black;
+        }
+
+        .filtros button:hover {
+            background: #111;
+            color: white;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .price {
+            color: green;
+            font-weight: bold;
+        }
+
+        .acoes {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .favorito {
+            font-size: 22px;
+            text-decoration: none;
+        }
+
+        .mensagem {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+<header style="background:#111; padding:15px 20px;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+
+        <!-- LOGO -->
+        <a href="{% url 'home' %}" style="text-decoration:none; color:white;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <img src="/media/imagens/logo.png" style="height:2em; width:auto;">
+                <span style="font-size:22px; font-weight:bold;">VestPolo</span>
+            </div>
+        </a>
+
+        <!-- ICONES -->
+        <div style="display:flex; gap:20px;">
+
+            <!-- FAVORITOS -->
+            <a href="#" style="position:relative; text-decoration:none;">
+                <span style="font-size:22px;">❤️</span>
+
+                {% if favoritos|length > 0 %}
+                <span style="
+                    position:absolute;
+                    top:-8px;
+                    right:-10px;
+                    background:red;
+                    color:white;
+                    font-size:12px;
+                    padding:3px 7px;
+                    border-radius:50%;
+                ">
+                    {{ favoritos|length }}
+                </span>
+                {% endif %}
+            </a>
+
+            <!-- CARRINHO -->
+            <a href="{% url 'carrinho' %}" style="position:relative; text-decoration:none;">
+                <span style="font-size:22px;">🛒</span>
+
+                {% if total_itens > 0 %}
+                <span style="
+                    position:absolute;
+                    top:-8px;
+                    right:-10px;
+                    background:red;
+                    color:white;
+                    font-size:12px;
+                    padding:3px 7px;
+                    border-radius:50%;
+                ">
+                    {{ total_itens }}
+                </span>
+                {% endif %}
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- TOPO -->
+<div class="topo">
+
+</div>
+
+<div class="busca" style="display:flex; justify-content:center; align-items:center; gap:20px; flex-wrap:wrap; margin-top:20px;">
+
+    <!-- FORM BUSCA -->
+    <form method="GET" style="display:flex; gap:10px; align-items:center;">
+
+        <input type="text" name="busca" placeholder="Buscar produto..."
+               value="{{ request.GET.busca }}"
+               style="padding:10px; width:250px; border-radius:5px; border:1px solid #ccc;">
+
+        {% if request.GET.tamanho %}
+            <input type="hidden" name="tamanho" value="{{ request.GET.tamanho }}">
+        {% endif %}
+
+        <button type="submit">Buscar</button>
+    </form>
+
+    <!-- FILTROS -->
+    <div class="filtros" style="display:flex; gap:10px;">
+
+        <a href="?busca={{ request.GET.busca }}"><button>Todos</button></a>
+        <a href="?tamanho=P&busca={{ request.GET.busca }}"><button>P</button></a>
+        <a href="?tamanho=M&busca={{ request.GET.busca }}"><button>M</button></a>
+        <a href="?tamanho=G&busca={{ request.GET.busca }}"><button>G</button></a>
+        <a href="?tamanho=GG&busca={{ request.GET.busca }}"><button>GG</button></a>
+
+    </div>
+
+</div>
+
+<!-- PRODUTOS -->
+<div class="container">
+
+{% for produto in produtos %}
+<div class="card">
+
+    <!-- FAVORITO -->
+    <a href="{% url 'favoritar' produto.id %}" class="favorito">
+        {% if produto.id in favoritos %}
+            ❤️
+        {% else %}
+            🤍
+        {% endif %}
+    </a>
+
+    <!-- LINK DO PRODUTO -->
+    <a href="{% url 'produto_detalhe' produto.id %}">
+        {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}">
+        {% else %}
+            <img src="https://via.placeholder.com/250x200">
+        {% endif %}
+
+        <h3>{{ produto.nome }}</h3>
+        <p class="price">R$ {{ produto.preco }}</p>
+        <p>{{ produto.descricao }}</p>
+        <p><strong>Tamanho:</strong> {{ produto.tamanho }}</p>
+    </a>
+
+    <!-- AÇÕES -->
+    <div class="acoes">
+        <a href="{% url 'add_carrinho' produto.id %}">
+            <button>🛒 Adicionar</button>
+        </a>
+    </div>
+
+</div>
+{% empty %}
+    <p class="mensagem">Nenhum produto encontrado 😢</p>
+{% endfor %}
+
+</div>
+
+</body>
+</html>

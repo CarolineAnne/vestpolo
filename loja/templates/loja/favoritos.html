@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus Favoritos</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .price {
+            color: green;
+            font-weight: bold;
+        }
+
+        .mensagem {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 18px;
+        }
+
+        .topo {
+            text-align: center;
+            margin: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>❤️ Meus Favoritos</h1>
+</header>
+
+<div class="topo">
+    <a href="{% url 'home' %}">
+        <button>⬅ Voltar para loja</button>
+    </a>
+</div>
+
+<div class="container">
+
+    {% for produto in produtos %}
+        <div class="card">
+            <a href="{% url 'produto_detalhe' produto.id %}">
+
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/250x200">
+                {% endif %}
+
+                <h3>{{ produto.nome }}</h3>
+                <p class="price">R$ {{ produto.preco }}</p>
+            </a>
+
+            <a href="{% url 'favoritar' produto.id %}">
+                <button>❌ Remover dos favoritos</button>
+            </a>
+        </div>
+    {% empty %}
+        <p class="mensagem">Você ainda não favoritou nenhum produto 😢</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
