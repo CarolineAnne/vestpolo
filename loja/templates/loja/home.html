@@ -5,38 +5,125 @@
     <title>VestPolo</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial;
-            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
             margin: 0;
+            color: #222;
         }
 
         header {
             background: #111;
             color: white;
-            padding: 15px;
-            text-align: center;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .topo {
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-area img {
+            height: 1.2em;
+            width: auto;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-link {
+            position: relative;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: red;
+            color: white;
+            font-size: 12px;
+            padding: 3px 7px;
+            border-radius: 50%;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #111, #333);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #ddd;
+        }
+
+        .area-busca {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            margin: -30px auto 30px;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin: 15px;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
-        .topo button {
+        .area-busca input {
+            padding: 12px;
+            width: 280px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
             background: #111;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 11px 16px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .filtros button {
             background: #eee;
-            color: black;
+            color: #111;
         }
 
         .filtros button:hover {
@@ -44,137 +131,177 @@
             color: white;
         }
 
+        .titulo-secao {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .titulo-secao h2 {
+            margin-bottom: 5px;
+        }
+
+        .titulo-secao p {
+            color: #666;
+        }
+
         .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            padding: 20px 0 50px;
         }
 
         .card {
             background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
             position: relative;
+            transition: 0.25s;
         }
 
         .card:hover {
-            transform: scale(1.02);
-        }
-
-        img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .price {
-            color: green;
-            font-weight: bold;
-        }
-
-        .acoes {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            transform: translateY(-5px);
         }
 
         .favorito {
-            font-size: 22px;
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: white;
+            border-radius: 50%;
+            padding: 6px 8px;
             text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .produto-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 14px;
+            background: #eee;
+        }
+
+        .card h3 {
+            margin: 12px 0 6px;
+            font-size: 18px;
+        }
+
+        .descricao {
+            color: #666;
+            font-size: 14px;
+            min-height: 40px;
+        }
+
+        .price {
+            color: #128a3c;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .acoes {
+            margin-top: 12px;
+        }
+
+        .acoes button {
+            width: 100%;
+            background: #128a3c;
+        }
+
+        .acoes button:hover {
+            background: #0d6c2e;
         }
 
         .mensagem {
             text-align: center;
             font-size: 18px;
+            color: #555;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
+        footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        footer p {
+            margin: 5px;
+            color: #ccc;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 14px 18px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .area-busca {
+                margin-top: -20px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<header style="background:#111; padding:15px 20px;">
+<header>
+    <a href="{% url 'home' %}" style="text-decoration:none; color:white;">
+        <div class="logo-area">
+            <img src="/media/logo.png" alt="VestPolo">
+            <span>VestPolo</span>
+        </div>
+    </a>
 
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-        <!-- LOGO -->
-        <a href="{% url 'home' %}" style="text-decoration:none; color:white;">
-            <div style="display:flex; align-items:center; gap:8px;">
-                <img src="/media/imagens/logo.png" style="height:2em; width:auto;">
-                <span style="font-size:22px; font-weight:bold;">VestPolo</span>
-            </div>
+    <div class="header-icons">
+        <a href="{% url 'favoritos' %}" class="icon-link">
+            ❤️
+            {% if total_favoritos > 0 %}
+                <span class="badge">{{ total_favoritos }}</span>
+            {% endif %}
         </a>
 
-        <!-- ICONES -->
-        <div style="display:flex; gap:20px;">
-
-            <!-- FAVORITOS -->
-            <a href="#" style="position:relative; text-decoration:none;">
-                <span style="font-size:22px;">❤️</span>
-
-                {% if favoritos|length > 0 %}
-                <span style="
-                    position:absolute;
-                    top:-8px;
-                    right:-10px;
-                    background:red;
-                    color:white;
-                    font-size:12px;
-                    padding:3px 7px;
-                    border-radius:50%;
-                ">
-                    {{ favoritos|length }}
-                </span>
-                {% endif %}
-            </a>
-
-            <!-- CARRINHO -->
-            <a href="{% url 'carrinho' %}" style="position:relative; text-decoration:none;">
-                <span style="font-size:22px;">🛒</span>
-
-                {% if total_itens > 0 %}
-                <span style="
-                    position:absolute;
-                    top:-8px;
-                    right:-10px;
-                    background:red;
-                    color:white;
-                    font-size:12px;
-                    padding:3px 7px;
-                    border-radius:50%;
-                ">
-                    {{ total_itens }}
-                </span>
-                {% endif %}
-            </a>
-
-        </div>
-
+        <a href="{% url 'carrinho' %}" class="icon-link">
+            🛒
+            {% if total_itens > 0 %}
+                <span class="badge">{{ total_itens }}</span>
+            {% endif %}
+        </a>
     </div>
-
 </header>
 
-<!-- TOPO -->
-<div class="topo">
+<section class="hero">
+    <h1>Seu curso, seu estilo.</h1>
+    <p>Camisas polo personalizadas com bordados exclusivos para sua turma, empresa ou instituição.</p>
+</section>
 
-</div>
-
-<div class="busca" style="display:flex; justify-content:center; align-items:center; gap:20px; flex-wrap:wrap; margin-top:20px;">
-
-    <!-- FORM BUSCA -->
-    <form method="GET" style="display:flex; gap:10px; align-items:center;">
-
+<section class="area-busca">
+    <form method="GET" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
         <input type="text" name="busca" placeholder="Buscar produto..."
-               value="{{ request.GET.busca }}"
-               style="padding:10px; width:250px; border-radius:5px; border:1px solid #ccc;">
+               value="{{ request.GET.busca }}">
 
         {% if request.GET.tamanho %}
             <input type="hidden" name="tamanho" value="{{ request.GET.tamanho }}">
@@ -183,61 +310,65 @@
         <button type="submit">Buscar</button>
     </form>
 
-    <!-- FILTROS -->
-    <div class="filtros" style="display:flex; gap:10px;">
-
+    <div class="filtros">
         <a href="?busca={{ request.GET.busca }}"><button>Todos</button></a>
         <a href="?tamanho=P&busca={{ request.GET.busca }}"><button>P</button></a>
         <a href="?tamanho=M&busca={{ request.GET.busca }}"><button>M</button></a>
         <a href="?tamanho=G&busca={{ request.GET.busca }}"><button>G</button></a>
         <a href="?tamanho=GG&busca={{ request.GET.busca }}"><button>GG</button></a>
-
     </div>
+</section>
 
+<div class="titulo-secao">
+    <h2>Produtos em destaque</h2>
+    <p>Escolha sua polo bordada e personalize seu estilo.</p>
 </div>
 
-<!-- PRODUTOS -->
 <div class="container">
 
-{% for produto in produtos %}
-<div class="card">
+    {% for produto in produtos %}
+    <div class="card">
 
-    <!-- FAVORITO -->
-    <a href="{% url 'favoritar' produto.id %}" class="favorito">
-        {% if produto.id in favoritos %}
-            ❤️
-        {% else %}
-            🤍
-        {% endif %}
-    </a>
-
-    <!-- LINK DO PRODUTO -->
-    <a href="{% url 'produto_detalhe' produto.id %}">
-        {% if produto.imagem %}
-            <img src="{{ produto.imagem.url }}">
-        {% else %}
-            <img src="https://via.placeholder.com/250x200">
-        {% endif %}
-
-        <h3>{{ produto.nome }}</h3>
-        <p class="price">R$ {{ produto.preco }}</p>
-        <p>{{ produto.descricao }}</p>
-        <p><strong>Tamanho:</strong> {{ produto.tamanho }}</p>
-    </a>
-
-    <!-- AÇÕES -->
-    <div class="acoes">
-        <a href="{% url 'add_carrinho' produto.id %}">
-            <button>🛒 Adicionar</button>
+        <a href="{% url 'favoritar' produto.id %}" class="favorito">
+            {% if produto.id in favoritos %}
+                ❤️
+            {% else %}
+                🤍
+            {% endif %}
         </a>
+
+        <a href="{% url 'produto_detalhe' produto.id %}" class="produto-link">
+            {% if produto.imagem %}
+                <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+            {% else %}
+                <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+            {% endif %}
+
+            <h3>{{ produto.nome }}</h3>
+            <p class="descricao">{{ produto.descricao }}</p>
+            <span class="tag">Tamanho {{ produto.tamanho }}</span>
+            <p class="price">R$ {{ produto.preco }}</p>
+        </a>
+
+        <div class="acoes">
+            <a href="{% url 'add_carrinho' produto.id %}">
+                <button>Adicionar ao carrinho</button>
+            </a>
+        </div>
+
     </div>
 
-</div>
-{% empty %}
-    <p class="mensagem">Nenhum produto encontrado 😢</p>
-{% endfor %}
+    {% empty %}
+        <p class="mensagem">Nenhum produto encontrado 😢</p>
+    {% endfor %}
 
 </div>
+
+<footer>
+    <strong>VestPolo</strong>
+    <p>Seu curso. Seu estilo. Seu fardamento.</p>
+    <p>WhatsApp: (74) 99908-7655</p>
+</footer>
 
 </body>
 </html>
