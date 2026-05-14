@@ -137,7 +137,9 @@
 
     {% if itens %}
     <div style="text-align:right;">
-        <button class="finalizar">💳 Finalizar Compra</button>
+        <a href="{% url 'finalizar_whatsapp' %}">
+            <button class="finalizar">💬 Finalizar pelo WhatsApp</button>
+        </a>
     </div>
     {% endif %}
 

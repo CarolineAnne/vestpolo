@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from .models import Produto
+from urllib.parse import quote
 
 
 def home(request):
@@ -151,3 +152,29 @@ def diminuir_quantidade(request, id):
     request.session['carrinho'] = carrinho
 
     return redirect('carrinho')
+
+def finalizar_whatsapp(request):
+    carrinho = request.session.get('carrinho', {})
+
+    if not carrinho:
+        return redirect('carrinho')
+
+    mensagem = "Olá! Tenho interesse em comprar:\n\n"
+    total = 0
+
+    for id, quantidade in carrinho.items():
+        produto = get_object_or_404(Produto, id=id)
+        subtotal = produto.preco * quantidade
+        total += subtotal
+
+        mensagem += f"- {produto.nome} | Tamanho: {produto.tamanho} | Qtd: {quantidade} | Subtotal: R$ {subtotal:.2f}\n"
+
+    mensagem += f"\nTotal: R$ {total:.2f}"
+    mensagem += "\n\nAguardo o atendimento."
+
+    numero_whatsapp = "5574999087655"
+    texto = quote(mensagem)
+
+    url = f"https://wa.me/{numero_whatsapp}?text={texto}"
+
+    return redirect(url)
