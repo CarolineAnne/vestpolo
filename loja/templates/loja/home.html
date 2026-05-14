@@ -240,14 +240,66 @@
         footer {
             background: #111;
             color: white;
-            text-align: center;
-            padding: 25px;
-            margin-top: 30px;
+            padding: 30px 40px;
+            margin-top: 40px;
         }
 
-        footer p {
-            margin: 5px;
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+
+            flex-wrap: wrap;
+        }
+
+        .footer-left h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .footer-left p {
+            margin-top: 6px;
             color: #ccc;
+        }
+
+        .footer-center {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .footer-right a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .footer-right a:hover {
+            color: #25D366;
+        }
+
+        @media (max-width: 700px) {
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-right {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
         }
 
         @media (max-width: 700px) {
@@ -368,18 +420,33 @@
 </div>
 
 <footer>
-    <strong>VestPolo</strong>
-    <p>Seu curso. Seu estilo. Seu fardamento.</p>
-    <p>WhatsApp: (74) 99908-7655</p>
+    <div class="footer-container">
 
-    <p>
-        Instagram:
-        <a href="https://www.instagram.com/vestpolo25/"
-        target="_blank"
-        style="color:white; text-decoration:none;">
-        @vestpolo25
-        </a>
-    </p>
+        <!-- ESQUERDA -->
+        <div class="footer-left">
+            <h3>VestPolo</h3>
+            <p>Seu curso. Seu estilo. Seu fardamento.</p>
+        </div>
+
+        <!-- CENTRO -->
+        <div class="footer-center">
+            <p>© 2026 VestPolo — Todos os direitos reservados.</p>
+        </div>
+
+        <!-- DIREITA -->
+        <div class="footer-right">
+
+            <a href="https://wa.me/5574999087655" target="_blank">
+                📞 WhatsApp
+            </a>
+
+            <a href="https://www.instagram.com/vestpolo25/" target="_blank">
+                📸 Instagram
+            </a>
+
+        </div>
+
+    </div>
 </footer>
 
 </body>
