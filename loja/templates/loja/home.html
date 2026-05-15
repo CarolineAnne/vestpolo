@@ -203,7 +203,15 @@
         .descricao {
             color: #666;
             font-size: 14px;
-            min-height: 40px;
+            line-height: 1.5;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+
+            overflow: hidden;
+
+            min-height: 85px;
         }
 
         .price {
@@ -228,6 +236,10 @@
         .acoes button {
             width: 100%;
             background: #128a3c;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: 0.3s ease;
         }
 
         .acoes button:hover {
@@ -318,6 +330,50 @@
                 margin-top: -20px;
             }
         }
+
+        .imagem-card {
+            width: 100%;
+            height: 230px;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #eee;
+        }
+
+        .imagem-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s ease;
+        }
+
+        .card:hover .imagem-card img {
+            transform: scale(1.06);
+        }
+
+        .card-click {
+            display: block;
+        }
+
+        .badge-novo {
+            display: inline-block;
+            margin-top: 12px;
+            background: #111;
+            color: white;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            cursor: pointer;
+            transition: 0.35s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.16);
+        }
     </style>
 </head>
 
@@ -399,16 +455,24 @@
             {% endif %}
         </a>
 
-        <a href="{% url 'produto_detalhe' produto.id %}" class="produto-link">
-            {% if produto.imagem %}
-                <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-            {% else %}
-                <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
-            {% endif %}
+        <a href="{% url 'produto_detalhe' produto.id %}" class="produto-link card-click">
+
+            <div class="imagem-card">
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+                {% endif %}
+            </div>
+
+            <span class="badge-novo">VestPolo</span>
 
             <h3>{{ produto.nome }}</h3>
+
             <p class="descricao">{{ produto.descricao }}</p>
+
             <span class="tag">Tamanho {{ produto.tamanho }}</span>
+
             <p class="price">R$ {{ produto.preco }}</p>
         </a>
 

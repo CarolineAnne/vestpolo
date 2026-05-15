@@ -77,14 +77,24 @@ def favoritos(request):
 
 
 def adicionar_carrinho(request, id):
+
     carrinho = request.session.get('carrinho', {})
+
     id = str(id)
 
-    carrinho[id] = carrinho.get(id, 0) + 1
+    quantidade = int(request.GET.get('quantidade', 1))
+
+    if quantidade < 1:
+        quantidade = 1
+
+    if id in carrinho:
+        carrinho[id] += quantidade
+    else:
+        carrinho[id] = quantidade
 
     request.session['carrinho'] = carrinho
 
-    return redirect('home')
+    return redirect('carrinho')
 
 
 def remover_carrinho(request, id):
