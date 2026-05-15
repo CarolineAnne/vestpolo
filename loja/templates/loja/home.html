@@ -66,21 +66,115 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #111, #333);
-            color: white;
-            text-align: center;
-            padding: 60px 20px;
-        }
+    position: relative;
+    height: 85vh;
 
-        .hero h1 {
-            font-size: 38px;
-            margin-bottom: 10px;
-        }
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,0.55),
+            rgba(0,0,0,0.45)
+        ),
+        url('/static/img/banner.jpg');
 
-        .hero p {
-            font-size: 18px;
-            color: #ddd;
-        }
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 8%;
+    overflow: hidden;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+    color: white;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+
+    padding: 10px 18px;
+    border-radius: 30px;
+
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.hero h1 {
+    font-size: 68px;
+    line-height: 1.05;
+    margin: 0 0 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #ddd;
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.hero-btn {
+    background: #25D366;
+    color: white;
+
+    padding: 16px 28px;
+    border-radius: 12px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    border: none;
+}
+
+.hero-btn:hover {
+    background: #1ebe5d;
+}
+
+.hero-btn-outline {
+    background: transparent;
+    color: white;
+
+    padding: 16px 28px;
+    border-radius: 12px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    border: 2px solid rgba(255,255,255,0.5);
+}
+
+.hero-btn-outline:hover {
+    background: white;
+    color: #111;
+}
+
+@media (max-width: 768px) {
+
+    .hero {
+        height: auto;
+        padding: 90px 24px;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+}
 
         .area-busca {
             background: white;
@@ -424,8 +518,46 @@
 </header>
 
 <section class="hero">
-    <h1>Seu curso, seu estilo.</h1>
-    <p>Camisas polo personalizadas com bordados exclusivos para sua turma, empresa ou instituição.</p>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <span class="hero-badge">
+            ✨ Bordados Premium
+        </span>
+
+        <h1>
+            Seu curso.<br>
+            Seu estilo.
+        </h1>
+
+        <p>
+            Polos premium personalizadas para universidades,
+            empresas, turmas e instituições.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#produtos">
+                <button class="hero-btn">
+                    Comprar agora
+                </button>
+            </a>
+
+            <a href="https://wa.me/5574999087655"
+               target="_blank">
+
+                <button class="hero-btn-outline">
+                    WhatsApp
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+
 </section>
 
 <section class="area-busca">
@@ -454,7 +586,7 @@
     <p>Escolha sua polo bordada e personalize seu estilo.</p>
 </div>
 
-<div class="container">
+<div class="container" id="produtos">
 
     {% for produto in produtos %}
     <div class="card">
