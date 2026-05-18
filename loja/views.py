@@ -196,6 +196,7 @@ def checkout(request):
         observacao = request.POST.get('observacao')
 
         pedido = Pedido.objects.create(
+            usuario=request.user if request.user.is_authenticated else None,
             nome_cliente=nome_cliente,
             telefone=telefone,
             forma_entrega=forma_entrega,
@@ -292,3 +293,13 @@ def minha_conta(request):
         return redirect('login')
 
     return render(request, 'loja/minha_conta.html')
+
+def meus_pedidos(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    pedidos = Pedido.objects.filter(usuario=request.user).order_by('-data_pedido')
+
+    return render(request, 'loja/meus_pedidos.html', {
+        'pedidos': pedidos
+    })

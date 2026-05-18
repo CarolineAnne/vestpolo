@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meus pedidos | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .pedido {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        .topo-pedido {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+        }
+
+        .status {
+            background: #111;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .item {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #128a3c;
+        }
+
+        .vazio {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}"><strong>VestPolo</strong></a>
+    <a href="{% url 'minha_conta' %}">Minha conta</a>
+</header>
+
+<div class="container">
+
+    <h1>Meus pedidos</h1>
+
+    {% for pedido in pedidos %}
+        <div class="pedido">
+
+            <div class="topo-pedido">
+                <div>
+                    <strong>Pedido #{{ pedido.id }}</strong><br>
+                    <small>{{ pedido.data_pedido|date:"d/m/Y H:i" }}</small>
+                </div>
+
+                <span class="status">{{ pedido.status }}</span>
+            </div>
+
+            {% for item in pedido.itens.all %}
+                <p class="item">
+                    {{ item.produto.nome }} — {{ item.quantidade }} un. — R$ {{ item.subtotal }}
+                </p>
+            {% endfor %}
+
+            <p class="total">Total: R$ {{ pedido.total }}</p>
+
+        </div>
+    {% empty %}
+        <div class="vazio">
+            <h2>Você ainda não fez pedidos 😢</h2>
+            <p>Escolha uma polo e finalize pelo WhatsApp.</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

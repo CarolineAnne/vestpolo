@@ -35,6 +35,13 @@ class Pedido(models.Model):
         ('Cancelado', 'Cancelado'),
     ]
 
+    usuario = models.ForeignKey(
+        'auth.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
     nome_cliente = models.CharField(max_length=100, blank=True)
     telefone = models.CharField(max_length=20, blank=True)
     forma_entrega = models.CharField(max_length=50, blank=True)
