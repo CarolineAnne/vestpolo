@@ -28,9 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-
-    'cloudinary_storage',
     'django.contrib.staticfiles',
+
     'cloudinary',
 
     'loja',
@@ -93,15 +92,10 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config('dn0oigtfw'),
-    'API_KEY': config('619559116184741'),
-    'API_SECRET': config('UbH1rzWBVOieOleQuhbnaKhBuH0'),
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
 STORAGES = {
@@ -112,5 +106,3 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
