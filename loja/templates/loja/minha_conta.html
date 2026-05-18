@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha conta | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: #f7f7f7;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .card a {
+            color: #111;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}"><strong>VestPolo</strong></a>
+    <a href="{% url 'logout' %}">Sair</a>
+</header>
+
+<div class="container">
+    <h1>Minha conta</h1>
+
+    <p>Olá, <strong>{{ request.user.first_name|default:request.user.username }}</strong>!</p>
+
+    <div class="menu">
+        <div class="card">
+            <a href="{% url 'home' %}">Ver produtos</a>
+        </div>
+
+        <div class="card">
+            <a href="{% url 'carrinho' %}">Meu carrinho</a>
+        </div>
+
+        <div class="card">
+            <a href="{% url 'favoritos' %}">Favoritos</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

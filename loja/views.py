@@ -3,6 +3,9 @@ from django.db.models import Q
 from .models import Produto
 from urllib.parse import quote
 from .models import Produto, Pedido, ItemPedido
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 def home(request):
     produtos = Produto.objects.all()
@@ -239,3 +242,53 @@ def checkout(request):
         'itens': produtos,
         'total': total
     })
+
+def cadastro(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        email = request.POST.get('email')
+        senha = request.POST.get('senha')
+
+        if User.objects.filter(username=email).exists():
+            messages.error(request, 'Este e-mail já está cadastrado.')
+            return redirect('cadastro')
+
+        usuario = User.objects.create_user(
+            username=email,
+            email=email,
+            first_name=nome,
+            password=senha
+        )
+
+        login(request, usuario)
+        return redirect('minha_conta')
+
+    return render(request, 'loja/cadastro.html')
+
+
+def login_usuario(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        senha = request.POST.get('senha')
+
+        usuario = authenticate(request, username=email, password=senha)
+
+        if usuario is not None:
+            login(request, usuario)
+            return redirect('minha_conta')
+        else:
+            messages.error(request, 'E-mail ou senha inválidos.')
+
+    return render(request, 'loja/login.html')
+
+
+def logout_usuario(request):
+    logout(request)
+    return redirect('home')
+
+
+def minha_conta(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    return render(request, 'loja/minha_conta.html')

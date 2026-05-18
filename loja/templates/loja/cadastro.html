@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 60px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            background: #111;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        a {
+            color: #111;
+            font-weight: bold;
+        }
+
+        .msg {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Criar conta</h1>
+
+    {% for message in messages %}
+        <p class="msg">{{ message }}</p>
+    {% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Nome</label>
+        <input type="text" name="nome" required>
+
+        <label>E-mail</label>
+        <input type="email" name="email" required>
+
+        <label>Senha</label>
+        <input type="password" name="senha" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <p style="text-align:center;">
+        Já tem conta? <a href="{% url 'login' %}">Entrar</a>
+    </p>
+</div>
+
+</body>
+</html>
