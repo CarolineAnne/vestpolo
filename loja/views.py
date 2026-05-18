@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from .models import Produto
 from urllib.parse import quote
-
+from .models import Produto, Pedido, ItemPedido
 
 def home(request):
     produtos = Produto.objects.all()
@@ -169,7 +169,9 @@ def finalizar_whatsapp(request):
     if not carrinho:
         return redirect('carrinho')
 
-    mensagem = "Olá! Tenho interesse em comprar:\n\n"
+    pedido = Pedido.objects.create(total=0)
+
+    mensagem = "Olá! Tenho interesse em finalizar este pedido:\n\n"
     total = 0
 
     for id, quantidade in carrinho.items():
@@ -177,13 +179,29 @@ def finalizar_whatsapp(request):
         subtotal = produto.preco * quantidade
         total += subtotal
 
-        mensagem += f"- {produto.nome} | Tamanho: {produto.tamanho} | Qtd: {quantidade} | Subtotal: R$ {subtotal:.2f}\n"
+        ItemPedido.objects.create(
+            pedido=pedido,
+            produto=produto,
+            quantidade=quantidade,
+            subtotal=subtotal
+        )
 
-    mensagem += f"\nTotal: R$ {total:.2f}"
-    mensagem += "\n\nAguardo o atendimento."
+        mensagem += f"- {produto.nome}\n"
+        mensagem += f"  Tamanho: {produto.tamanho}\n"
+        mensagem += f"  Quantidade: {quantidade}\n"
+        mensagem += f"  Subtotal: R$ {subtotal:.2f}\n\n"
 
-    numero_whatsapp = "5574999087655"
+    pedido.total = total
+    pedido.save()
+
+    mensagem += f"Total do pedido: R$ {total:.2f}\n"
+    mensagem += f"Número do pedido: #{pedido.id}\n\n"
+    mensagem += "Aguardo o atendimento."
+
+    request.session['carrinho'] = {}
+
     texto = quote(mensagem)
+    numero_whatsapp = "5574999087655"
 
     url = f"https://wa.me/{numero_whatsapp}?text={texto}"
 
