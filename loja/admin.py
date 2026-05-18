@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Produto, Pedido, ItemPedido
+from .models import Produto, Pedido, ItemPedido, Favorito
+
+@admin.register(Favorito)
+class FavoritoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'produto', 'data_adicionado')
+    search_fields = ('usuario__username', 'produto__nome')
+    list_filter = ('data_adicionado',)
 
 
 @admin.register(Produto)

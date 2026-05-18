@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from .models import Produto
 from urllib.parse import quote
-from .models import Produto, Pedido, ItemPedido
+from .models import Produto, Pedido, ItemPedido, Favorito
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -50,34 +49,35 @@ def produto_detalhe(request, id):
 
 
 def favoritar(request, id):
-    favoritos = request.session.get('favoritos', [])
-    favoritos = [int(f) for f in favoritos]
+    if not request.user.is_authenticated:
+        return redirect('login')
 
-    if id in favoritos:
-        favoritos.remove(id)
-    else:
-        favoritos.append(id)
+    produto = get_object_or_404(Produto, id=id)
 
-    request.session['favoritos'] = favoritos
+    favorito, criado = Favorito.objects.get_or_create(
+        usuario=request.user,
+        produto=produto
+    )
 
-    return redirect('home')
+    if not criado:
+        favorito.delete()
+
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
 def favoritos(request):
-    favoritos_ids = request.session.get('favoritos', [])
-    favoritos_ids = [int(f) for f in favoritos_ids]
+    if not request.user.is_authenticated:
+        return redirect('login')
 
-    produtos = Produto.objects.filter(id__in=favoritos_ids)
+    favoritos_usuario = Favorito.objects.filter(
+        usuario=request.user
+    ).select_related('produto')
 
-    carrinho = request.session.get('carrinho', {})
-    total_itens = sum(carrinho.values())
+    produtos = [fav.produto for fav in favoritos_usuario]
 
     return render(request, 'loja/favoritos.html', {
-        'produtos': produtos,
-        'total_itens': total_itens,
-        'total_favoritos': len(favoritos_ids)
+        'produtos': produtos
     })
-
 
 def adicionar_carrinho(request, id):
 
