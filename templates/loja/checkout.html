@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Finalizar pedido | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 25px;
+        }
+
+        .box {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        h1, h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .item {
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+
+        .item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1ebe5d;
+        }
+
+        @media (max-width: 850px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}"><strong>VestPolo</strong></a>
+    <a href="{% url 'carrinho' %}">⬅ Voltar ao carrinho</a>
+</header>
+
+<div class="container">
+
+    <div class="box">
+        <h1>Dados do cliente</h1>
+        <p>Preencha seus dados para finalizar o pedido pelo WhatsApp.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Nome completo</label>
+            <input type="text" name="nome_cliente" required>
+
+            <label>Telefone / WhatsApp</label>
+            <input type="text" name="telefone" required>
+
+            <label>Forma de entrega</label>
+            <select name="forma_entrega" required>
+                <option value="">Selecione</option>
+                <option value="Retirada">Retirada</option>
+                <option value="Entrega">Entrega</option>
+                <option value="Combinar pelo WhatsApp">Combinar pelo WhatsApp</option>
+            </select>
+
+            <label>Observação</label>
+            <textarea name="observacao" placeholder="Ex: nome do curso, cor desejada, bordado, prazo..."></textarea>
+
+            <button type="submit">💬 Enviar pedido pelo WhatsApp</button>
+        </form>
+    </div>
+
+    <div class="box">
+        <h2>Resumo do pedido</h2>
+
+        {% for item in itens %}
+            <div class="item">
+                <strong>{{ item.produto.nome }}</strong>
+                <span>Tamanho: {{ item.produto.tamanho }}</span><br>
+                <span>Quantidade: {{ item.quantidade }}</span><br>
+                <span>Subtotal: R$ {{ item.subtotal }}</span>
+            </div>
+        {% endfor %}
+
+        <div class="total">
+            <span>Total</span>
+            <span>R$ {{ total }}</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

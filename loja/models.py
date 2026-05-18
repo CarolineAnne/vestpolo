@@ -35,6 +35,11 @@ class Pedido(models.Model):
         ('Cancelado', 'Cancelado'),
     ]
 
+    nome_cliente = models.CharField(max_length=100, blank=True)
+    telefone = models.CharField(max_length=20, blank=True)
+    forma_entrega = models.CharField(max_length=50, blank=True)
+    observacao = models.TextField(blank=True)
+
     total = models.DecimalField(
         max_digits=10,
         decimal_places=2,

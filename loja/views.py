@@ -164,14 +164,15 @@ def diminuir_quantidade(request, id):
     return redirect('carrinho')
 
 def finalizar_whatsapp(request):
+    return redirect('checkout')
+
+def checkout(request):
     carrinho = request.session.get('carrinho', {})
 
     if not carrinho:
         return redirect('carrinho')
 
-    pedido = Pedido.objects.create(total=0)
-
-    mensagem = "Olá! Tenho interesse em finalizar este pedido:\n\n"
+    produtos = []
     total = 0
 
     for id, quantidade in carrinho.items():
@@ -179,30 +180,62 @@ def finalizar_whatsapp(request):
         subtotal = produto.preco * quantidade
         total += subtotal
 
-        ItemPedido.objects.create(
-            pedido=pedido,
-            produto=produto,
-            quantidade=quantidade,
-            subtotal=subtotal
+        produtos.append({
+            'produto': produto,
+            'quantidade': quantidade,
+            'subtotal': subtotal
+        })
+
+    if request.method == 'POST':
+        nome_cliente = request.POST.get('nome_cliente')
+        telefone = request.POST.get('telefone')
+        forma_entrega = request.POST.get('forma_entrega')
+        observacao = request.POST.get('observacao')
+
+        pedido = Pedido.objects.create(
+            nome_cliente=nome_cliente,
+            telefone=telefone,
+            forma_entrega=forma_entrega,
+            observacao=observacao,
+            total=total
         )
 
-        mensagem += f"- {produto.nome}\n"
-        mensagem += f"  Tamanho: {produto.tamanho}\n"
-        mensagem += f"  Quantidade: {quantidade}\n"
-        mensagem += f"  Subtotal: R$ {subtotal:.2f}\n\n"
+        mensagem = "Olá! Quero finalizar este pedido:\n\n"
 
-    pedido.total = total
-    pedido.save()
+        mensagem += f"Pedido #{pedido.id}\n"
+        mensagem += f"Cliente: {nome_cliente}\n"
+        mensagem += f"Telefone: {telefone}\n"
+        mensagem += f"Entrega/Retirada: {forma_entrega}\n"
 
-    mensagem += f"Total do pedido: R$ {total:.2f}\n"
-    mensagem += f"Número do pedido: #{pedido.id}\n\n"
-    mensagem += "Aguardo o atendimento."
+        if observacao:
+            mensagem += f"Observação: {observacao}\n"
 
-    request.session['carrinho'] = {}
+        mensagem += "\nItens:\n"
 
-    texto = quote(mensagem)
-    numero_whatsapp = "5574999087655"
+        for item in produtos:
+            ItemPedido.objects.create(
+                pedido=pedido,
+                produto=item['produto'],
+                quantidade=item['quantidade'],
+                subtotal=item['subtotal']
+            )
 
-    url = f"https://wa.me/{numero_whatsapp}?text={texto}"
+            mensagem += f"- {item['produto'].nome}\n"
+            mensagem += f"  Tamanho: {item['produto'].tamanho}\n"
+            mensagem += f"  Quantidade: {item['quantidade']}\n"
+            mensagem += f"  Subtotal: R$ {item['subtotal']:.2f}\n\n"
 
-    return redirect(url)
+        mensagem += f"Total: R$ {total:.2f}\n\n"
+        mensagem += "Aguardo o atendimento."
+
+        request.session['carrinho'] = {}
+
+        texto = quote(mensagem)
+        numero_whatsapp = "5574999087655"
+
+        return redirect(f"https://wa.me/{numero_whatsapp}?text={texto}")
+
+    return render(request, 'loja/checkout.html', {
+        'itens': produtos,
+        'total': total
+    })

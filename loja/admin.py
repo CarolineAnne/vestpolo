@@ -18,7 +18,8 @@ class ItemPedidoInline(admin.TabularInline):
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status', 'total', 'data_pedido')
+    list_display = ('id', 'nome_cliente', 'telefone', 'status', 'total', 'data_pedido')
+    readonly_fields = ('data_pedido',)
     list_filter = ('status', 'data_pedido')
     search_fields = ('id',)
     inlines = [ItemPedidoInline]
