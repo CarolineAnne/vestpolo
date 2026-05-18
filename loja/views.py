@@ -24,8 +24,14 @@ def home(request):
         produtos = produtos.filter(tamanho=tamanho)
 
     # ❤️ Favoritos
-    favoritos = request.session.get('favoritos', [])
-    favoritos = [int(f) for f in favoritos]
+    if request.user.is_authenticated:
+        favoritos = list(
+            Favorito.objects.filter(usuario=request.user)
+            .values_list('produto_id', flat=True)
+        )
+    else:
+        favoritos = []
+
     total_favoritos = len(favoritos)
 
     # 🛒 Carrinho
