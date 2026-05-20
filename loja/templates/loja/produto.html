@@ -222,11 +222,6 @@
             {{ produto.descricao }}
         </p>
 
-        <div class="tamanho-box">
-            <strong>Tamanho disponível:</strong>
-            <span class="tamanho">{{ produto.tamanho }}</span>
-        </div>
-
         <div class="beneficios">
             <p>✔ Bordado profissional personalizado</p>
             <p>✔ Polo premium confortável e resistente</p>
@@ -234,16 +229,97 @@
             <p>✔ Acabamento elegante e padronizado</p>
         </div>
 
-        <div class="acoes">
-            <a href="{% url 'add_carrinho' produto.id %}">
-                <button class="btn-carrinho">🛒 Adicionar ao carrinho</button>
-            </a>
+        <div class="tamanho-box">
+    <strong>Tamanho disponível:</strong>
+    <span class="tamanho">{{ produto.tamanho }}</span>
+</div>
 
-            <a href="https://wa.me/5574999087655?text=Olá! Tenho interesse no produto: {{ produto.nome }} - Tamanho {{ produto.tamanho }} - Valor R$ {{ produto.preco }}"
-               target="_blank">
-                <button class="btn-whatsapp">💬 Comprar pelo WhatsApp</button>
-            </a>
-        </div>
+<div class="tamanho-box">
+    <strong>Quantidade:</strong>
+
+    <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+        <button type="button" onclick="diminuirQtd()">-</button>
+
+        <input id="quantidade" 
+               type="number" 
+               value="1" 
+               min="1"
+               style="width:70px; padding:10px; text-align:center; border-radius:8px; border:1px solid #ccc;">
+
+        <button type="button" onclick="aumentarQtd()">+</button>
+    </div>
+</div>
+
+<div class="acoes">
+
+    <form method="GET" action="{% url 'add_carrinho' produto.id %}">
+        <input type="hidden" name="quantidade" id="quantidadeCarrinho" value="1">
+
+        <button type="submit"
+                class="btn-carrinho"
+                onclick="atualizarQuantidadeCarrinho()">
+
+            🛒 Adicionar ao carrinho
+
+        </button>
+    </form>
+
+    <a id="btnWhatsapp"
+       href="#"
+       target="_blank">
+
+        <button class="btn-whatsapp"
+                type="button"
+                onclick="abrirWhatsapp()">
+
+            💬 Comprar pelo WhatsApp
+
+        </button>
+
+    </a>
+
+</div>
+
+<script>
+
+    function aumentarQtd() {
+        let qtd = document.getElementById("quantidade");
+        qtd.value = parseInt(qtd.value) + 1;
+    }
+
+    function diminuirQtd() {
+
+        let qtd = document.getElementById("quantidade");
+
+        if (parseInt(qtd.value) > 1) {
+            qtd.value = parseInt(qtd.value) - 1;
+        }
+    }
+
+    function atualizarQuantidadeCarrinho() {
+
+        let qtd = document.getElementById("quantidade").value;
+
+        document.getElementById("quantidadeCarrinho").value = qtd;
+    }
+
+    function abrirWhatsapp() {
+
+        let qtd = document.getElementById("quantidade").value;
+
+        let mensagem =
+            `Olá! Tenho interesse no produto: {{ produto.nome }}%0A` +
+            `Tamanho: {{ produto.tamanho }}%0A` +
+            `Quantidade: ${qtd}%0A` +
+            `Valor unitário: R$ {{ produto.preco }}`;
+
+        let url =
+            `https://wa.me/5574999087655?text=${mensagem}`;
+
+        window.open(url, "_blank");
+    }
+
+</script>
 
         <p class="observacao">
             Após clicar em comprar, você será direcionado ao WhatsApp para confirmar detalhes do pedido, bordado e disponibilidade.

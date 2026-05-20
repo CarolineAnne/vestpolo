@@ -87,17 +87,19 @@ class ItemPedido(models.Model):
 
     def __str__(self):
         return f"{self.produto.nome} - {self.quantidade} un."
-    
-    class Favorito(models.Model):
-        usuario = models.ForeignKey(
-            'auth.User',
-            on_delete=models.CASCADE,
-        )
 
-        produto = models.ForeignKey(
-            Produto,
-            on_delete=models.CASCADE,
-        )
+
+class Favorito(models.Model):
+
+    usuario = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+    )
+
+    produto = models.ForeignKey(
+        Produto,
+        on_delete=models.CASCADE,
+    )
 
     data_adicionado = models.DateTimeField(auto_now_add=True)
 
