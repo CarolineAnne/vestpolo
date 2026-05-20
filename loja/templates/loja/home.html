@@ -498,21 +498,21 @@
         }
 
         .menu-loja {
-            background: white;
             display: flex;
             justify-content: center;
-            gap: 35px;
-            padding: 18px;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            z-index: 999;
-            top: 72px;
+            align-items: center;
+            gap: 28px;
+            background: transparent;
+            padding: 0;
+            border: none;
+            position: static;
         }
 
         .menu-loja a {
             text-decoration: none;
-            color: #111;
+            color: white;
             font-weight: bold;
+            font-size: 15px;
         }
 
         .menu-loja a:hover {
@@ -561,6 +561,15 @@
         </div>
     </a>
 
+    <nav class="menu-loja">
+        <a href="{% url 'home' %}">Início</a>
+        <a href="#produtos">Universitários</a>
+        <a href="#produtos">Empresariais</a>
+        <a href="#produtos">Personalizados</a>
+        <a href="#produtos">Mais vendidos</a>
+        <a href="https://wa.me/5574999087655" target="_blank">Contato</a>
+    </nav>
+
     <div class="header-icons">
 
     <a href="https://www.instagram.com/vestpolo25/"
@@ -597,17 +606,6 @@
 
 </div>
 </header>
-
-<nav class="menu-loja">
-
-    <a href="{% url 'home' %}">Início</a>
-    <a href="#produtos">Universitários</a>
-    <a href="#produtos">Empresariais</a>
-    <a href="#produtos">Personalizados</a>
-    <a href="#produtos">Mais vendidos</a>
-    <a href="https://wa.me/5574999087655" target="_blank">Contato</a>
-
-</nav>
 
 <section class="hero">
 
