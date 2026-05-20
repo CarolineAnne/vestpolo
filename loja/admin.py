@@ -27,6 +27,7 @@ class ItemPedidoInline(admin.TabularInline):
         'curso',
         'nome_bordado',
         'observacao',
+        'arte',
         'subtotal',
     )
 
@@ -37,6 +38,7 @@ class ItemPedidoInline(admin.TabularInline):
         'curso',
         'nome_bordado',
         'observacao',
+        'arte',
         'subtotal',
     )
 
