@@ -80,6 +80,11 @@ class ItemPedido(models.Model):
 
     quantidade = models.PositiveIntegerField(default=1)
 
+    cor = models.CharField(max_length=50, blank=True)
+    curso = models.CharField(max_length=100, blank=True)
+    nome_bordado = models.CharField(max_length=100, blank=True)
+    observacao_item = models.TextField(blank=True)
+
     subtotal = models.DecimalField(
         max_digits=10,
         decimal_places=2

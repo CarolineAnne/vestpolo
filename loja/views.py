@@ -201,6 +201,11 @@ def checkout(request):
         forma_entrega = request.POST.get('forma_entrega')
         observacao = request.POST.get('observacao')
 
+        cor = request.POST.get('cor', '')
+        curso = request.POST.get('curso', '')
+        nome_bordado = request.POST.get('nome_bordado', '')
+        observacao_item = request.POST.get('observacao_item', '')
+
         pedido = Pedido.objects.create(
             usuario=request.user if request.user.is_authenticated else None,
             nome_cliente=nome_cliente,
@@ -223,16 +228,34 @@ def checkout(request):
         mensagem += "\nItens:\n"
 
         for item in produtos:
+
             ItemPedido.objects.create(
                 pedido=pedido,
                 produto=item['produto'],
                 quantidade=item['quantidade'],
+                cor=cor,
+                curso=curso,
+                nome_bordado=nome_bordado,
+                observacao=observacao_item,
                 subtotal=item['subtotal']
             )
 
             mensagem += f"- {item['produto'].nome}\n"
             mensagem += f"  Tamanho: {item['produto'].tamanho}\n"
             mensagem += f"  Quantidade: {item['quantidade']}\n"
+
+            if cor:
+                mensagem += f"  Cor: {cor}\n"
+
+            if curso:
+                mensagem += f"  Curso/Turma/Empresa: {curso}\n"
+
+            if nome_bordado:
+                mensagem += f"  Nome bordado: {nome_bordado}\n"
+
+            if observacao_item:
+                mensagem += f"  Detalhes do bordado: {observacao_item}\n"
+
             mensagem += f"  Subtotal: R$ {item['subtotal']:.2f}\n\n"
 
         mensagem += f"Total: R$ {total:.2f}\n\n"
