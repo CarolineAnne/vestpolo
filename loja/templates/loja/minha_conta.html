@@ -5,10 +5,15 @@
     <title>Minha conta | VestPolo</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background: #f4f4f4;
             margin: 0;
+            color: #222;
         }
 
         header {
@@ -17,40 +22,107 @@
             padding: 18px 40px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
         header a {
             color: white;
             text-decoration: none;
+            font-weight: bold;
         }
 
         .container {
-            max-width: 900px;
+            width: 92%;
+            max-width: 1100px;
             margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+        }
+
+        .perfil {
+            background: linear-gradient(135deg, #111, #333);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        }
+
+        .perfil h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .perfil p {
+            margin: 5px 0;
+            color: #ddd;
         }
 
         .menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
         }
 
         .card {
-            background: #f7f7f7;
-            padding: 20px;
-            border-radius: 14px;
-            text-align: center;
-            font-weight: bold;
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.13);
         }
 
         .card a {
             color: #111;
             text-decoration: none;
+            display: block;
+        }
+
+        .card .icone {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .card p {
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .sair {
+            background: #fff0f0;
+        }
+
+        .sair h3 {
+            color: #b00020;
+        }
+
+        .rodape-conta {
+            text-align: center;
+            margin-top: 35px;
+            color: #777;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 16px 22px;
+            }
+
+            .perfil {
+                padding: 25px;
+            }
+
+            .perfil h1 {
+                font-size: 26px;
+            }
         }
     </style>
 </head>
@@ -58,32 +130,71 @@
 <body>
 
 <header>
-    <a href="{% url 'home' %}"><strong>VestPolo</strong></a>
-    <a href="{% url 'logout' %}">Sair</a>
+    <a href="{% url 'home' %}">VestPolo</a>
+    <a href="{% url 'home' %}">Voltar à loja</a>
 </header>
 
 <div class="container">
-    <h1>Minha conta</h1>
 
-    <p>Olá, <strong>{{ request.user.first_name|default:request.user.username }}</strong>!</p>
+    <section class="perfil">
+        <h1>Minha conta</h1>
 
-    <div class="menu">
+        <p>
+            Olá,
+            <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+        </p>
+
+        <p>{{ request.user.email }}</p>
+    </section>
+
+    <section class="menu">
+
         <div class="card">
-            <a href="{% url 'home' %}">Ver produtos</a>
+            <a href="{% url 'meus_pedidos' %}">
+                <div class="icone">📦</div>
+                <h3>Meus pedidos</h3>
+                <p>Acompanhe seus pedidos, status e histórico de compras.</p>
+            </a>
         </div>
 
         <div class="card">
-            <a href="{% url 'carrinho' %}">Meu carrinho</a>
+            <a href="{% url 'favoritos' %}">
+                <div class="icone">❤️</div>
+                <h3>Favoritos</h3>
+                <p>Veja os produtos que você salvou para comprar depois.</p>
+            </a>
         </div>
 
         <div class="card">
-            <a href="{% url 'favoritos' %}">Favoritos</a>
+            <a href="{% url 'carrinho' %}">
+                <div class="icone">🛒</div>
+                <h3>Meu carrinho</h3>
+                <p>Revise os produtos escolhidos antes de finalizar.</p>
+            </a>
         </div>
 
         <div class="card">
-            <a href="{% url 'meus_pedidos' %}">Meus pedidos</a>
+            <a href="{% url 'home' %}">
+                <div class="icone">🛍️</div>
+                <h3>Continuar comprando</h3>
+                <p>Volte para a loja e escolha sua próxima polo personalizada.</p>
+            </a>
         </div>
+
+        <div class="card sair">
+            <a href="{% url 'logout' %}">
+                <div class="icone">🚪</div>
+                <h3>Sair da conta</h3>
+                <p>Encerrar sua sessão com segurança.</p>
+            </a>
+        </div>
+
+    </section>
+
+    <div class="rodape-conta">
+        <p>VestPolo — Seu curso. Seu estilo. Seu fardamento.</p>
     </div>
+
 </div>
 
 </body>
