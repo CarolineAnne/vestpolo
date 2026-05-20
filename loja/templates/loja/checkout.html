@@ -121,7 +121,7 @@
         <h1>Dados do cliente</h1>
         <p>Preencha seus dados para finalizar o pedido pelo WhatsApp.</p>
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <label>Nome completo</label>
@@ -142,6 +142,9 @@
             <textarea name="observacao" placeholder="Ex: nome do curso, cor desejada, bordado, prazo..."></textarea>
 
             <h2>Personalização</h2>
+
+            <label>Enviar arte/logo/referência</label>
+            <input type="file" name="arte" accept="image/*,.pdf">
 
             <label>Cor desejada</label>
             <input type="text" name="cor" placeholder="Ex: preta, vinho, azul marinho">

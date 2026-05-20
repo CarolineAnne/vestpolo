@@ -211,6 +211,8 @@ def checkout(request):
         nome_bordado = request.POST.get('nome_bordado', '')
         observacao_item = request.POST.get('observacao_item', '')
 
+        arte = request.FILES.get('arte')
+
         pedido = Pedido.objects.create(
             usuario=request.user if request.user.is_authenticated else None,
             nome_cliente=nome_cliente,
@@ -242,6 +244,7 @@ def checkout(request):
                 curso=curso,
                 nome_bordado=nome_bordado,
                 observacao=observacao_item,
+                arte=arte,
                 subtotal=item['subtotal']
             )
 
@@ -260,6 +263,9 @@ def checkout(request):
 
             if observacao_item:
                 mensagem += f"  Detalhes do bordado: {observacao_item}\n"
+
+            if arte:
+                mensagem += "  Arte/logo enviada no pedido.\n"
 
             mensagem += f"  Subtotal: R$ {item['subtotal']:.2f}\n\n"
 

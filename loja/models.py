@@ -84,6 +84,7 @@ class ItemPedido(models.Model):
     curso = models.CharField(max_length=100, blank=True)
     nome_bordado = models.CharField(max_length=100, blank=True)
     observacao = models.TextField(blank=True)
+    arte = models.FileField(upload_to='artes/', blank=True, null=True)
 
     subtotal = models.DecimalField(
         max_digits=10,
