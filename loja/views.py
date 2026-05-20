@@ -91,7 +91,10 @@ def adicionar_carrinho(request, id):
 
     id = str(id)
 
-    quantidade = int(request.GET.get('quantidade', 1))
+    try:
+        quantidade = int(request.GET.get('quantidade', 1))
+    except ValueError:
+        quantidade = 1
 
     if quantidade < 1:
         quantidade = 1
@@ -136,15 +139,17 @@ def carrinho(request):
 
         total += subtotal
 
-    favoritos = request.session.get('favoritos', [])
+    if request.user.is_authenticated:
+        total_favoritos = Favorito.objects.filter(usuario=request.user).count()
+    else:
+        total_favoritos = 0
 
     return render(request, 'loja/carrinho.html', {
         'itens': itens,
         'total': total,
         'total_itens': sum(carrinho.values()),
-        'total_favoritos': len(favoritos)
+        'total_favoritos': total_favoritos
     })
-
 
 def aumentar_quantidade(request, id):
     carrinho = request.session.get('carrinho', {})
