@@ -20,6 +20,9 @@
         }
 
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: #111;
             color: white;
             padding: 16px 40px;
@@ -344,7 +347,7 @@
 
         .acoes button {
             width: 100%;
-            background: #128a3c;
+            background: linear-gradient(135deg, #128a3c, #25D366);
             padding: 14px;
             border-radius: 12px;
             font-size: 15px;
@@ -483,10 +486,72 @@
             transform: translateY(-7px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.16);
         }
+
+        .topbar {
+            background: #000;
+            color: white;
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .menu-loja {
+            background: white;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            padding: 18px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            z-index: 999;
+            top: 72px;
+        }
+
+        .menu-loja a {
+            text-decoration: none;
+            color: #111;
+            font-weight: bold;
+        }
+
+        .menu-loja a:hover {
+            color: #25D366;
+        }
+
+        @media (max-width: 700px) {
+
+        .topbar {
+            flex-direction: column;
+            gap: 5px;
+            text-align: center;
+            padding: 10px 15px;
+        }
+
+        .menu-loja {
+            gap: 18px;
+            overflow-x: auto;
+            justify-content: flex-start;
+            padding: 14px;
+        }
+
+    }
     </style>
 </head>
 
 <body>
+
+<div class="topbar">
+
+    <div class="topbar-left">
+        📞 WhatsApp: (74) 99908-7655
+    </div>
+
+    <div class="topbar-right">
+        🚚 Enviamos para todo Brasil
+    </div>
+
+</div>
 
 <header>
     <a href="{% url 'home' %}" style="text-decoration:none; color:white;">
@@ -532,6 +597,17 @@
 
 </div>
 </header>
+
+<nav class="menu-loja">
+
+    <a href="{% url 'home' %}">Início</a>
+    <a href="#produtos">Universitários</a>
+    <a href="#produtos">Empresariais</a>
+    <a href="#produtos">Personalizados</a>
+    <a href="#produtos">Mais vendidos</a>
+    <a href="https://wa.me/5574999087655" target="_blank">Contato</a>
+
+</nav>
 
 <section class="hero">
 
