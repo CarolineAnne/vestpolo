@@ -10,9 +10,9 @@ class FavoritoAdmin(admin.ModelAdmin):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'preco', 'tamanho')
+    list_display = ('id', 'nome', 'categoria', 'preco', 'tamanho')
     search_fields = ('nome', 'descricao')
-    list_filter = ('tamanho',)
+    list_filter = ('categoria', 'tamanho')
     list_per_page = 20
 
 
