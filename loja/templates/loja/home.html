@@ -599,6 +599,119 @@
         line-height: 1.5;
         margin: 0;
     }
+
+    .vitrine-premium {
+        width: 92%;
+        max-width: 1200px;
+        margin: 45px auto;
+    }
+
+    .vitrine-topo {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 18px;
+        gap: 20px;
+    }
+
+    .vitrine-topo h2 {
+        font-size: 30px;
+        margin: 6px 0 0;
+    }
+
+    .vitrine-topo .subtitulo {
+        color: #128a3c;
+        font-size: 13px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .vitrine-topo a {
+        color: #111;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .carrossel-produtos {
+        display: flex;
+        gap: 18px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 12px;
+    }
+
+    .carrossel-produtos::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .carrossel-produtos::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 20px;
+    }
+
+    .mini-produto {
+        min-width: 220px;
+        max-width: 220px;
+        background: white;
+        border-radius: 18px;
+        padding: 14px;
+        text-decoration: none;
+        color: #111;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        scroll-snap-align: start;
+        transition: 0.3s ease;
+    }
+
+    .mini-produto:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+    }
+
+    .mini-produto img {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+        border-radius: 14px;
+        background: #eee;
+    }
+
+    .mini-badge {
+        display: inline-block;
+        margin-top: 10px;
+        background: #111;
+        color: white;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+    }
+
+    .mini-produto h3 {
+        font-size: 16px;
+        margin: 10px 0 6px;
+    }
+
+    .mini-produto p {
+        color: #128a3c;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    @media (max-width: 700px) {
+        .vitrine-topo {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .mini-produto {
+            min-width: 190px;
+            max-width: 190px;
+        }
+
+        .mini-produto img {
+            height: 150px;
+        }
+    }
     </style>
 </head>
 
@@ -724,6 +837,102 @@
         <h3>Personalizados</h3>
         <p>Bordados exclusivos com nome, curso, logo ou identidade visual.</p>
     </a>
+
+</section>
+
+<section class="vitrine-premium">
+
+    <div class="vitrine-topo">
+        <div>
+            <span class="subtitulo">Vitrine VestPolo</span>
+            <h2>Mais vendidos</h2>
+        </div>
+        <a href="#produtos">Ver todos</a>
+    </div>
+
+    <div class="carrossel-produtos">
+
+        {% for produto in produtos %}
+            <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
+
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
+                {% endif %}
+
+                <span class="mini-badge">Mais vendido</span>
+                <h3>{{ produto.nome }}</h3>
+                <p>R$ {{ produto.preco }}</p>
+
+            </a>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<section class="vitrine-premium">
+
+    <div class="vitrine-topo">
+        <div>
+            <span class="subtitulo">Categorias</span>
+            <h2>Polos universitárias</h2>
+        </div>
+        <a href="#produtos">Ver todos</a>
+    </div>
+
+    <div class="carrossel-produtos">
+
+        {% for produto in produtos %}
+            <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
+
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
+                {% endif %}
+
+                <span class="mini-badge">Universitário</span>
+                <h3>{{ produto.nome }}</h3>
+                <p>R$ {{ produto.preco }}</p>
+
+            </a>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<section class="vitrine-premium">
+
+    <div class="vitrine-topo">
+        <div>
+            <span class="subtitulo">Uniformes</span>
+            <h2>Empresariais e personalizados</h2>
+        </div>
+        <a href="#produtos">Ver todos</a>
+    </div>
+
+    <div class="carrossel-produtos">
+
+        {% for produto in produtos %}
+            <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
+
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
+                {% endif %}
+
+                <span class="mini-badge">Personalizado</span>
+                <h3>{{ produto.nome }}</h3>
+                <p>R$ {{ produto.preco }}</p>
+
+            </a>
+        {% endfor %}
+
+    </div>
 
 </section>
 
