@@ -348,6 +348,104 @@
             text-decoration: none;
         }
 
+        /* Modal da imagem ampliada */
+
+        .imagem-principal {
+            cursor: pointer;
+        }
+
+        .modal-imagem {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            z-index: 9999;
+        }
+
+        .modal-imagem.ativo {
+            display: flex;
+        }
+
+        .modal-conteudo {
+            position: relative;
+            max-width: 95vw;
+            max-height: 92vh;
+            text-align: center;
+        }
+
+        .modal-conteudo img {
+            max-width: 95vw;
+            max-height: 85vh;
+            object-fit: contain;
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .modal-conteudo span {
+            display: inline-block;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .fechar-modal {
+            position: fixed;
+            top: 22px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            color: #111;
+            font-size: 32px;
+            line-height: 1;
+            padding: 0;
+            z-index: 10000;
+        }
+
+        .fechar-modal:hover {
+            background: #eee;
+        }
+
+        .seta-modal {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: white;
+            color: #111;
+            font-size: 42px;
+            line-height: 1;
+            padding: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .seta-modal:hover {
+            background: #eee;
+        }
+
+        .seta-modal-esquerda {
+            left: 28px;
+        }
+
+        .seta-modal-direita {
+            right: 28px;
+        }
+
+        body.modal-aberto {
+            overflow: hidden;
+        }
+
         /* Responsivo */
 
         @media (max-width: 850px) {
@@ -428,6 +526,28 @@
             .titulo-slide-produto {
                 font-size: 12px;
                 padding: 7px 12px;
+            }
+
+            .seta-modal {
+                width: 42px;
+                height: 42px;
+                font-size: 34px;
+            }
+
+            .seta-modal-esquerda {
+                left: 12px;
+            }
+
+            .seta-modal-direita {
+                right: 12px;
+            }
+
+            .fechar-modal {
+                top: 14px;
+                right: 14px;
+                width: 40px;
+                height: 40px;
+                font-size: 28px;
             }
         }
     </style>
@@ -619,6 +739,25 @@
 <footer>
     VestPolo — Seu curso. Seu estilo. Seu fardamento.
 </footer>
+
+<div class="modal-imagem" id="modalImagem" onclick="fecharImagemGrande(event)">
+    <button type="button" class="fechar-modal" onclick="fecharImagemGrande(event)">
+        ×
+    </button>
+
+    <button type="button" class="seta-modal seta-modal-esquerda" onclick="moverImagemGrande(-1)">
+        ‹
+    </button>
+
+    <div class="modal-conteudo">
+        <span id="modalTitulo"></span>
+        <img id="imagemGrande" src="" alt="Imagem ampliada do produto">
+    </div>
+
+    <button type="button" class="seta-modal seta-modal-direita" onclick="moverImagemGrande(1)">
+        ›
+    </button>
+</div>
 
 <script>
     function aumentarQtd() {
@@ -835,6 +974,138 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         mostrarSlideProduto("produto");
+    });
+
+    let imagensModal = [];
+    let imagemModalAtual = 0;
+
+    function montarListaImagensModal() {
+        const slides = document.querySelectorAll(".slide-produto");
+
+        imagensModal = [];
+
+        slides.forEach(function (slide) {
+            const img = slide.querySelector("img");
+
+            if (!img) return;
+
+            const tipo = slide.getAttribute("data-slide");
+
+            let titulo = "{{ produto.nome }}";
+
+            if (tipo === "logo") {
+                titulo = "Logo do bordado";
+            } else if (tipo === "tamanho") {
+                titulo = "Tabela de tamanhos";
+            }
+
+            imagensModal.push({
+                tipo: tipo,
+                src: img.src,
+                alt: img.alt,
+                titulo: titulo
+            });
+        });
+    }
+
+    function descobrirIndiceImagemAtiva() {
+        const slideAtivo = document.querySelector(".slide-produto.ativo");
+
+        if (!slideAtivo) return 0;
+
+        const tipoAtivo = slideAtivo.getAttribute("data-slide");
+
+        const indice = imagensModal.findIndex(function (item) {
+            return item.tipo === tipoAtivo;
+        });
+
+        return indice >= 0 ? indice : 0;
+    }
+
+    function exibirImagemGrande(indice) {
+        const imagemGrande = document.getElementById("imagemGrande");
+        const modalTitulo = document.getElementById("modalTitulo");
+
+        if (!imagemGrande || !modalTitulo) return;
+        if (imagensModal.length === 0) return;
+
+        if (indice >= imagensModal.length) {
+            imagemModalAtual = 0;
+        } else if (indice < 0) {
+            imagemModalAtual = imagensModal.length - 1;
+        } else {
+            imagemModalAtual = indice;
+        }
+
+        const imagem = imagensModal[imagemModalAtual];
+
+        imagemGrande.src = imagem.src;
+        imagemGrande.alt = imagem.alt;
+        modalTitulo.textContent = imagem.titulo;
+    }
+
+    function abrirImagemGrande() {
+        const modal = document.getElementById("modalImagem");
+
+        if (!modal) return;
+
+        montarListaImagensModal();
+
+        if (imagensModal.length === 0) return;
+
+        imagemModalAtual = descobrirIndiceImagemAtiva();
+
+        exibirImagemGrande(imagemModalAtual);
+
+        modal.classList.add("ativo");
+        document.body.classList.add("modal-aberto");
+    }
+
+    function moverImagemGrande(direcao) {
+        exibirImagemGrande(imagemModalAtual + direcao);
+    }
+
+    function fecharImagemGrande(event) {
+        const modal = document.getElementById("modalImagem");
+
+        if (!modal) return;
+
+        if (
+            event.target.id === "modalImagem" ||
+            event.target.classList.contains("fechar-modal")
+        ) {
+            modal.classList.remove("ativo");
+            document.body.classList.remove("modal-aberto");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const areaImagem = document.getElementById("zoomContainer");
+
+        if (areaImagem) {
+            areaImagem.addEventListener("click", function () {
+                abrirImagemGrande();
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            const modal = document.getElementById("modalImagem");
+
+            if (!modal || !modal.classList.contains("ativo")) return;
+
+            if (event.key === "Escape") {
+                modal.classList.remove("ativo");
+                document.body.classList.remove("modal-aberto");
+            }
+
+            if (event.key === "ArrowRight") {
+                moverImagemGrande(1);
+            }
+
+            if (event.key === "ArrowLeft") {
+                moverImagemGrande(-1);
+            }
+        });
     });
 </script>
 
