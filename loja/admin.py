@@ -42,6 +42,8 @@ class ItemPedidoInline(admin.TabularInline):
         'observacao',
         'arte',
         'subtotal',
+        'imagem_logo',
+        'imagem_tamanho',
     )
 
     can_delete = False

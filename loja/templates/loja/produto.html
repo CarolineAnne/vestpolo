@@ -216,6 +216,103 @@
             margin-top: 16px;
         }
 
+        /* Galeria extra depois do produto */
+
+        .galeria-extra-produto {
+            max-width: 1150px;
+            margin: 0 auto 40px;
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        }
+
+        .galeria-extra-produto h2 {
+            margin: 0 0 20px;
+            font-size: 26px;
+            text-align: center;
+        }
+
+        .carrossel-extra {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 360px;
+        }
+
+        .area-slides-extra {
+            width: 100%;
+            max-width: 750px;
+            overflow: hidden;
+        }
+
+        .slide-extra {
+            display: none;
+            text-align: center;
+            animation: aparecerSlide 0.3s ease;
+        }
+
+        .slide-extra.ativo {
+            display: block;
+        }
+
+        .slide-extra span {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .slide-extra img {
+            width: 100%;
+            max-height: 430px;
+            object-fit: contain;
+            border-radius: 16px;
+            background: #f7f7f7;
+            padding: 15px;
+        }
+
+        .seta-extra {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #111;
+            color: white;
+            font-size: 32px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            flex-shrink: 0;
+        }
+
+        .seta-extra:hover {
+            background: #333;
+        }
+
+        .seta-esquerda {
+            margin-right: 18px;
+        }
+
+        .seta-direita {
+            margin-left: 18px;
+        }
+
+        @keyframes aparecerSlide {
+            from {
+                opacity: 0;
+                transform: translateX(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         footer {
             text-align: center;
             padding: 25px;
@@ -225,6 +322,8 @@
         a {
             text-decoration: none;
         }
+
+        /* Responsivo */
 
         @media (max-width: 850px) {
             header {
@@ -250,8 +349,44 @@
                 height: 130px;
             }
 
+            .acoes {
+                flex-direction: column;
+            }
+
+            .acoes form,
             .acoes button {
                 width: 100%;
+            }
+
+            .galeria-extra-produto {
+                margin: 0 20px 30px;
+                padding: 20px;
+            }
+
+            .galeria-extra-produto h2 {
+                font-size: 22px;
+            }
+
+            .carrossel-extra {
+                min-height: 280px;
+            }
+
+            .slide-extra img {
+                max-height: 300px;
+            }
+
+            .seta-extra {
+                width: 40px;
+                height: 40px;
+                font-size: 26px;
+            }
+
+            .seta-esquerda {
+                margin-right: 8px;
+            }
+
+            .seta-direita {
+                margin-left: 8px;
             }
         }
     </style>
@@ -375,8 +510,45 @@
         </p>
 
     </div>
-
 </main>
+
+{% if produto.imagem_logo or produto.imagem_tamanho %}
+<section class="galeria-extra-produto">
+
+    <h2>Detalhes do produto</h2>
+
+    <div class="carrossel-extra">
+
+        <button type="button" class="seta-extra seta-esquerda" onclick="moverImagemExtra(-1)">
+            ‹
+        </button>
+
+        <div class="area-slides-extra">
+
+            {% if produto.imagem_logo %}
+                <div class="slide-extra ativo">
+                    <span>Logo do bordado</span>
+                    <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
+                </div>
+            {% endif %}
+
+            {% if produto.imagem_tamanho %}
+                <div class="slide-extra">
+                    <span>Tabela de tamanhos</span>
+                    <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
+                </div>
+            {% endif %}
+
+        </div>
+
+        <button type="button" class="seta-extra seta-direita" onclick="moverImagemExtra(1)">
+            ›
+        </button>
+
+    </div>
+
+</section>
+{% endif %}
 
 <footer>
     VestPolo — Seu curso. Seu estilo. Seu fardamento.
@@ -523,6 +695,36 @@
         imagem.addEventListener("load", function () {
             atualizarImagemDaLupa();
         });
+    });
+
+    let slideExtraAtual = 0;
+
+    function mostrarImagemExtra(indice) {
+        const slides = document.querySelectorAll(".slide-extra");
+
+        if (slides.length === 0) return;
+
+        if (indice >= slides.length) {
+            slideExtraAtual = 0;
+        } else if (indice < 0) {
+            slideExtraAtual = slides.length - 1;
+        } else {
+            slideExtraAtual = indice;
+        }
+
+        slides.forEach(function (slide) {
+            slide.classList.remove("ativo");
+        });
+
+        slides[slideExtraAtual].classList.add("ativo");
+    }
+
+    function moverImagemExtra(direcao) {
+        mostrarImagemExtra(slideExtraAtual + direcao);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        mostrarImagemExtra(0);
     });
 </script>
 

@@ -29,6 +29,20 @@ class Produto(models.Model):
     imagem_vinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
     imagem_marinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
 
+    imagem_logo = models.ImageField(
+        upload_to='produtos/logos/',
+        blank=True,
+        null=True,
+        verbose_name='Logo do bordado'
+    )
+
+    imagem_tamanho = models.ImageField(
+        upload_to='produtos/tamanhos/',
+        blank=True,
+        null=True,
+        verbose_name='Tabela de tamanhos'
+    )
+
     def __str__(self):
         return self.nome
 
