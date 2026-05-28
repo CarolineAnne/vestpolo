@@ -235,23 +235,24 @@
                 <div class="item-info">
                     <h3>{{ item.produto.nome }}</h3>
 
-                    <p><strong>Tamanho:</strong> {{ item.produto.tamanho }}</p>
+                    <p><strong>Tamanho:</strong> {{ item.tamanho }}</p>
+                    <p><strong>Cor:</strong> {{ item.cor }}</p>
                     <p><strong>Subtotal:</strong> R$ {{ item.subtotal }}</p>
 
                     <div class="qtd-area">
-                        <a href="{% url 'menos' item.produto.id %}">
+                        <a href="{% url 'menos' item.chave %}">
                             <button class="btn-qtd">−</button>
                         </a>
 
                         <span class="qtd-numero">{{ item.quantidade }}</span>
 
-                        <a href="{% url 'mais' item.produto.id %}">
+                        <a href="{% url 'mais' item.chave %}">
                             <button class="btn-qtd">+</button>
                         </a>
                     </div>
                 </div>
 
-                <a href="{% url 'remover_carrinho' item.produto.id %}">
+                <a href="{% url 'remover_carrinho' item.chave %}">
                     <button class="btn-remover">Remover</button>
                 </a>
 

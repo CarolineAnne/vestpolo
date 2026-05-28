@@ -18,21 +18,16 @@ class Produto(models.Model):
         default='Universitário'
     )
 
-    tamanho = models.CharField(
-        max_length=5,
-        choices=[
-            ('P', 'P'),
-            ('M', 'M'),
-            ('G', 'G'),
-            ('GG', 'GG'),
-        ]
-    )
-
     imagem = models.ImageField(
         upload_to='produtos/',
         blank=True,
         null=True
     )
+
+    imagem_preta = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_branca = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_vinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_marinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
 
     def __str__(self):
         return self.nome
@@ -91,7 +86,8 @@ class ItemPedido(models.Model):
     )
 
     quantidade = models.PositiveIntegerField(default=1)
-
+    
+    tamanho = models.CharField(max_length=5, blank=True)
     cor = models.CharField(max_length=50, blank=True)
     curso = models.CharField(max_length=100, blank=True)
     nome_bordado = models.CharField(max_length=100, blank=True)

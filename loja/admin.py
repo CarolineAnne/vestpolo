@@ -10,9 +10,9 @@ class FavoritoAdmin(admin.ModelAdmin):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'categoria', 'preco', 'tamanho')
+    list_display = ('id', 'nome', 'categoria', 'preco')
     search_fields = ('nome', 'descricao')
-    list_filter = ('categoria', 'tamanho')
+    list_filter = ('categoria',)
     list_per_page = 20
 
 
@@ -23,6 +23,7 @@ class ItemPedidoInline(admin.TabularInline):
     readonly_fields = (
         'produto',
         'quantidade',
+        'tamanho',
         'cor',
         'curso',
         'nome_bordado',
@@ -34,6 +35,7 @@ class ItemPedidoInline(admin.TabularInline):
     fields = (
         'produto',
         'quantidade',
+        'tamanho',
         'cor',
         'curso',
         'nome_bordado',

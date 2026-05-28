@@ -204,9 +204,9 @@
 
     <div class="imagem-principal">
         {% if produto.imagem %}
-            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+            <img id="imagemProduto" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
         {% else %}
-            <img src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
+            <img id="imagemProduto" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
         {% endif %}
     </div>
 
@@ -230,96 +230,159 @@
         </div>
 
         <div class="tamanho-box">
-    <strong>Tamanho disponível:</strong>
-    <span class="tamanho">{{ produto.tamanho }}</span>
-</div>
+            <strong>Escolha o tamanho:</strong>
 
-<div class="tamanho-box">
-    <strong>Quantidade:</strong>
+            <select id="tamanhoSelecionado"
+                    required
+                    style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+                <option value="">Selecione</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+            </select>
+        </div>
 
-    <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
-        <button type="button" onclick="diminuirQtd()">-</button>
+        <div class="tamanho-box">
+            <strong>Escolha a cor:</strong>
 
-        <input id="quantidade" 
-               type="number" 
-               value="1" 
-               min="1"
-               style="width:70px; padding:10px; text-align:center; border-radius:8px; border:1px solid #ccc;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button type="button"
+                        onclick="selecionarCor('Preto', '{% if produto.imagem_preta %}{{ produto.imagem_preta.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
+                    Preto
+                </button>
 
-        <button type="button" onclick="aumentarQtd()">+</button>
-    </div>
-</div>
+                <button type="button"
+                        onclick="selecionarCor('Branca', '{% if produto.imagem_branca %}{{ produto.imagem_branca.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
+                    Branca
+                </button>
 
-<div class="acoes">
+                <button type="button"
+                        onclick="selecionarCor('Vinho', '{% if produto.imagem_vinho %}{{ produto.imagem_vinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
+                    Vinho
+                </button>
 
-    <form method="GET" action="{% url 'add_carrinho' produto.id %}">
-        <input type="hidden" name="quantidade" id="quantidadeCarrinho" value="1">
+                <button type="button"
+                        onclick="selecionarCor('Marinho', '{% if produto.imagem_marinho %}{{ produto.imagem_marinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
+                    Marinho
+                </button>
+            </div>
 
-        <button type="submit"
-                class="btn-carrinho"
-                onclick="atualizarQuantidadeCarrinho()">
+            <input type="hidden" id="corSelecionada" value="">
+        </div>
 
-            🛒 Adicionar ao carrinho
+        <div class="tamanho-box">
+            <strong>Quantidade:</strong>
 
-        </button>
-    </form>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+                <button type="button" onclick="diminuirQtd()">-</button>
 
-    <a id="btnWhatsapp"
-       href="#"
-       target="_blank">
+                <input id="quantidade"
+                       type="number"
+                       value="1"
+                       min="1"
+                       style="width:70px; padding:10px; text-align:center; border-radius:8px; border:1px solid #ccc;">
 
-        <button class="btn-whatsapp"
-                type="button"
-                onclick="abrirWhatsapp()">
+                <button type="button" onclick="aumentarQtd()">+</button>
+            </div>
+        </div>
 
-            💬 Comprar pelo WhatsApp
+        <div class="acoes">
 
-        </button>
+            <form method="GET"
+                  action="{% url 'add_carrinho' produto.id %}"
+                  onsubmit="return prepararCarrinho()">
 
-    </a>
+                <input type="hidden" name="quantidade" id="quantidadeCarrinho" value="1">
+                <input type="hidden" name="tamanho" id="tamanhoCarrinho">
+                <input type="hidden" name="cor" id="corCarrinho">
 
-</div>
+                <button type="submit" class="btn-carrinho">
+                    🛒 Adicionar ao carrinho
+                </button>
+            </form>
 
-<script>
+            <button class="btn-whatsapp"
+                    type="button"
+                    onclick="abrirWhatsapp()">
+                💬 Comprar pelo WhatsApp
+            </button>
 
-    function aumentarQtd() {
-        let qtd = document.getElementById("quantidade");
-        qtd.value = parseInt(qtd.value) + 1;
-    }
+        </div>
 
-    function diminuirQtd() {
+        <script>
+            function aumentarQtd() {
+                let qtd = document.getElementById("quantidade");
+                qtd.value = parseInt(qtd.value) + 1;
+            }
 
-        let qtd = document.getElementById("quantidade");
+            function diminuirQtd() {
+                let qtd = document.getElementById("quantidade");
 
-        if (parseInt(qtd.value) > 1) {
-            qtd.value = parseInt(qtd.value) - 1;
-        }
-    }
+                if (parseInt(qtd.value) > 1) {
+                    qtd.value = parseInt(qtd.value) - 1;
+                }
+            }
 
-    function atualizarQuantidadeCarrinho() {
+            function selecionarCor(cor, imagemUrl) {
+                document.getElementById("corSelecionada").value = cor;
 
-        let qtd = document.getElementById("quantidade").value;
+                let imagem = document.getElementById("imagemProduto");
 
-        document.getElementById("quantidadeCarrinho").value = qtd;
-    }
+                if (imagemUrl && imagemUrl !== "None") {
+                    imagem.src = imagemUrl;
+                }
+            }
 
-    function abrirWhatsapp() {
+            function prepararCarrinho() {
+                let qtd = document.getElementById("quantidade").value;
+                let tamanho = document.getElementById("tamanhoSelecionado").value;
+                let cor = document.getElementById("corSelecionada").value;
 
-        let qtd = document.getElementById("quantidade").value;
+                if (!tamanho) {
+                    alert("Escolha um tamanho.");
+                    return false;
+                }
 
-        let mensagem =
-            `Olá! Tenho interesse no produto: {{ produto.nome }}%0A` +
-            `Tamanho: {{ produto.tamanho }}%0A` +
-            `Quantidade: ${qtd}%0A` +
-            `Valor unitário: R$ {{ produto.preco }}`;
+                if (!cor) {
+                    alert("Escolha uma cor.");
+                    return false;
+                }
 
-        let url =
-            `https://wa.me/5574999087655?text=${mensagem}`;
+                document.getElementById("quantidadeCarrinho").value = qtd;
+                document.getElementById("tamanhoCarrinho").value = tamanho;
+                document.getElementById("corCarrinho").value = cor;
 
-        window.open(url, "_blank");
-    }
+                return true;
+            }
 
-</script>
+            function abrirWhatsapp() {
+                let qtd = document.getElementById("quantidade").value;
+                let tamanho = document.getElementById("tamanhoSelecionado").value;
+                let cor = document.getElementById("corSelecionada").value;
+
+                if (!tamanho) {
+                    alert("Escolha um tamanho.");
+                    return;
+                }
+
+                if (!cor) {
+                    alert("Escolha uma cor.");
+                    return;
+                }
+
+                let mensagem =
+                    `Olá! Tenho interesse no produto: {{ produto.nome }}%0A` +
+                    `Tamanho: ${tamanho}%0A` +
+                    `Cor: ${cor}%0A` +
+                    `Quantidade: ${qtd}%0A` +
+                    `Valor unitário: R$ {{ produto.preco }}`;
+
+                let url = `https://wa.me/5574999087655?text=${mensagem}`;
+
+                window.open(url, "_blank");
+            }
+        </script>
 
         <p class="observacao">
             Após clicar em comprar, você será direcionado ao WhatsApp para confirmar detalhes do pedido, bordado e disponibilidade.

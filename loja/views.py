@@ -10,7 +10,6 @@ def home(request):
     produtos = Produto.objects.all()
 
     busca = request.GET.get('busca')
-    tamanho = request.GET.get('tamanho')
 
     # 🔎 Busca
     if busca:
@@ -18,10 +17,6 @@ def home(request):
             Q(nome__icontains=busca) |
             Q(descricao__icontains=busca)
         )
-
-    # 🎯 Filtro
-    if tamanho:
-        produtos = produtos.filter(tamanho=tamanho)
 
     # ❤️ Favoritos
     if request.user.is_authenticated:
@@ -36,7 +31,14 @@ def home(request):
 
     # 🛒 Carrinho
     carrinho = request.session.get('carrinho', {})
-    total_itens = sum(carrinho.values())
+
+    total_itens = 0
+
+    for item in carrinho.values():
+        if isinstance(item, dict):
+            total_itens += item.get('quantidade', 0)
+        else:
+            total_itens += item
 
     return render(request, 'loja/home.html', {
         'produtos': produtos,
@@ -89,7 +91,7 @@ def adicionar_carrinho(request, id):
 
     carrinho = request.session.get('carrinho', {})
 
-    id = str(id)
+    produto = get_object_or_404(Produto, id=id)
 
     try:
         quantidade = int(request.GET.get('quantidade', 1))
@@ -99,10 +101,23 @@ def adicionar_carrinho(request, id):
     if quantidade < 1:
         quantidade = 1
 
-    if id in carrinho:
-        carrinho[id] += quantidade
+    tamanho = request.GET.get('tamanho', '')
+    cor = request.GET.get('cor', '')
+
+    if not tamanho or not cor:
+        return redirect('produto_detalhe', id=id)
+
+    chave = f"{id}_{tamanho}_{cor}"
+
+    if chave in carrinho:
+        carrinho[chave]['quantidade'] += quantidade
     else:
-        carrinho[id] = quantidade
+        carrinho[chave] = {
+            'produto_id': produto.id,
+            'quantidade': quantidade,
+            'tamanho': tamanho,
+            'cor': cor
+        }
 
     request.session['carrinho'] = carrinho
 
@@ -111,33 +126,39 @@ def adicionar_carrinho(request, id):
 
 def remover_carrinho(request, id):
     carrinho = request.session.get('carrinho', {})
-    id = str(id)
 
-    if id in carrinho:
-        del carrinho[id]
+    chave = str(id)
+
+    if chave in carrinho:
+        del carrinho[chave]
 
     request.session['carrinho'] = carrinho
 
     return redirect('carrinho')
-
 
 def carrinho(request):
     carrinho = request.session.get('carrinho', {})
 
     itens = []
     total = 0
+    total_itens = 0
 
-    for id, quantidade in carrinho.items():
-        produto = get_object_or_404(Produto, id=id)
+    for chave, dados in carrinho.items():
+        produto = get_object_or_404(Produto, id=dados['produto_id'])
+        quantidade = dados['quantidade']
         subtotal = produto.preco * quantidade
 
         itens.append({
+            'chave': chave,
             'produto': produto,
             'quantidade': quantidade,
+            'tamanho': dados.get('tamanho', ''),
+            'cor': dados.get('cor', ''),
             'subtotal': subtotal
         })
 
         total += subtotal
+        total_itens += quantidade
 
     if request.user.is_authenticated:
         total_favoritos = Favorito.objects.filter(usuario=request.user).count()
@@ -147,31 +168,32 @@ def carrinho(request):
     return render(request, 'loja/carrinho.html', {
         'itens': itens,
         'total': total,
-        'total_itens': sum(carrinho.values()),
+        'total_itens': total_itens,
         'total_favoritos': total_favoritos
     })
 
 def aumentar_quantidade(request, id):
     carrinho = request.session.get('carrinho', {})
-    id = str(id)
 
-    if id in carrinho:
-        carrinho[id] += 1
+    chave = str(id)
+
+    if chave in carrinho:
+        carrinho[chave]['quantidade'] += 1
 
     request.session['carrinho'] = carrinho
 
     return redirect('carrinho')
 
-
 def diminuir_quantidade(request, id):
     carrinho = request.session.get('carrinho', {})
-    id = str(id)
 
-    if id in carrinho:
-        carrinho[id] -= 1
+    chave = str(id)
 
-        if carrinho[id] <= 0:
-            del carrinho[id]
+    if chave in carrinho:
+        carrinho[chave]['quantidade'] -= 1
+
+        if carrinho[chave]['quantidade'] <= 0:
+            del carrinho[chave]
 
     request.session['carrinho'] = carrinho
 
@@ -189,24 +211,26 @@ def checkout(request):
     produtos = []
     total = 0
 
-    for id, quantidade in carrinho.items():
-        produto = get_object_or_404(Produto, id=id)
+    for chave, dados in carrinho.items():
+        produto = get_object_or_404(Produto, id=dados['produto_id'])
+        quantidade = dados['quantidade']
         subtotal = produto.preco * quantidade
         total += subtotal
 
         produtos.append({
+            'chave': chave,
             'produto': produto,
             'quantidade': quantidade,
+            'tamanho': dados.get('tamanho', ''),
+            'cor': dados.get('cor', ''),
             'subtotal': subtotal
         })
-
     if request.method == 'POST':
         nome_cliente = request.POST.get('nome_cliente')
         telefone = request.POST.get('telefone')
         forma_entrega = request.POST.get('forma_entrega')
         observacao = request.POST.get('observacao')
 
-        cor = request.POST.get('cor', '')
         curso = request.POST.get('curso', '')
         nome_bordado = request.POST.get('nome_bordado', '')
         observacao_item = request.POST.get('observacao_item', '')
@@ -240,7 +264,8 @@ def checkout(request):
                 pedido=pedido,
                 produto=item['produto'],
                 quantidade=item['quantidade'],
-                cor=cor,
+                tamanho=item['tamanho'],
+                cor=item['cor'],
                 curso=curso,
                 nome_bordado=nome_bordado,
                 observacao=observacao_item,
@@ -249,11 +274,9 @@ def checkout(request):
             )
 
             mensagem += f"- {item['produto'].nome}\n"
-            mensagem += f"  Tamanho: {item['produto'].tamanho}\n"
+            mensagem += f"  Tamanho: {item['tamanho']}\n"
+            mensagem += f"  Cor: {item['cor']}\n"
             mensagem += f"  Quantidade: {item['quantidade']}\n"
-
-            if cor:
-                mensagem += f"  Cor: {cor}\n"
 
             if curso:
                 mensagem += f"  Curso/Turma/Empresa: {curso}\n"

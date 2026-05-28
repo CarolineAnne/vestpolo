@@ -168,7 +168,8 @@
         {% for item in itens %}
             <div class="item">
                 <strong>{{ item.produto.nome }}</strong>
-                <span>Tamanho: {{ item.produto.tamanho }}</span><br>
+                <span>Tamanho: {{ item.tamanho }}</span><br>
+                <span>Cor: {{ item.cor }}</span><br>
                 <span>Quantidade: {{ item.quantidade }}</span><br>
                 <span>Subtotal: R$ {{ item.subtotal }}</span>
             </div>
