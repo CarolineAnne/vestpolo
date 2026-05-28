@@ -53,11 +53,78 @@
         /* Galeria principal do produto */
 
         .galeria-produto {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 12px;
             width: 100%;
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .miniaturas-wrapper {
+            width: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .miniaturas-produto {
+            width: 90px;
+            max-height: 470px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .miniaturas-produto::-webkit-scrollbar {
+            display: none;
+        }
+
+        .miniatura-produto {
+            width: 90px;
+            height: 108px;
+            padding: 0;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .miniatura-produto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .miniatura-produto.ativo {
+            border: 2px solid #111;
+        }
+
+        .miniatura-produto:hover {
+            transform: scale(1.02);
+            border-color: #111;
+        }
+
+        .miniatura-scroll {
+            width: 34px;
+            height: 28px;
+            margin-top: 8px;
+            padding: 0;
+            background: transparent;
+            color: #777;
+            font-size: 28px;
+            line-height: 1;
+            border-radius: 0;
+        }
+
+        .miniatura-scroll:hover {
+            color: #111;
+            background: transparent;
         }
 
         .imagem-principal {
@@ -65,7 +132,7 @@
             width: 100%;
             height: 520px;
             overflow: hidden;
-            border-radius: 16px;
+            border-radius: 0;
             background: #eee;
             flex: 1;
             min-width: 0;
@@ -76,7 +143,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 16px;
+            border-radius: 0;
         }
 
         .zoom-container {
@@ -113,13 +180,13 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 16px;
+            border-radius: 0;
         }
 
-        .slide-produto:not(:first-child) img {
+        .slide-produto:not([data-slide="produto"]) img {
             object-fit: contain;
             background: #f7f7f7;
-            padding: 20px;
+            padding: 25px;
         }
 
         .titulo-slide-produto {
@@ -135,26 +202,6 @@
             font-weight: bold;
             z-index: 5;
             white-space: nowrap;
-        }
-
-        .seta-produto {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #111;
-            color: white;
-            font-size: 30px;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            z-index: 8;
-            padding: 0;
-        }
-
-        .seta-produto:hover {
-            background: #333;
         }
 
         /* Informações do produto */
@@ -322,12 +369,6 @@
                 height: 380px;
             }
 
-            .seta-produto {
-                width: 36px;
-                height: 36px;
-                font-size: 24px;
-            }
-
             .titulo-slide-produto {
                 font-size: 12px;
                 padding: 7px 12px;
@@ -350,6 +391,44 @@
             .acoes button {
                 width: 100%;
             }
+
+            .galeria-produto {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .miniaturas-wrapper {
+                width: 100%;
+                order: 2;
+            }
+
+            .miniaturas-produto {
+                width: 100%;
+                max-height: none;
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .miniatura-produto {
+                width: 80px;
+                height: 90px;
+                flex-shrink: 0;
+            }
+
+            .miniatura-scroll {
+                display: none;
+            }
+
+            .imagem-principal {
+                height: 380px;
+                order: 1;
+            }
+
+            .titulo-slide-produto {
+                font-size: 12px;
+                padding: 7px 12px;
+            }
         }
     </style>
 </head>
@@ -365,13 +444,50 @@
 
     <div class="galeria-produto">
 
-        <button type="button" class="seta-produto seta-produto-esquerda" onclick="moverSlideProduto(-1)">
-            ‹
-        </button>
+        <div class="miniaturas-wrapper">
+
+            <div class="miniaturas-produto" id="miniaturasProduto">
+
+                <button type="button"
+                        class="miniatura-produto ativo"
+                        data-slide="produto"
+                        onclick="mostrarSlideProduto('produto', this)">
+                    {% if produto.imagem %}
+                        <img id="miniaturaImagemPrincipal" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img id="miniaturaImagemPrincipal" src="https://via.placeholder.com/120x120?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                </button>
+
+                {% if produto.imagem_logo %}
+                    <button type="button"
+                            class="miniatura-produto"
+                            data-slide="logo"
+                            onclick="mostrarSlideProduto('logo', this)">
+                        <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
+                    </button>
+                {% endif %}
+
+                {% if produto.imagem_tamanho %}
+                    <button type="button"
+                            class="miniatura-produto"
+                            data-slide="tamanho"
+                            onclick="mostrarSlideProduto('tamanho', this)">
+                        <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
+                    </button>
+                {% endif %}
+
+            </div>
+
+            <button type="button" class="miniatura-scroll" onclick="rolarMiniaturas()">
+                ˅
+            </button>
+
+        </div>
 
         <div class="imagem-principal zoom-container" id="zoomContainer">
 
-            <div class="slide-produto ativo">
+            <div class="slide-produto ativo" data-slide="produto">
                 {% if produto.imagem %}
                     <img id="produtoImagem" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
                 {% else %}
@@ -382,24 +498,20 @@
             </div>
 
             {% if produto.imagem_logo %}
-                <div class="slide-produto">
+                <div class="slide-produto" data-slide="logo">
                     <span class="titulo-slide-produto">Logo do bordado</span>
                     <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
                 </div>
             {% endif %}
 
             {% if produto.imagem_tamanho %}
-                <div class="slide-produto">
+                <div class="slide-produto" data-slide="tamanho">
                     <span class="titulo-slide-produto">Tabela de tamanhos</span>
                     <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
                 </div>
             {% endif %}
 
         </div>
-
-        <button type="button" class="seta-produto seta-produto-direita" onclick="moverSlideProduto(1)">
-            ›
-        </button>
 
     </div>
 
@@ -526,12 +638,19 @@
         document.getElementById("corSelecionada").value = cor;
 
         let imagem = document.getElementById("produtoImagem");
+        let miniatura = document.getElementById("miniaturaImagemPrincipal");
 
         if (imagemUrl && imagemUrl !== "None") {
             imagem.src = imagemUrl;
+
+            if (miniatura) {
+                miniatura.src = imagemUrl;
+            }
+
+            mostrarSlideProduto("produto");
         }
     }
-
+    
     function prepararCarrinho() {
         let qtd = document.getElementById("quantidade").value;
         let tamanho = document.getElementById("tamanhoSelecionado").value;
@@ -651,39 +770,56 @@
         });
     });
 
-    let slideProdutoAtual = 0;
+    let slideProdutoAtual = "produto";
 
-    function mostrarSlideProduto(indice) {
+    function mostrarSlideProduto(nomeSlide, botaoClicado = null) {
         const slides = document.querySelectorAll(".slide-produto");
+        const miniaturas = document.querySelectorAll(".miniatura-produto");
         const lente = document.getElementById("zoomLente");
 
-        if (slides.length === 0) return;
+        const slideEscolhido = document.querySelector(`.slide-produto[data-slide="${nomeSlide}"]`);
 
-        if (indice >= slides.length) {
-            slideProdutoAtual = 0;
-        } else if (indice < 0) {
-            slideProdutoAtual = slides.length - 1;
-        } else {
-            slideProdutoAtual = indice;
-        }
+        if (!slideEscolhido) return;
+
+        slideProdutoAtual = nomeSlide;
 
         slides.forEach(function (slide) {
             slide.classList.remove("ativo");
         });
 
-        slides[slideProdutoAtual].classList.add("ativo");
+        miniaturas.forEach(function (miniatura) {
+            miniatura.classList.remove("ativo");
+        });
+
+        slideEscolhido.classList.add("ativo");
+
+        if (botaoClicado) {
+            botaoClicado.classList.add("ativo");
+        } else {
+            const miniaturaAtual = document.querySelector(`.miniatura-produto[data-slide="${nomeSlide}"]`);
+            if (miniaturaAtual) {
+                miniaturaAtual.classList.add("ativo");
+            }
+        }
 
         if (lente) {
             lente.style.display = "none";
         }
     }
 
-    function moverSlideProduto(direcao) {
-        mostrarSlideProduto(slideProdutoAtual + direcao);
+    function rolarMiniaturas() {
+        const miniaturas = document.getElementById("miniaturasProduto");
+
+        if (miniaturas) {
+            miniaturas.scrollBy({
+                top: 120,
+                behavior: "smooth"
+            });
+        }
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        mostrarSlideProduto(0);
+        mostrarSlideProduto("produto");
     });
 </script>
 
