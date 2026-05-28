@@ -4,193 +4,146 @@
     <meta charset="UTF-8">
     <title>{{ produto.nome }} | VestPolo</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
+    <script>
+        function aumentarQtd() {
+            let qtd = document.getElementById("quantidade");
+            qtd.value = parseInt(qtd.value) + 1;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            color: #222;
-        }
+        function diminuirQtd() {
+            let qtd = document.getElementById("quantidade");
 
-        header {
-            background: #111;
-            color: white;
-            padding: 18px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-            color: white;
-        }
-
-        .voltar {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .produto-container {
-            max-width: 1150px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 18px;
-            padding: 28px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 35px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
-        }
-
-        .imagem-principal img {
-            width: 100%;
-            height: 520px;
-            object-fit: cover;
-            border-radius: 16px;
-            background: #eee;
-        }
-
-        .info-produto {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .categoria {
-            color: #777;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .info-produto h1 {
-            font-size: 34px;
-            margin: 0 0 12px;
-        }
-
-        .price {
-            color: #128a3c;
-            font-size: 30px;
-            font-weight: bold;
-            margin: 10px 0 20px;
-        }
-
-        .descricao {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 22px;
-        }
-
-        .tamanho-box {
-            margin-bottom: 20px;
-        }
-
-        .tamanho-box strong {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .tamanho {
-            display: inline-block;
-            background: #111;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 25px;
-            font-weight: bold;
-        }
-
-        .beneficios {
-            background: #f7f7f7;
-            border-radius: 14px;
-            padding: 16px;
-            margin: 20px 0;
-        }
-
-        .beneficios p {
-            margin: 8px 0;
-            color: #444;
-        }
-
-        .acoes {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        button {
-            border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .btn-carrinho {
-            background: #111;
-            color: white;
-        }
-
-        .btn-carrinho:hover {
-            background: #333;
-        }
-
-        .btn-whatsapp {
-            background: #25D366;
-            color: white;
-        }
-
-        .btn-whatsapp:hover {
-            background: #1ebe5d;
-        }
-
-        .observacao {
-            font-size: 13px;
-            color: #777;
-            margin-top: 16px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px;
-            color: #666;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        @media (max-width: 850px) {
-            .produto-container {
-                grid-template-columns: 1fr;
-                margin: 20px;
-                padding: 20px;
-            }
-
-            .imagem-principal img {
-                height: 380px;
-            }
-
-            .info-produto h1 {
-                font-size: 26px;
-            }
-
-            header {
-                padding: 15px 20px;
+            if (parseInt(qtd.value) > 1) {
+                qtd.value = parseInt(qtd.value) - 1;
             }
         }
-    </style>
+
+        function selecionarCor(cor, imagemUrl) {
+            document.getElementById("corSelecionada").value = cor;
+
+            let imagem = document.getElementById("produtoImagem");
+
+            if (imagemUrl && imagemUrl !== "None") {
+                imagem.src = imagemUrl;
+            }
+        }
+
+        function prepararCarrinho() {
+            let qtd = document.getElementById("quantidade").value;
+            let tamanho = document.getElementById("tamanhoSelecionado").value;
+            let cor = document.getElementById("corSelecionada").value;
+
+            if (!tamanho) {
+                alert("Escolha um tamanho.");
+                return false;
+            }
+
+            if (!cor) {
+                alert("Escolha uma cor.");
+                return false;
+            }
+
+            document.getElementById("quantidadeCarrinho").value = qtd;
+            document.getElementById("tamanhoCarrinho").value = tamanho;
+            document.getElementById("corCarrinho").value = cor;
+
+            return true;
+        }
+
+        function abrirWhatsapp() {
+            let qtd = document.getElementById("quantidade").value;
+            let tamanho = document.getElementById("tamanhoSelecionado").value;
+            let cor = document.getElementById("corSelecionada").value;
+
+            if (!tamanho) {
+                alert("Escolha um tamanho.");
+                return;
+            }
+
+            if (!cor) {
+                alert("Escolha uma cor.");
+                return;
+            }
+
+            let mensagem =
+                `Olá! Tenho interesse no produto: {{ produto.nome }}%0A` +
+                `Tamanho: ${tamanho}%0A` +
+                `Cor: ${cor}%0A` +
+                `Quantidade: ${qtd}%0A` +
+                `Valor unitário: R$ {{ produto.preco }}`;
+
+            let url = `https://wa.me/5574999087655?text=${mensagem}`;
+
+            window.open(url, "_blank");
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const container = document.getElementById("zoomContainer");
+            const imagem = document.getElementById("produtoImagem");
+            const lente = document.getElementById("zoomLente");
+
+            if (!container || !imagem || !lente) return;
+
+            const zoom = 2.5;
+
+            function atualizarImagemDaLupa() {
+                lente.style.backgroundImage = `url('${imagem.src}')`;
+                lente.style.backgroundSize = `${imagem.offsetWidth * zoom}px ${imagem.offsetHeight * zoom}px`;
+            }
+
+            function moverLupa(event) {
+                const rect = imagem.getBoundingClientRect();
+
+                const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+                const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+                let x = clientX - rect.left;
+                let y = clientY - rect.top;
+
+                if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+                    lente.style.display = "none";
+                    return;
+                }
+
+                const metadeLargura = lente.offsetWidth / 2;
+                const metadeAltura = lente.offsetHeight / 2;
+
+                lente.style.display = "block";
+                lente.style.left = `${x - metadeLargura}px`;
+                lente.style.top = `${y - metadeAltura}px`;
+
+                const posicaoX = -(x * zoom - metadeLargura);
+                const posicaoY = -(y * zoom - metadeAltura);
+
+                lente.style.backgroundPosition = `${posicaoX}px ${posicaoY}px`;
+            }
+
+            container.addEventListener("mouseenter", function () {
+                atualizarImagemDaLupa();
+            });
+
+            container.addEventListener("mousemove", moverLupa);
+
+            container.addEventListener("mouseleave", function () {
+                lente.style.display = "none";
+            });
+
+            container.addEventListener("touchstart", function (event) {
+                atualizarImagemDaLupa();
+                moverLupa(event);
+            });
+
+            container.addEventListener("touchmove", moverLupa);
+
+            container.addEventListener("touchend", function () {
+                lente.style.display = "none";
+            });
+
+            imagem.addEventListener("load", function () {
+                atualizarImagemDaLupa();
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -202,12 +155,14 @@
 
 <main class="produto-container">
 
-    <div class="imagem-principal">
+    <div class="imagem-principal zoom-container" id="zoomContainer">
         {% if produto.imagem %}
-            <img id="imagemProduto" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+            <img id="produtoImagem" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
         {% else %}
-            <img id="imagemProduto" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
+            <img id="produtoImagem" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
         {% endif %}
+
+        <div class="zoom-lente" id="zoomLente"></div>
     </div>
 
     <div class="info-produto">
@@ -327,7 +282,7 @@
             function selecionarCor(cor, imagemUrl) {
                 document.getElementById("corSelecionada").value = cor;
 
-                let imagem = document.getElementById("imagemProduto");
+                let imagem = document.getElementById("produtoImagem");
 
                 if (imagemUrl && imagemUrl !== "None") {
                     imagem.src = imagemUrl;
