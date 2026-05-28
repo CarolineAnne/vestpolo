@@ -493,8 +493,6 @@
                 {% else %}
                     <img id="produtoImagem" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
                 {% endif %}
-
-                <div class="zoom-lente" id="zoomLente"></div>
             </div>
 
             {% if produto.imagem_logo %}
@@ -510,6 +508,8 @@
                     <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
                 </div>
             {% endif %}
+
+            <div class="zoom-lente" id="zoomLente"></div>
 
         </div>
 
@@ -702,20 +702,31 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const container = document.getElementById("zoomContainer");
-        const imagem = document.getElementById("produtoImagem");
         const lente = document.getElementById("zoomLente");
 
-        if (!container || !imagem || !lente) return;
+        if (!container || !lente) return;
 
         const zoom = 2.5;
 
+        function pegarImagemAtiva() {
+            return container.querySelector(".slide-produto.ativo img");
+        }
+
         function atualizarImagemDaLupa() {
-            lente.style.backgroundImage = `url('${imagem.src}')`;
-            lente.style.backgroundSize = `${imagem.offsetWidth * zoom}px ${imagem.offsetHeight * zoom}px`;
+            const imagemAtiva = pegarImagemAtiva();
+
+            if (!imagemAtiva) return;
+
+            lente.style.backgroundImage = `url('${imagemAtiva.src}')`;
+            lente.style.backgroundSize = `${imagemAtiva.offsetWidth * zoom}px ${imagemAtiva.offsetHeight * zoom}px`;
         }
 
         function moverLupa(event) {
-            const rect = imagem.getBoundingClientRect();
+            const imagemAtiva = pegarImagemAtiva();
+
+            if (!imagemAtiva) return;
+
+            const rect = imagemAtiva.getBoundingClientRect();
 
             const clientX = event.touches ? event.touches[0].clientX : event.clientX;
             const clientY = event.touches ? event.touches[0].clientY : event.clientY;
@@ -765,8 +776,12 @@
             lente.style.display = "none";
         });
 
-        imagem.addEventListener("load", function () {
-            atualizarImagemDaLupa();
+        const imagens = container.querySelectorAll(".slide-produto img");
+
+        imagens.forEach(function (img) {
+            img.addEventListener("load", function () {
+                atualizarImagemDaLupa();
+            });
         });
     });
 
