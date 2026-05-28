@@ -50,6 +50,16 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.10);
         }
 
+        /* Galeria principal do produto */
+
+        .galeria-produto {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
         .imagem-principal {
             position: relative;
             width: 100%;
@@ -57,6 +67,8 @@
             overflow: hidden;
             border-radius: 16px;
             background: #eee;
+            flex: 1;
+            min-width: 0;
         }
 
         .imagem-principal img {
@@ -83,6 +95,69 @@
             z-index: 20;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
         }
+
+        .slide-produto {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: center;
+        }
+
+        .slide-produto.ativo {
+            display: block;
+        }
+
+        .slide-produto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 16px;
+        }
+
+        .slide-produto:not(:first-child) img {
+            object-fit: contain;
+            background: #f7f7f7;
+            padding: 20px;
+        }
+
+        .titulo-slide-produto {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(17, 17, 17, 0.80);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 5;
+            white-space: nowrap;
+        }
+
+        .seta-produto {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #111;
+            color: white;
+            font-size: 30px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            z-index: 8;
+            padding: 0;
+        }
+
+        .seta-produto:hover {
+            background: #333;
+        }
+
+        /* Informações do produto */
 
         .info-produto {
             display: flex;
@@ -216,103 +291,6 @@
             margin-top: 16px;
         }
 
-        /* Galeria extra depois do produto */
-
-        .galeria-extra-produto {
-            max-width: 1150px;
-            margin: 0 auto 40px;
-            background: white;
-            border-radius: 18px;
-            padding: 28px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
-        }
-
-        .galeria-extra-produto h2 {
-            margin: 0 0 20px;
-            font-size: 26px;
-            text-align: center;
-        }
-
-        .carrossel-extra {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 360px;
-        }
-
-        .area-slides-extra {
-            width: 100%;
-            max-width: 750px;
-            overflow: hidden;
-        }
-
-        .slide-extra {
-            display: none;
-            text-align: center;
-            animation: aparecerSlide 0.3s ease;
-        }
-
-        .slide-extra.ativo {
-            display: block;
-        }
-
-        .slide-extra span {
-            display: block;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .slide-extra img {
-            width: 100%;
-            max-height: 430px;
-            object-fit: contain;
-            border-radius: 16px;
-            background: #f7f7f7;
-            padding: 15px;
-        }
-
-        .seta-extra {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #111;
-            color: white;
-            font-size: 32px;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-            flex-shrink: 0;
-        }
-
-        .seta-extra:hover {
-            background: #333;
-        }
-
-        .seta-esquerda {
-            margin-right: 18px;
-        }
-
-        .seta-direita {
-            margin-left: 18px;
-        }
-
-        @keyframes aparecerSlide {
-            from {
-                opacity: 0;
-                transform: translateX(15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
         footer {
             text-align: center;
             padding: 25px;
@@ -336,8 +314,23 @@
                 padding: 20px;
             }
 
+            .galeria-produto {
+                gap: 8px;
+            }
+
             .imagem-principal {
                 height: 380px;
+            }
+
+            .seta-produto {
+                width: 36px;
+                height: 36px;
+                font-size: 24px;
+            }
+
+            .titulo-slide-produto {
+                font-size: 12px;
+                padding: 7px 12px;
             }
 
             .info-produto h1 {
@@ -357,37 +350,6 @@
             .acoes button {
                 width: 100%;
             }
-
-            .galeria-extra-produto {
-                margin: 0 20px 30px;
-                padding: 20px;
-            }
-
-            .galeria-extra-produto h2 {
-                font-size: 22px;
-            }
-
-            .carrossel-extra {
-                min-height: 280px;
-            }
-
-            .slide-extra img {
-                max-height: 300px;
-            }
-
-            .seta-extra {
-                width: 40px;
-                height: 40px;
-                font-size: 26px;
-            }
-
-            .seta-esquerda {
-                margin-right: 8px;
-            }
-
-            .seta-direita {
-                margin-left: 8px;
-            }
         }
     </style>
 </head>
@@ -401,14 +363,44 @@
 
 <main class="produto-container">
 
-    <div class="imagem-principal zoom-container" id="zoomContainer">
-        {% if produto.imagem %}
-            <img id="produtoImagem" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-        {% else %}
-            <img id="produtoImagem" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
-        {% endif %}
+    <div class="galeria-produto">
 
-        <div class="zoom-lente" id="zoomLente"></div>
+        <button type="button" class="seta-produto seta-produto-esquerda" onclick="moverSlideProduto(-1)">
+            ‹
+        </button>
+
+        <div class="imagem-principal zoom-container" id="zoomContainer">
+
+            <div class="slide-produto ativo">
+                {% if produto.imagem %}
+                    <img id="produtoImagem" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                {% else %}
+                    <img id="produtoImagem" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
+                {% endif %}
+
+                <div class="zoom-lente" id="zoomLente"></div>
+            </div>
+
+            {% if produto.imagem_logo %}
+                <div class="slide-produto">
+                    <span class="titulo-slide-produto">Logo do bordado</span>
+                    <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
+                </div>
+            {% endif %}
+
+            {% if produto.imagem_tamanho %}
+                <div class="slide-produto">
+                    <span class="titulo-slide-produto">Tabela de tamanhos</span>
+                    <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
+                </div>
+            {% endif %}
+
+        </div>
+
+        <button type="button" class="seta-produto seta-produto-direita" onclick="moverSlideProduto(1)">
+            ›
+        </button>
+
     </div>
 
     <div class="info-produto">
@@ -511,44 +503,6 @@
 
     </div>
 </main>
-
-{% if produto.imagem_logo or produto.imagem_tamanho %}
-<section class="galeria-extra-produto">
-
-    <h2>Detalhes do produto</h2>
-
-    <div class="carrossel-extra">
-
-        <button type="button" class="seta-extra seta-esquerda" onclick="moverImagemExtra(-1)">
-            ‹
-        </button>
-
-        <div class="area-slides-extra">
-
-            {% if produto.imagem_logo %}
-                <div class="slide-extra ativo">
-                    <span>Logo do bordado</span>
-                    <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
-                </div>
-            {% endif %}
-
-            {% if produto.imagem_tamanho %}
-                <div class="slide-extra">
-                    <span>Tabela de tamanhos</span>
-                    <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
-                </div>
-            {% endif %}
-
-        </div>
-
-        <button type="button" class="seta-extra seta-direita" onclick="moverImagemExtra(1)">
-            ›
-        </button>
-
-    </div>
-
-</section>
-{% endif %}
 
 <footer>
     VestPolo — Seu curso. Seu estilo. Seu fardamento.
@@ -697,34 +651,39 @@
         });
     });
 
-    let slideExtraAtual = 0;
+    let slideProdutoAtual = 0;
 
-    function mostrarImagemExtra(indice) {
-        const slides = document.querySelectorAll(".slide-extra");
+    function mostrarSlideProduto(indice) {
+        const slides = document.querySelectorAll(".slide-produto");
+        const lente = document.getElementById("zoomLente");
 
         if (slides.length === 0) return;
 
         if (indice >= slides.length) {
-            slideExtraAtual = 0;
+            slideProdutoAtual = 0;
         } else if (indice < 0) {
-            slideExtraAtual = slides.length - 1;
+            slideProdutoAtual = slides.length - 1;
         } else {
-            slideExtraAtual = indice;
+            slideProdutoAtual = indice;
         }
 
         slides.forEach(function (slide) {
             slide.classList.remove("ativo");
         });
 
-        slides[slideExtraAtual].classList.add("ativo");
+        slides[slideProdutoAtual].classList.add("ativo");
+
+        if (lente) {
+            lente.style.display = "none";
+        }
     }
 
-    function moverImagemExtra(direcao) {
-        mostrarImagemExtra(slideExtraAtual + direcao);
+    function moverSlideProduto(direcao) {
+        mostrarSlideProduto(slideProdutoAtual + direcao);
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        mostrarImagemExtra(0);
+        mostrarSlideProduto(0);
     });
 </script>
 
