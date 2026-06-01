@@ -2,18 +2,35 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | VestPolo</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background: #f4f4f4;
             margin: 0;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
         }
 
         .container {
+            width: 100%;
             max-width: 430px;
-            margin: 60px auto;
             background: white;
             padding: 30px;
             border-radius: 18px;
@@ -22,20 +39,23 @@
 
         h1 {
             text-align: center;
+            margin: 0 0 25px;
+            font-size: 30px;
         }
 
         label {
             font-weight: bold;
             display: block;
             margin-top: 15px;
+            margin-bottom: 6px;
         }
 
         input {
             width: 100%;
             padding: 13px;
-            margin-top: 6px;
             border: 1px solid #ccc;
             border-radius: 10px;
+            font-size: 15px;
         }
 
         button {
@@ -47,17 +67,77 @@
             padding: 14px;
             border-radius: 12px;
             font-weight: bold;
+            font-size: 15px;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #333;
         }
 
         a {
             color: #111;
             font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
 
         .msg {
             color: red;
             text-align: center;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .link-cadastro {
+            text-align: center;
+            margin: 20px 0 0;
+            font-size: 15px;
+        }
+
+        @media (max-width: 520px) {
+            body {
+                align-items: flex-start;
+                padding: 20px 12px;
+            }
+
+            .container {
+                padding: 24px 20px;
+                border-radius: 14px;
+                margin-top: 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            input {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 13px;
+                font-size: 14px;
+            }
+
+            .link-cadastro {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -83,7 +163,7 @@
         <button type="submit">Entrar</button>
     </form>
 
-    <p style="text-align:center;">
+    <p class="link-cadastro">
         Não tem conta? <a href="{% url 'cadastro' %}">Cadastrar</a>
     </p>
 </div>

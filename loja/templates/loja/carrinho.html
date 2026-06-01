@@ -2,11 +2,18 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho | VestPolo</title>
 
     <style>
         * {
             box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
         }
 
         body {
@@ -16,6 +23,21 @@
             color: #222;
         }
 
+        img {
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            max-width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
         header {
             background: #111;
             color: white;
@@ -23,6 +45,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
         }
 
         header a {
@@ -33,6 +56,7 @@
         .logo {
             font-size: 24px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .container {
@@ -47,13 +71,21 @@
         }
 
         .titulo h1 {
-            margin-bottom: 5px;
+            margin: 0 0 5px;
+            font-size: 32px;
+        }
+
+        .titulo p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
         }
 
         .layout-carrinho {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
             gap: 25px;
+            align-items: start;
         }
 
         .item {
@@ -63,17 +95,27 @@
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             gap: 20px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            min-width: 0;
+        }
+
+        .item-info {
+            min-width: 0;
+            flex: 1;
         }
 
         .item-info h3 {
             margin: 0 0 8px;
+            word-break: break-word;
+            font-size: 20px;
         }
 
         .item-info p {
             color: #555;
             margin: 8px 0;
+            line-height: 1.4;
         }
 
         .qtd-area {
@@ -81,6 +123,14 @@
             align-items: center;
             gap: 10px;
             margin-top: 12px;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            font-family: inherit;
         }
 
         .btn-qtd {
@@ -91,6 +141,13 @@
             border-radius: 50%;
             font-size: 18px;
             padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-qtd:hover {
+            background: #ddd;
         }
 
         .qtd-numero {
@@ -100,19 +157,13 @@
             text-align: center;
         }
 
-        button {
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
         .btn-remover {
             background: #ffefef;
             color: #b00020;
             padding: 10px 14px;
             border-radius: 10px;
             height: fit-content;
+            white-space: nowrap;
         }
 
         .btn-remover:hover {
@@ -131,12 +182,14 @@
         }
 
         .resumo h2 {
-            margin-top: 0;
+            margin: 0 0 18px;
+            font-size: 24px;
         }
 
         .linha-resumo {
             display: flex;
             justify-content: space-between;
+            gap: 12px;
             margin: 14px 0;
             color: #555;
         }
@@ -149,6 +202,7 @@
             font-weight: bold;
             display: flex;
             justify-content: space-between;
+            gap: 12px;
         }
 
         .finalizar {
@@ -187,24 +241,155 @@
         }
 
         .vazio h2 {
-            margin-bottom: 10px;
+            margin: 0 0 10px;
+            font-size: 26px;
         }
 
-        @media (max-width: 850px) {
+        .vazio p {
+            margin: 0 0 18px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Tablets e telas médias */
+        @media (max-width: 900px) {
             header {
                 padding: 16px 22px;
+                flex-wrap: wrap;
             }
 
             .layout-carrinho {
                 grid-template-columns: 1fr;
             }
 
+            .resumo {
+                position: static;
+            }
+        }
+
+        /* Celulares */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 18px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            header a {
+                font-size: 14px;
+            }
+
+            .container {
+                width: calc(100% - 24px);
+                margin: 24px auto;
+            }
+
+            .titulo {
+                margin-bottom: 22px;
+            }
+
+            .titulo h1 {
+                font-size: 26px;
+            }
+
+            .titulo p {
+                font-size: 14px;
+            }
+
             .item {
                 flex-direction: column;
+                padding: 16px;
+                gap: 15px;
+            }
+
+            .item-info h3 {
+                font-size: 18px;
+            }
+
+            .item-info p {
+                font-size: 14px;
+            }
+
+            .qtd-area {
+                justify-content: flex-start;
+            }
+
+            .btn-remover {
+                width: 100%;
+                padding: 12px;
             }
 
             .resumo {
-                position: static;
+                padding: 18px;
+                border-radius: 16px;
+            }
+
+            .resumo h2 {
+                font-size: 22px;
+            }
+
+            .linha-resumo {
+                font-size: 14px;
+            }
+
+            .total {
+                font-size: 19px;
+            }
+
+            .finalizar,
+            .continuar {
+                font-size: 15px;
+                padding: 14px;
+            }
+
+            .vazio {
+                padding: 28px 18px;
+            }
+
+            .vazio h2 {
+                font-size: 22px;
+            }
+
+            .vazio p {
+                font-size: 14px;
+            }
+        }
+
+        /* Celulares pequenos */
+        @media (max-width: 420px) {
+            .container {
+                width: calc(100% - 16px);
+                margin: 18px auto;
+            }
+
+            .item {
+                padding: 14px;
+            }
+
+            .titulo h1 {
+                font-size: 24px;
+            }
+
+            .btn-qtd {
+                width: 32px;
+                height: 32px;
+                font-size: 17px;
+            }
+
+            .qtd-numero {
+                font-size: 16px;
+            }
+
+            .resumo {
+                padding: 16px;
+            }
+
+            .total {
+                font-size: 18px;
             }
         }
     </style>

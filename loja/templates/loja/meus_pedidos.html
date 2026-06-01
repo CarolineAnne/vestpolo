@@ -2,13 +2,29 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus pedidos | VestPolo</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background: #f4f4f4;
             margin: 0;
+            color: #222;
+        }
+
+        a {
+            text-decoration: none;
         }
 
         header {
@@ -17,6 +33,8 @@
             padding: 18px 40px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: 16px;
         }
 
         header a {
@@ -24,10 +42,19 @@
             text-decoration: none;
         }
 
+        header strong {
+            font-size: 24px;
+        }
+
         .container {
+            width: 92%;
             max-width: 1000px;
             margin: 40px auto;
-            padding: 0 20px;
+        }
+
+        .container h1 {
+            margin: 0 0 25px;
+            font-size: 32px;
         }
 
         .pedido {
@@ -36,16 +63,27 @@
             border-radius: 16px;
             margin-bottom: 18px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            min-width: 0;
         }
 
         .topo-pedido {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             gap: 15px;
             flex-wrap: wrap;
             border-bottom: 1px solid #eee;
             padding-bottom: 12px;
             margin-bottom: 14px;
+        }
+
+        .topo-pedido strong {
+            font-size: 18px;
+        }
+
+        .topo-pedido small {
+            color: #666;
+            line-height: 1.6;
         }
 
         .status {
@@ -55,11 +93,14 @@
             border-radius: 20px;
             font-size: 13px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .item {
             color: #555;
             margin: 8px 0;
+            line-height: 1.5;
+            word-break: break-word;
         }
 
         .total {
@@ -74,6 +115,138 @@
             padding: 35px;
             border-radius: 16px;
             text-align: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        .vazio h2 {
+            margin: 0 0 10px;
+            font-size: 26px;
+        }
+
+        .vazio p {
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Tablets */
+        @media (max-width: 768px) {
+            header {
+                padding: 16px 22px;
+                flex-wrap: wrap;
+            }
+
+            header strong {
+                font-size: 22px;
+            }
+
+            .container {
+                width: calc(100% - 32px);
+                margin: 30px auto;
+            }
+
+            .container h1 {
+                font-size: 28px;
+            }
+
+            .pedido {
+                padding: 20px;
+            }
+        }
+
+        /* Celulares */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 18px;
+            }
+
+            header a {
+                font-size: 14px;
+            }
+
+            header strong {
+                font-size: 22px;
+            }
+
+            .container {
+                width: calc(100% - 24px);
+                margin: 24px auto;
+            }
+
+            .container h1 {
+                font-size: 26px;
+                margin-bottom: 20px;
+            }
+
+            .pedido {
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            .topo-pedido {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .topo-pedido strong {
+                font-size: 17px;
+            }
+
+            .status {
+                width: fit-content;
+                font-size: 12px;
+            }
+
+            .item {
+                font-size: 14px;
+            }
+
+            .total {
+                font-size: 17px;
+            }
+
+            .vazio {
+                padding: 28px 18px;
+            }
+
+            .vazio h2 {
+                font-size: 22px;
+            }
+
+            .vazio p {
+                font-size: 14px;
+            }
+        }
+
+        /* Celulares pequenos */
+        @media (max-width: 420px) {
+            .container {
+                width: calc(100% - 16px);
+                margin: 18px auto;
+            }
+
+            .container h1 {
+                font-size: 24px;
+            }
+
+            .pedido {
+                padding: 16px;
+            }
+
+            .topo-pedido strong {
+                font-size: 16px;
+            }
+
+            .item {
+                font-size: 13px;
+            }
+
+            .total {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
