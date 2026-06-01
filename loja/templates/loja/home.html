@@ -652,6 +652,11 @@
                 padding: 10px 15px;
             }
 
+            .secao-premium,
+            .categorias-home {
+                display: none;
+            }
+
             header {
                 padding: 14px 18px;
                 gap: 14px;
@@ -866,13 +871,21 @@
     </nav>
 
     <div class="header-icons">
-
+<!--
     <a href="https://www.instagram.com/vestpolo25/"
         target="_blank"
         class="icon-link">
 
         <i class="fa-brands fa-instagram"></i>
 
+    </a>
+-->
+
+    <a href="{% url 'favoritos' %}" class="icon-link">
+        ❤️
+        {% if total_favoritos > 0 %}
+            <span class="badge">{{ total_favoritos }}</span>
+        {% endif %}
     </a>
 
     {% if request.user.is_authenticated %}
@@ -884,13 +897,6 @@
             👤
         </a>
     {% endif %}
-
-    <a href="{% url 'favoritos' %}" class="icon-link">
-        ❤️
-        {% if total_favoritos > 0 %}
-            <span class="badge">{{ total_favoritos }}</span>
-        {% endif %}
-    </a>
 
     <a href="{% url 'carrinho' %}" class="icon-link">
         🛒
