@@ -645,19 +645,27 @@
         /* Responsivo: celulares */
 
         @media (max-width: 768px) {
+            body {
+                padding-bottom: 78px;
+                background: #f6f6f6;
+            }
+
             .topbar {
-                text-align: center;
                 justify-content: center;
-                padding: 9px 12px;
+                text-align: center;
+                padding: 8px 12px;
                 font-size: 13px;
+                background: #000;
             }
 
             header {
                 display: grid;
                 grid-template-columns: 1fr auto;
                 align-items: center;
-                padding: 12px 16px;
+                padding: 14px 18px;
                 gap: 10px;
+                background: #111;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
             }
 
             header > a {
@@ -667,12 +675,13 @@
 
             .logo-area {
                 font-size: 22px;
-                gap: 9px;
+                gap: 10px;
             }
 
             .logo-area img {
                 height: 34px;
                 width: auto;
+                border-radius: 4px;
             }
 
             .menu-toggle {
@@ -685,38 +694,11 @@
                 font-size: 15px;
                 background: #25D366;
                 color: white;
-            }
-
-            .header-icons {
-                order: 3;
-                grid-column: 1 / -1;
-                width: 100%;
-                justify-content: center;
-                gap: 14px;
-                padding-top: 10px;
-                border-top: 1px solid rgba(255,255,255,0.08);
-            }
-
-            .icon-link {
-                width: 42px;
-                height: 42px;
-                background: #1b1b1b;
-                border-radius: 50%;
-                font-size: 21px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .badge {
-                top: -6px;
-                right: -6px;
-                font-size: 10px;
-                padding: 3px 6px;
+                box-shadow: 0 6px 14px rgba(37, 211, 102, 0.25);
             }
 
             .menu-loja {
-                order: 4;
+                order: 3;
                 grid-column: 1 / -1;
                 width: 100%;
                 display: none;
@@ -726,7 +708,7 @@
                 background: #1a1a1a;
                 border-radius: 16px;
                 padding: 8px;
-                margin-top: 4px;
+                margin-top: 8px;
             }
 
             .menu-loja.ativo {
@@ -738,6 +720,7 @@
                 padding: 13px 14px;
                 border-radius: 10px;
                 font-size: 15px;
+                color: white;
             }
 
             .menu-loja a:hover {
@@ -745,17 +728,66 @@
                 color: white;
             }
 
+            .header-icons {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 2000;
+                width: 100%;
+                background: white;
+                border-top: 1px solid #ddd;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 0;
+                padding: 7px 8px 9px;
+                box-shadow: 0 -4px 18px rgba(0,0,0,0.10);
+            }
+
+            .icon-link {
+                width: 100%;
+                min-height: 52px;
+                color: #555;
+                font-size: 22px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                border-radius: 12px;
+                position: relative;
+            }
+
+            .icon-link::after {
+                content: attr(data-label);
+                font-size: 11px;
+                color: #555;
+                font-weight: normal;
+            }
+
+            .icon-link:hover {
+                background: #f1f1f1;
+            }
+
+            .badge {
+                top: 2px;
+                right: 18%;
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+
             .hero {
+                width: 100%;
                 min-height: 0;
                 height: auto;
                 aspect-ratio: 3 / 1;
                 padding: 0;
-                margin-bottom: 32px;
+                margin-bottom: 28px;
                 background-image: url('/static/img/banner.png');
-                background-size: contain;
+                background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
-                background-color: #050505;
+                background-color: #111;
             }
 
             .hero-overlay,
@@ -764,93 +796,154 @@
             }
 
             .secao-premium,
-            .categorias-home {
+            .categorias-home,
+            .mobile-ocultar {
                 display: none;
             }
 
             .vitrine-premium {
                 width: calc(100% - 24px);
-                margin: 30px auto;
+                margin: 28px auto;
             }
 
             .vitrine-topo {
+                display: flex;
                 flex-direction: row;
-                align-items: center;
+                align-items: flex-end;
                 justify-content: space-between;
                 gap: 12px;
                 margin-bottom: 16px;
             }
 
-            .vitrine-topo h2 {
-                font-size: 24px;
-                line-height: 1.15;
-            }
-
             .vitrine-topo .subtitulo {
                 font-size: 12px;
+                letter-spacing: 2px;
+            }
+
+            .vitrine-topo h2 {
+                font-size: 25px;
+                line-height: 1.15;
+                margin: 6px 0 0;
             }
 
             .vitrine-topo a {
                 font-size: 14px;
                 white-space: nowrap;
+                color: #111;
             }
 
             .carrossel-produtos {
-                gap: 14px;
-                padding-bottom: 16px;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+                overflow: visible;
+                padding-bottom: 0;
             }
 
             .mini-produto {
-                min-width: 78vw;
-                max-width: 78vw;
-                padding: 14px;
-                border-radius: 18px;
+                min-width: 0;
+                max-width: none;
+                width: 100%;
+                border-radius: 14px;
+                padding: 10px;
+                box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            }
+
+            .mini-produto:hover {
+                transform: none;
             }
 
             .mini-produto img {
-                height: 220px;
+                height: 155px;
                 object-fit: contain;
                 background: #f7f7f7;
+                border-radius: 12px;
+            }
+
+            .mini-badge {
+                font-size: 10px;
+                padding: 5px 8px;
+                margin-top: 9px;
             }
 
             .mini-produto h3 {
-                font-size: 18px;
+                font-size: 15px;
                 line-height: 1.25;
+                margin: 9px 0 6px;
             }
 
             .mini-produto p {
-                font-size: 18px;
+                font-size: 17px;
+                color: #128a3c;
             }
 
             .container {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 width: calc(100% - 24px);
-                gap: 18px;
-                padding-bottom: 40px;
+                gap: 12px;
+                padding: 10px 0 36px;
             }
 
             .card {
-                border-radius: 18px;
-                padding: 14px;
+                border-radius: 14px;
+                padding: 10px;
+                box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            }
+
+            .card:hover {
+                transform: none;
+            }
+
+            .favorito {
+                top: 10px;
+                right: 10px;
+                font-size: 17px;
+                padding: 5px 7px;
             }
 
             .imagem-card {
-                height: 240px;
+                height: 155px;
                 background: #f7f7f7;
+                border-radius: 12px;
             }
 
             .imagem-card img {
                 object-fit: contain;
             }
 
+            .badge-novo {
+                font-size: 10px;
+                padding: 5px 8px;
+                margin-top: 9px;
+            }
+
             .card h3 {
-                font-size: 19px;
+                font-size: 15px;
                 line-height: 1.25;
+                margin: 9px 0 6px;
             }
 
             .descricao {
-                min-height: auto;
-                -webkit-line-clamp: 3;
+                display: none;
+            }
+
+            .tag {
+                font-size: 11px;
+            }
+
+            .price {
+                font-size: 17px;
+                margin: 8px 0;
+            }
+
+            .acoes button {
+                padding: 11px 8px;
+                font-size: 13px;
+                border-radius: 10px;
+            }
+
+            footer {
+                padding: 26px 18px 90px;
             }
 
             .footer-container {
@@ -872,7 +965,7 @@
             }
 
             header {
-                padding: 11px 14px;
+                padding: 12px 14px;
             }
 
             .logo-area {
@@ -888,49 +981,38 @@
                 font-size: 14px;
             }
 
-            .icon-link {
-                width: 39px;
-                height: 39px;
-                font-size: 19px;
-            }
-
             .hero {
-                aspect-ratio: 3 / 1;
-                margin-bottom: 26px;
+                aspect-ratio: 2.8 / 1;
+                margin-bottom: 24px;
             }
 
             .vitrine-premium {
                 width: calc(100% - 20px);
-                margin: 26px auto;
+                margin: 24px auto;
             }
 
             .vitrine-topo h2 {
-                font-size: 22px;
+                font-size: 23px;
             }
 
-            .mini-produto {
-                min-width: 82vw;
-                max-width: 82vw;
+            .mini-produto img,
+            .imagem-card {
+                height: 145px;
             }
 
-            .mini-produto img {
-                height: 205px;
+            .mini-produto h3,
+            .card h3 {
+                font-size: 14px;
+            }
+
+            .mini-produto p,
+            .price {
+                font-size: 16px;
             }
 
             .container {
                 width: calc(100% - 20px);
-            }
-
-            .imagem-card {
-                height: 220px;
-            }
-
-            .categoria-card {
-                padding: 22px;
-            }
-
-            footer {
-                padding: 25px 18px;
+                gap: 10px;
             }
         }
     </style>
@@ -970,21 +1052,12 @@
     </nav>
 
     <div class="header-icons">
-<!--
-    <a href="https://www.instagram.com/vestpolo25/"
-        target="_blank"
-        class="icon-link">
 
-        <i class="fa-brands fa-instagram"></i>
-
-    </a>
--->
-
-    <a href="{% url 'favoritos' %}" class="icon-link" data-label="Favoritos">
-        ❤️
-        {% if total_favoritos > 0 %}
-            <span class="badge">{{ total_favoritos }}</span>
-        {% endif %}
+    <a href="https://wa.me/5574999087655"
+       target="_blank"
+       class="icon-link"
+       data-label="Contato">
+        <i class="fa-brands fa-whatsapp"></i>
     </a>
 
     {% if request.user.is_authenticated %}
@@ -996,6 +1069,17 @@
             👤
         </a>
     {% endif %}
+
+    <a href="{% url 'meus_pedidos' %}" class="icon-link" data-label="Pedidos">
+        📦
+    </a>
+
+    <a href="{% url 'favoritos' %}" class="icon-link" data-label="Favoritos">
+        ❤️
+        {% if total_favoritos > 0 %}
+            <span class="badge">{{ total_favoritos }}</span>
+        {% endif %}
+    </a>
 
     <a href="{% url 'carrinho' %}" class="icon-link" data-label="Carrinho">
         🛒
@@ -1075,7 +1159,7 @@
 
 </section>
 
-<section class="vitrine-premium">
+<section class="vitrine-premium mobile-ocultar">
 
     <div class="vitrine-topo">
         <div>
@@ -1107,7 +1191,7 @@
 
 </section>
 
-<section class="vitrine-premium">
+<section class="vitrine-premium mobile-ocultar">
 
     <div class="vitrine-topo">
         <div>
