@@ -11,14 +11,16 @@ def home(request):
 
     busca = request.GET.get('busca')
 
-    # 🔎 Busca
     if busca:
         produtos = produtos.filter(
             Q(nome__icontains=busca) |
             Q(descricao__icontains=busca)
         )
 
-    # ❤️ Favoritos
+    produtos_universitarios = Produto.objects.filter(categoria='Universitário')
+    produtos_empresariais = Produto.objects.filter(categoria='Empresarial')
+    produtos_personalizados = Produto.objects.filter(categoria='Personalizado')
+
     if request.user.is_authenticated:
         favoritos = list(
             Favorito.objects.filter(usuario=request.user)
@@ -29,7 +31,6 @@ def home(request):
 
     total_favoritos = len(favoritos)
 
-    # 🛒 Carrinho
     carrinho = request.session.get('carrinho', {})
 
     total_itens = 0
@@ -42,18 +43,16 @@ def home(request):
 
     return render(request, 'loja/home.html', {
         'produtos': produtos,
+        'produtos_universitarios': produtos_universitarios,
+        'produtos_empresariais': produtos_empresariais,
+        'produtos_personalizados': produtos_personalizados,
         'favoritos': favoritos,
         'total_itens': total_itens,
         'total_favoritos': total_favoritos
     })
 
 def personalizados(request):
-    produtos = Produto.objects.filter(
-        Q(categoria__icontains='personalizado') |
-        Q(categoria__icontains='personalizados') |
-        Q(nome__icontains='personalizado') |
-        Q(nome__icontains='personalizados')
-    )
+    produtos = Produto.objects.filter(categoria='Personalizado')
 
     if request.user.is_authenticated:
         favoritos = list(
@@ -80,6 +79,77 @@ def personalizados(request):
         'favoritos': favoritos,
         'total_itens': total_itens,
         'total_favoritos': total_favoritos
+    })
+
+def universitarios(request):
+    produtos = Produto.objects.filter(categoria='Universitário')
+
+    if request.user.is_authenticated:
+        favoritos = list(
+            Favorito.objects.filter(usuario=request.user)
+            .values_list('produto_id', flat=True)
+        )
+    else:
+        favoritos = []
+
+    total_favoritos = len(favoritos)
+
+    carrinho = request.session.get('carrinho', {})
+
+    total_itens = 0
+
+    for item in carrinho.values():
+        if isinstance(item, dict):
+            total_itens += item.get('quantidade', 0)
+        else:
+            total_itens += item
+
+    return render(request, 'loja/categoria.html', {
+        'produtos': produtos,
+        'favoritos': favoritos,
+        'total_itens': total_itens,
+        'total_favoritos': total_favoritos,
+        'titulo': 'Universitários',
+        'subtitulo': 'Polos universitárias personalizadas',
+        'descricao_pagina': 'Polos bordadas para cursos, turmas, eventos acadêmicos e formandos.',
+        'badge': 'Universitário',
+        'icone': '🎓'
+    })
+
+
+def empresariais(request):
+    produtos = Produto.objects.filter(categoria='Empresarial')
+
+    if request.user.is_authenticated:
+        favoritos = list(
+            Favorito.objects.filter(usuario=request.user)
+            .values_list('produto_id', flat=True)
+        )
+    else:
+        favoritos = []
+
+    total_favoritos = len(favoritos)
+
+    carrinho = request.session.get('carrinho', {})
+
+    total_itens = 0
+
+    for item in carrinho.values():
+        if isinstance(item, dict):
+            total_itens += item.get('quantidade', 0)
+        else:
+            total_itens += item
+
+    return render(request, 'loja/categoria.html', {
+        'produtos': produtos,
+        'favoritos': favoritos,
+        'total_itens': total_itens,
+        'total_favoritos': total_favoritos,
+        'titulo': 'Empresariais',
+        'subtitulo': 'Uniformes profissionais personalizados',
+        'descricao_pagina': 'Polos bordadas para empresas, equipes, instituições e eventos corporativos.',
+        'badge': 'Empresarial',
+        'icone': '🏢'
     })
 
 def produto_detalhe(request, id):

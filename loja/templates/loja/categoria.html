@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }} | VestPolo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            color: #222;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #25D366;
+        }
+
+        .hero-categoria {
+            background: linear-gradient(135deg, #111, #2b2b2b);
+            color: white;
+            padding: 65px 8%;
+            text-align: center;
+        }
+
+        .hero-categoria .icone {
+            font-size: 58px;
+            margin-bottom: 14px;
+        }
+
+        .hero-categoria span {
+            color: #25D366;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 13px;
+        }
+
+        .hero-categoria h1 {
+            font-size: 44px;
+            margin: 12px 0;
+        }
+
+        .hero-categoria p {
+            max-width: 700px;
+            margin: 0 auto;
+            color: #ddd;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        .produtos {
+            width: 92%;
+            max-width: 1200px;
+            margin: 45px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+        }
+
+        .favorito {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: white;
+            border-radius: 50%;
+            padding: 6px 8px;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            z-index: 10;
+        }
+
+        .imagem-card {
+            height: 230px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .imagem-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 12px;
+            background: #111;
+            color: white;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .card h3 {
+            margin: 12px 0 6px;
+            font-size: 18px;
+            line-height: 1.3;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price {
+            color: #128a3c;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .btn-ver {
+            display: block;
+            width: 100%;
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 13px;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .btn-ver:hover {
+            background: #333;
+        }
+
+        .mensagem {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            text-align: center;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 26px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 16px 20px;
+            }
+
+            nav {
+                gap: 14px;
+            }
+
+            .hero-categoria {
+                padding: 45px 22px;
+            }
+
+            .hero-categoria h1 {
+                font-size: 32px;
+            }
+
+            .hero-categoria p {
+                font-size: 15px;
+            }
+
+            .produtos {
+                width: calc(100% - 24px);
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin: 30px auto;
+            }
+
+            .card {
+                padding: 10px;
+                border-radius: 14px;
+            }
+
+            .imagem-card {
+                height: 145px;
+            }
+
+            .card h3 {
+                font-size: 14px;
+            }
+
+            .card p {
+                display: none;
+            }
+
+            .price {
+                font-size: 16px;
+            }
+
+            .btn-ver {
+                padding: 11px 8px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}" class="logo">VestPolo</a>
+
+    <nav>
+        <a href="{% url 'home' %}">Início</a>
+        <a href="{% url 'universitarios' %}">Universitários</a>
+        <a href="{% url 'empresariais' %}">Empresariais</a>
+        <a href="{% url 'personalizados' %}">Personalizados</a>
+        <a href="{% url 'carrinho' %}">Carrinho</a>
+    </nav>
+</header>
+
+<section class="hero-categoria">
+    <div class="icone">{{ icone }}</div>
+    <span>{{ subtitulo }}</span>
+    <h1>{{ titulo }}</h1>
+    <p>{{ descricao_pagina }}</p>
+</section>
+
+<section class="produtos">
+
+    {% for produto in produtos %}
+        <div class="card">
+
+            <a href="{% url 'favoritar' produto.id %}" class="favorito">
+                {% if produto.id in favoritos %}
+                    ❤️
+                {% else %}
+                    🤍
+                {% endif %}
+            </a>
+
+            <a href="{% url 'produto_detalhe' produto.id %}">
+                <div class="imagem-card">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                </div>
+
+                <span class="badge">{{ badge }}</span>
+
+                <h3>{{ produto.nome }}</h3>
+
+                <p>{{ produto.descricao }}</p>
+
+                <div class="price">R$ {{ produto.preco }}</div>
+            </a>
+
+            <a href="{% url 'produto_detalhe' produto.id %}" class="btn-ver">
+                Ver detalhes
+            </a>
+        </div>
+    {% empty %}
+        <div class="mensagem">
+            Nenhum produto encontrado nessa categoria.
+        </div>
+    {% endfor %}
+
+</section>
+
+<footer>
+    VestPolo — Seu curso. Seu estilo. Seu fardamento.
+</footer>
+
+</body>
+</html>

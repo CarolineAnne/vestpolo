@@ -1046,8 +1046,8 @@
 
     <nav class="menu-loja" id="menuLoja">
         <a href="{% url 'home' %}">Início</a>
-        <a href="#produtos">Universitários</a>
-        <a href="#produtos">Empresariais</a>
+        <a href="{% url 'universitarios' %}">Universitários</a>
+        <a href="{% url 'empresariais' %}">Empresariais</a>
         <a href="{% url 'personalizados' %}">Personalizados</a>
         <a href="#produtos">Mais vendidos</a>
         <a href="https://wa.me/5574999087655" target="_blank">Contato</a>
@@ -1109,13 +1109,13 @@
 
 <section class="categorias-home">
 
-    <a href="#produtos" class="categoria-card">
+    <a href="{% url 'universitarios' %}" class="categoria-card">
         <span>🎓</span>
         <h3>Universitários</h3>
         <p>Polos personalizadas para cursos, turmas e eventos acadêmicos.</p>
     </a>
 
-    <a href="#produtos" class="categoria-card">
+    <a href="{% url 'empresariais' %}" class="categoria-card">
         <span>🏢</span>
         <h3>Empresariais</h3>
         <p>Uniformes profissionais para empresas, equipes e instituições.</p>
@@ -1168,12 +1168,12 @@
             <span class="subtitulo">Categorias</span>
             <h2>Polos universitárias</h2>
         </div>
-        <a href="#produtos">Ver todos</a>
+        <a href="{% url 'universitarios' %}">Ver todos</a>
     </div>
 
     <div class="carrossel-produtos">
 
-        {% for produto in produtos %}
+        {% for produto in produtos_universitarios %}
             <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
 
                 {% if produto.imagem %}
@@ -1198,14 +1198,14 @@
     <div class="vitrine-topo">
         <div>
             <span class="subtitulo">Uniformes</span>
-            <h2>Empresariais e personalizados</h2>
+            <h2>Polos empresariais</h2>
         </div>
-        <a href="#produtos">Ver todos</a>
+        <a href="{% url 'empresariais' %}">Ver todos</a>
     </div>
 
     <div class="carrossel-produtos">
 
-        {% for produto in produtos %}
+        {% for produto in produtos_empresariais %}
             <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
 
                 {% if produto.imagem %}
@@ -1214,7 +1214,7 @@
                     <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
                 {% endif %}
 
-                <span class="mini-badge">Personalizado</span>
+                <span class="mini-badge">Empresarial</span>
                 <h3>{{ produto.nome }}</h3>
                 <p>R$ {{ produto.preco }}</p>
 
@@ -1254,14 +1254,14 @@
 
             <p class="descricao">{{ produto.descricao }}</p>
 
-            <span class="tag">Tamanho {{ produto.tamanho }}</span>
+            <span class="tag">{{ produto.categoria }}</span>
 
             <p class="price">R$ {{ produto.preco }}</p>
         </a>
 
         <div class="acoes">
-            <a href="{% url 'add_carrinho' produto.id %}">
-                <button>Adicionar ao carrinho</button>
+            <a href="{% url 'produto_detalhe' produto.id %}">
+                <button>Ver detalhes</button>
             </a>
         </div>
 
