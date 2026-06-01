@@ -103,6 +103,21 @@
             color: #25D366;
         }
 
+        .menu-toggle {
+            display: none;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .menu-toggle:hover {
+            background: #1ebe5d;
+        }
+
         .header-icons {
             display: flex;
             gap: 20px;
@@ -222,37 +237,6 @@
         .hero-btn-outline:hover {
             background: white;
             color: #111;
-        }
-
-        /* Busca */
-
-        .area-busca {
-            background: white;
-            width: 90%;
-            max-width: 1000px;
-            margin: -30px auto 30px;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .area-busca form {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .area-busca input {
-            padding: 12px;
-            width: 280px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
         }
 
         button {
@@ -656,10 +640,6 @@
             .hero h1 {
                 font-size: 54px;
             }
-
-            .area-busca {
-                width: calc(100% - 32px);
-            }
         }
 
         /* Responsivo: celulares */
@@ -693,19 +673,55 @@
                 font-size: 21px;
             }
 
-            .menu-loja {
-                gap: 18px;
-                overflow-x: auto;
+            .menu-toggle {
+                display: block;
+                order: 2;
+            }
+
+            .header-icons {
+                order: 3;
+                width: 100%;
                 justify-content: flex-start;
-                white-space: nowrap;
-                padding: 10px 0;
+                gap: 16px;
+            }
+
+            .menu-loja {
+                order: 4;
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0;
+                background: #1a1a1a;
+                border-radius: 12px;
+                padding: 8px;
+                margin-top: 4px;
+            }
+
+            .menu-loja.ativo {
+                display: flex;
+            }
+
+            .menu-loja a {
+                width: 100%;
+                padding: 13px 12px;
+                border-radius: 8px;
+                font-size: 15px;
+            }
+
+            .menu-loja a:hover {
+                background: #25D366;
+                color: white;
             }
 
             .hero {
-                min-height: 520px;
-                padding: 90px 24px 60px;
+                min-height: 320px;
+                padding: 0;
                 margin-bottom: 50px;
+                background-size: contain;
                 background-position: center;
+                background-repeat: no-repeat;
+                background-color: #111;
             }
 
             .hero h1 {
@@ -727,24 +743,6 @@
                 width: 100%;
                 padding: 15px 22px;
                 font-size: 15px;
-            }
-
-            .area-busca {
-                width: calc(100% - 24px);
-                margin: -25px auto 25px;
-                padding: 16px;
-            }
-
-            .area-busca form {
-                width: 100%;
-            }
-
-            .area-busca input {
-                width: 100%;
-            }
-
-            .area-busca button {
-                width: 100%;
             }
 
             .secao-premium h2 {
@@ -793,8 +791,12 @@
 
         @media (max-width: 480px) {
             .hero {
-                min-height: 460px;
-                padding: 80px 18px 45px;
+                min-height: 260px;
+                padding: 0;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-color: #111;
             }
 
             .hero h1 {
@@ -850,7 +852,11 @@
         </div>
     </a>
 
-    <nav class="menu-loja">
+    <button type="button" class="menu-toggle" onclick="alternarMenu()">
+        ☰ Menu
+    </button>
+
+    <nav class="menu-loja" id="menuLoja">
         <a href="{% url 'home' %}">Início</a>
         <a href="#produtos">Universitários</a>
         <a href="#produtos">Empresariais</a>
@@ -1107,6 +1113,16 @@
 
     </div>
 </footer>
+
+<script>
+    function alternarMenu() {
+        const menu = document.getElementById("menuLoja");
+
+        if (menu) {
+            menu.classList.toggle("ativo");
+        }
+    }
+</script>
 
 </body>
 </html>
