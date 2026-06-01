@@ -18,4 +18,5 @@ urlpatterns = [
     path('logout/', views.logout_usuario, name='logout'),
     path('minha-conta/', views.minha_conta, name='minha_conta'),
     path('meus-pedidos/', views.meus_pedidos, name='meus_pedidos'),
+    path('personalizados/', views.personalizados, name='personalizados'),
 ]

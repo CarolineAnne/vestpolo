@@ -1048,7 +1048,7 @@
         <a href="{% url 'home' %}">Início</a>
         <a href="#produtos">Universitários</a>
         <a href="#produtos">Empresariais</a>
-        <a href="#produtos">Personalizados</a>
+        <a href="{% url 'personalizados' %}">Personalizados</a>
         <a href="#produtos">Mais vendidos</a>
         <a href="https://wa.me/5574999087655" target="_blank">Contato</a>
     </nav>
@@ -1121,7 +1121,7 @@
         <p>Uniformes profissionais para empresas, equipes e instituições.</p>
     </a>
 
-    <a href="#produtos" class="categoria-card">
+    <a href="{% url 'personalizados' %}" class="categoria-card">
         <span>✨</span>
         <h3>Personalizados</h3>
         <p>Bordados exclusivos com nome, curso, logo ou identidade visual.</p>

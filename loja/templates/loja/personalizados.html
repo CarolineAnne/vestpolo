@@ -1,0 +1,575 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalizados | VestPolo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            color: #222;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #25D366;
+        }
+
+        .hero-personalizados {
+            width: 100%;
+            background: linear-gradient(135deg, #111, #242424);
+            color: white;
+            padding: 70px 8%;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .hero-texto span {
+            display: inline-block;
+            background: rgba(37, 211, 102, 0.15);
+            color: #25D366;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .hero-texto h1 {
+            font-size: 46px;
+            line-height: 1.1;
+            margin: 0 0 18px;
+        }
+
+        .hero-texto p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #ddd;
+            margin: 0 0 28px;
+            max-width: 650px;
+        }
+
+        .hero-lista {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 28px;
+            color: #f1f1f1;
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #25D366;
+            color: white;
+            padding: 15px 24px;
+            border-radius: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1ebe5d;
+            transform: translateY(-2px);
+        }
+
+        .hero-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .hero-card .icone {
+            font-size: 72px;
+            margin-bottom: 14px;
+        }
+
+        .hero-card h2 {
+            margin: 0 0 12px;
+            font-size: 26px;
+        }
+
+        .hero-card p {
+            margin: 0;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .como-funciona {
+            width: 92%;
+            max-width: 1200px;
+            margin: 45px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .etapa {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+
+        .etapa span {
+            display: inline-flex;
+            width: 34px;
+            height: 34px;
+            background: #111;
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .etapa h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .etapa p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .titulo-secao {
+            width: 92%;
+            max-width: 1200px;
+            margin: 45px auto 20px;
+        }
+
+        .titulo-secao span {
+            color: #128a3c;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 13px;
+        }
+
+        .titulo-secao h2 {
+            font-size: 32px;
+            margin: 8px 0 0;
+        }
+
+        .produtos {
+            width: 92%;
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+        }
+
+        .favorito {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: white;
+            border-radius: 50%;
+            padding: 6px 8px;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            z-index: 10;
+        }
+
+        .imagem-card {
+            height: 230px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .imagem-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 12px;
+            background: #111;
+            color: white;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .card h3 {
+            margin: 12px 0 6px;
+            font-size: 18px;
+            line-height: 1.3;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price {
+            color: #128a3c;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .btn-ver {
+            display: block;
+            width: 100%;
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 13px;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .btn-ver:hover {
+            background: #333;
+        }
+
+        .mensagem {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            text-align: center;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 26px;
+            margin-top: 40px;
+        }
+
+        .banner-destaque-personalizados {
+            width: 92%;
+            max-width: 1400px;
+            margin: 30px auto 0;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            background: #111;
+        }
+
+        .banner-destaque-personalizados img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        @media (max-width: 900px) {
+            .hero-personalizados {
+                grid-template-columns: 1fr;
+                padding: 50px 6%;
+            }
+
+            .como-funciona {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .banner-destaque-personalizados {
+                width: calc(100% - 40px);
+                border-radius: 22px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 16px 20px;
+            }
+
+            nav {
+                gap: 14px;
+            }
+
+            .hero-personalizados {
+                padding: 42px 22px;
+            }
+
+            .hero-texto h1 {
+                font-size: 32px;
+            }
+
+            .hero-texto p {
+                font-size: 15px;
+            }
+
+            .hero-card {
+                padding: 24px;
+            }
+
+            .como-funciona {
+                grid-template-columns: 1fr;
+                width: calc(100% - 24px);
+                margin: 30px auto;
+            }
+
+            .titulo-secao {
+                width: calc(100% - 24px);
+            }
+
+            .titulo-secao h2 {
+                font-size: 26px;
+            }
+
+            .produtos {
+                width: calc(100% - 24px);
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .card {
+                padding: 10px;
+                border-radius: 14px;
+            }
+
+            .imagem-card {
+                height: 145px;
+            }
+
+            .card h3 {
+                font-size: 14px;
+            }
+
+            .card p {
+                display: none;
+            }
+
+            .price {
+                font-size: 16px;
+            }
+
+            .btn-ver {
+                padding: 11px 8px;
+                font-size: 13px;
+            }
+
+            .banner-destaque-personalizados {
+                width: calc(100% - 24px);
+                margin: 18px auto 0;
+                border-radius: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}" class="logo">VestPolo</a>
+
+    <nav>
+        <a href="{% url 'home' %}">Início</a>
+        <a href="{% url 'personalizados' %}">Personalizados</a>
+        <a href="{% url 'carrinho' %}">Carrinho</a>
+    </nav>
+</header>
+
+<section class="banner-destaque-personalizados">
+    <img src="{% static 'img/personalizados-destaque.png' %}" alt="Personalize sua polo - VestPolo">
+</section>
+
+<section class="hero-personalizados">
+    <div class="hero-texto">
+        <span>Personalizados VestPolo</span>
+
+        <h1>Crie sua polo personalizada do seu jeito</h1>
+
+        <p>
+            Produzimos polos com bordado personalizado para cursos, turmas, empresas,
+            eventos, formandos e grupos especiais. Você pode enviar sua logo, nome,
+            arte de referência ou identidade visual.
+        </p>
+
+        <div class="hero-lista">
+            <div>✔ Bordado com nome, curso, turma ou empresa</div>
+            <div>✔ Envio de arte/logo/referência pelo cliente</div>
+            <div>✔ Ideal para universitários, equipes e eventos</div>
+            <div>✔ Atendimento direto pelo WhatsApp</div>
+        </div>
+
+        <a class="btn-whatsapp"
+           href="https://wa.me/5574999087655?text=Olá! Tenho interesse em uma polo personalizada."
+           target="_blank">
+            Personalizar pelo WhatsApp
+        </a>
+    </div>
+
+    <div class="hero-card">
+        <div class="icone">✨</div>
+        <h2>Sua ideia em bordado</h2>
+        <p>
+            Envie sua referência e transforme sua farda em uma peça exclusiva.
+        </p>
+    </div>
+</section>
+
+<section class="como-funciona">
+    <div class="etapa">
+        <span>1</span>
+        <h3>Escolha o modelo</h3>
+        <p>Selecione a polo desejada e a cor disponível.</p>
+    </div>
+
+    <div class="etapa">
+        <span>2</span>
+        <h3>Envie sua ideia</h3>
+        <p>Informe nome, curso, empresa, logo ou referência.</p>
+    </div>
+
+    <div class="etapa">
+        <span>3</span>
+        <h3>Ajustamos o bordado</h3>
+        <p>Organizamos os detalhes para deixar a peça elegante.</p>
+    </div>
+
+    <div class="etapa">
+        <span>4</span>
+        <h3>Finalize pelo WhatsApp</h3>
+        <p>Confirmamos o pedido e os detalhes de produção.</p>
+    </div>
+</section>
+
+<section class="titulo-secao">
+    <span>Produtos personalizados</span>
+    <h2>Escolha sua base para personalizar</h2>
+</section>
+
+<section class="produtos">
+
+    {% for produto in produtos %}
+        <div class="card">
+
+            <a href="{% url 'favoritar' produto.id %}" class="favorito">
+                {% if produto.id in favoritos %}
+                    ❤️
+                {% else %}
+                    🤍
+                {% endif %}
+            </a>
+
+            <a href="{% url 'produto_detalhe' produto.id %}">
+                <div class="imagem-card">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                </div>
+
+                <span class="badge">Personalizado</span>
+
+                <h3>{{ produto.nome }}</h3>
+
+                <p>{{ produto.descricao }}</p>
+
+                <div class="price">R$ {{ produto.preco }}</div>
+            </a>
+
+            <a href="{% url 'produto_detalhe' produto.id %}" class="btn-ver">
+                Ver detalhes
+            </a>
+        </div>
+    {% empty %}
+        <div class="mensagem">
+            Nenhum produto personalizado cadastrado ainda.
+        </div>
+    {% endfor %}
+
+</section>
+
+<footer>
+    VestPolo — Seu curso. Seu estilo. Seu fardamento.
+</footer>
+
+</body>
+</html>

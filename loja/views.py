@@ -47,6 +47,40 @@ def home(request):
         'total_favoritos': total_favoritos
     })
 
+def personalizados(request):
+    produtos = Produto.objects.filter(
+        Q(categoria__icontains='personalizado') |
+        Q(categoria__icontains='personalizados') |
+        Q(nome__icontains='personalizado') |
+        Q(nome__icontains='personalizados')
+    )
+
+    if request.user.is_authenticated:
+        favoritos = list(
+            Favorito.objects.filter(usuario=request.user)
+            .values_list('produto_id', flat=True)
+        )
+    else:
+        favoritos = []
+
+    total_favoritos = len(favoritos)
+
+    carrinho = request.session.get('carrinho', {})
+
+    total_itens = 0
+
+    for item in carrinho.values():
+        if isinstance(item, dict):
+            total_itens += item.get('quantidade', 0)
+        else:
+            total_itens += item
+
+    return render(request, 'loja/personalizados.html', {
+        'produtos': produtos,
+        'favoritos': favoritos,
+        'total_itens': total_itens,
+        'total_favoritos': total_favoritos
+    })
 
 def produto_detalhe(request, id):
     produto = get_object_or_404(Produto, id=id)
