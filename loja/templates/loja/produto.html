@@ -276,14 +276,6 @@
             margin-bottom: 8px;
         }
 
-        select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-        }
-
         button {
             border: none;
             padding: 14px 20px;
@@ -293,19 +285,84 @@
             font-size: 15px;
         }
 
-        .botoes-cor {
+        .opcao-titulo {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #222;
+        }
+
+        .opcoes-cores {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .cor-opcao {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 2px solid #d9d9d9;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 0;
+            outline: none;
+        }
+
+        .cor-opcao:hover {
+            transform: scale(1.06);
+        }
+
+        .cor-opcao.ativa {
+            border: 3px solid #111;
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.08);
+        }
+
+        .cor-preto {
+            background: #000;
+        }
+
+        .cor-branca {
+            background: #fff;
+        }
+
+        .cor-vinho {
+            background: #6e1028;
+        }
+
+        .cor-marinho {
+            background: #0d1b4c;
+        }
+
+        .opcoes-tamanhos {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .botoes-cor button {
-            background: #f0f0f0;
+        .tamanho-opcao {
+            min-width: 56px;
+            padding: 12px 16px;
+            border: 1px solid #d8d8d8;
+            background: #fff;
             color: #222;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .botoes-cor button:hover {
-            background: #ddd;
+        .tamanho-opcao:hover {
+            background: #f5f5f5;
+        }
+
+        .tamanho-opcao.ativo {
+            background: #111;
+            color: #fff;
+            border-color: #111;
         }
 
         .quantidade-controle {
@@ -568,14 +625,15 @@
                 padding: 14px;
             }
 
-            .botoes-cor {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
+            .cor-opcao {
+                width: 42px;
+                height: 42px;
             }
 
-            .botoes-cor button {
-                width: 100%;
+            .tamanho-opcao {
+                min-width: 52px;
+                padding: 10px 14px;
+                font-size: 14px;
             }
 
             .acoes {
@@ -662,10 +720,6 @@
                 font-size: 24px;
             }
 
-            .botoes-cor {
-                grid-template-columns: 1fr;
-            }
-
             button {
                 padding: 12px 16px;
                 font-size: 14px;
@@ -678,6 +732,19 @@
             footer {
                 font-size: 13px;
                 padding: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cor-opcao {
+                width: 42px;
+                height: 42px;
+            }
+
+            .tamanho-opcao {
+                min-width: 52px;
+                padding: 10px 14px;
+                font-size: 14px;
             }
         }
     </style>
@@ -785,43 +852,48 @@
         </div>
 
         <div class="tamanho-box">
-            <strong>Escolha o tamanho:</strong>
+            <span class="opcao-titulo">Selecione a opção de Cor:</span>
 
-            <select id="tamanhoSelecionado" required>
-                <option value="">Selecione</option>
-                <option value="P">P</option>
-                <option value="M">M</option>
-                <option value="G">G</option>
-                <option value="GG">GG</option>
-            </select>
-        </div>
-
-        <div class="tamanho-box">
-            <strong>Escolha a cor:</strong>
-
-            <div class="botoes-cor">
+            <div class="opcoes-cores">
                 <button type="button"
-                        onclick="selecionarCor('Preto', '{% if produto.imagem_preta %}{{ produto.imagem_preta.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                    Preto
+                        class="cor-opcao cor-preto"
+                        title="Preto"
+                        onclick="selecionarCor(this, 'Preto', '{% if produto.imagem_preta %}{{ produto.imagem_preta.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
                 </button>
 
                 <button type="button"
-                        onclick="selecionarCor('Branca', '{% if produto.imagem_branca %}{{ produto.imagem_branca.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                    Branca
+                        class="cor-opcao cor-branca"
+                        title="Branca"
+                        onclick="selecionarCor(this, 'Branca', '{% if produto.imagem_branca %}{{ produto.imagem_branca.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
                 </button>
 
                 <button type="button"
-                        onclick="selecionarCor('Vinho', '{% if produto.imagem_vinho %}{{ produto.imagem_vinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                    Vinho
+                        class="cor-opcao cor-vinho"
+                        title="Vinho"
+                        onclick="selecionarCor(this, 'Vinho', '{% if produto.imagem_vinho %}{{ produto.imagem_vinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
                 </button>
 
                 <button type="button"
-                        onclick="selecionarCor('Marinho', '{% if produto.imagem_marinho %}{{ produto.imagem_marinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                    Marinho
+                        class="cor-opcao cor-marinho"
+                        title="Marinho"
+                        onclick="selecionarCor(this, 'Marinho', '{% if produto.imagem_marinho %}{{ produto.imagem_marinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
                 </button>
             </div>
 
             <input type="hidden" id="corSelecionada" value="">
+        </div>
+
+        <div class="tamanho-box">
+            <span class="opcao-titulo">Selecione a opção de Tamanho:</span>
+
+            <div class="opcoes-tamanhos">
+                <button type="button" class="tamanho-opcao" onclick="selecionarTamanho(this, 'P')">P</button>
+                <button type="button" class="tamanho-opcao" onclick="selecionarTamanho(this, 'M')">M</button>
+                <button type="button" class="tamanho-opcao" onclick="selecionarTamanho(this, 'G')">G</button>
+                <button type="button" class="tamanho-opcao" onclick="selecionarTamanho(this, 'GG')">GG</button>
+            </div>
+
+            <input type="hidden" id="tamanhoSelecionado" value="">
         </div>
 
         <div class="tamanho-box">
@@ -903,8 +975,14 @@
         }
     }
 
-    function selecionarCor(cor, imagemUrl) {
+    function selecionarCor(botao, cor, imagemUrl) {
         document.getElementById("corSelecionada").value = cor;
+
+        document.querySelectorAll(".cor-opcao").forEach(function (item) {
+            item.classList.remove("ativa");
+        });
+
+        botao.classList.add("ativa");
 
         let imagem = document.getElementById("produtoImagem");
         let miniatura = document.getElementById("miniaturaImagemPrincipal");
@@ -918,6 +996,15 @@
 
             mostrarSlideProduto("produto");
         }
+    }
+    function selecionarTamanho(botao, tamanho) {
+        document.getElementById("tamanhoSelecionado").value = tamanho;
+
+        document.querySelectorAll(".tamanho-opcao").forEach(item => {
+            item.classList.remove("ativo");
+        });
+
+        botao.classList.add("ativo");
     }
     
     function prepararCarrinho() {
