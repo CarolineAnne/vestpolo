@@ -124,15 +124,14 @@ def adicionar_carrinho(request, id):
     return redirect('carrinho')
 
 
-def remover_carrinho(request, id):
+def remover_carrinho(request, chave):
     carrinho = request.session.get('carrinho', {})
-
-    chave = str(id)
 
     if chave in carrinho:
         del carrinho[chave]
 
     request.session['carrinho'] = carrinho
+    request.session.modified = True
 
     return redirect('carrinho')
 
@@ -172,22 +171,20 @@ def carrinho(request):
         'total_favoritos': total_favoritos
     })
 
-def aumentar_quantidade(request, id):
+def aumentar_quantidade(request, chave):
     carrinho = request.session.get('carrinho', {})
-
-    chave = str(id)
 
     if chave in carrinho:
         carrinho[chave]['quantidade'] += 1
 
     request.session['carrinho'] = carrinho
+    request.session.modified = True
 
     return redirect('carrinho')
 
-def diminuir_quantidade(request, id):
-    carrinho = request.session.get('carrinho', {})
 
-    chave = str(id)
+def diminuir_quantidade(request, chave):
+    carrinho = request.session.get('carrinho', {})
 
     if chave in carrinho:
         carrinho[chave]['quantidade'] -= 1
@@ -196,6 +193,7 @@ def diminuir_quantidade(request, id):
             del carrinho[chave]
 
     request.session['carrinho'] = carrinho
+    request.session.modified = True
 
     return redirect('carrinho')
 
