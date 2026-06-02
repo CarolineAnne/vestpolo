@@ -336,6 +336,14 @@
             background: #0d1b4c;
         }
 
+        .cor-azul {
+            background: #0057b8;
+        }
+
+        .cor-amarelo {
+            background: #FFFF00;
+        }
+
         .opcoes-tamanhos {
             display: flex;
             gap: 10px;
@@ -886,29 +894,55 @@
             <span class="opcao-titulo">Selecione a opção de Cor:</span>
 
             <div class="opcoes-cores">
-                <button type="button"
-                        class="cor-opcao cor-preto"
-                        title="Preto"
-                        onclick="selecionarCor(this, 'Preto', '{% if produto.imagem_preta %}{{ produto.imagem_preta.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                </button>
 
-                <button type="button"
-                        class="cor-opcao cor-branca"
-                        title="Branca"
-                        onclick="selecionarCor(this, 'Branca', '{% if produto.imagem_branca %}{{ produto.imagem_branca.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                </button>
+                {% if produto.imagem_preta %}
+                    <button type="button"
+                            class="cor-opcao cor-preto"
+                            title="Preto"
+                            onclick="selecionarCor(this, 'Preto', '{{ produto.imagem_preta.url }}')">
+                    </button>
+                {% endif %}
 
-                <button type="button"
-                        class="cor-opcao cor-vinho"
-                        title="Vinho"
-                        onclick="selecionarCor(this, 'Vinho', '{% if produto.imagem_vinho %}{{ produto.imagem_vinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                </button>
+                {% if produto.imagem_branca %}
+                    <button type="button"
+                            class="cor-opcao cor-branca"
+                            title="Branca"
+                            onclick="selecionarCor(this, 'Branca', '{{ produto.imagem_branca.url }}')">
+                    </button>
+                {% endif %}
 
-                <button type="button"
-                        class="cor-opcao cor-marinho"
-                        title="Marinho"
-                        onclick="selecionarCor(this, 'Marinho', '{% if produto.imagem_marinho %}{{ produto.imagem_marinho.url }}{% elif produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=Sem+Imagem{% endif %}')">
-                </button>
+                {% if produto.imagem_vinho %}
+                    <button type="button"
+                            class="cor-opcao cor-vinho"
+                            title="Vinho"
+                            onclick="selecionarCor(this, 'Vinho', '{{ produto.imagem_vinho.url }}')">
+                    </button>
+                {% endif %}
+
+                {% if produto.imagem_marinho %}
+                    <button type="button"
+                            class="cor-opcao cor-marinho"
+                            title="Marinho"
+                            onclick="selecionarCor(this, 'Marinho', '{{ produto.imagem_marinho.url }}')">
+                    </button>
+                {% endif %}
+
+                {% if produto.imagem_azul %}
+                    <button type="button"
+                            class="cor-opcao cor-azul"
+                            title="Azul"
+                            onclick="selecionarCor(this, 'Azul', '{{ produto.imagem_azul.url }}')">
+                    </button>
+                {% endif %}
+
+                {% if produto.imagem_amarelo %}
+                    <button type="button"
+                            class="cor-opcao cor-amarelo"
+                            title="Amarelo"
+                            onclick="selecionarCor(this, 'Amarelo', '{{ produto.imagem_amarelo.url }}')">
+                    </button>
+                {% endif %}
+
             </div>
 
             <input type="hidden" id="corSelecionada" value="">
