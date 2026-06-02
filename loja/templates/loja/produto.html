@@ -344,6 +344,10 @@
             background: #FFFF00;
         }
 
+        .cor-verde {
+            background: #1f7a3a;
+        }
+
         .opcoes-tamanhos {
             display: flex;
             gap: 10px;
@@ -940,6 +944,14 @@
                             class="cor-opcao cor-amarelo"
                             title="Amarelo"
                             onclick="selecionarCor(this, 'Amarelo', '{{ produto.imagem_amarelo.url }}')">
+                    </button>
+                {% endif %}
+
+                {% if produto.imagem_verde %}
+                    <button type="button"
+                            class="cor-opcao cor-verde"
+                            title="Verde"
+                            onclick="selecionarCor(this, 'Verde', '{{ produto.imagem_verde.url }}')">
                     </button>
                 {% endif %}
 
