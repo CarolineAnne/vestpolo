@@ -30,6 +30,7 @@ class Produto(models.Model):
     imagem_marinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
     imagem_azul = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
     imagem_amarelo = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_verde = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
 
     imagem_logo = models.ImageField(
         upload_to='produtos/logos/',
