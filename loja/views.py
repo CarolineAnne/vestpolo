@@ -113,7 +113,8 @@ def universitarios(request):
         'subtitulo': 'Polos universitárias personalizadas',
         'descricao_pagina': 'Polos bordadas para cursos, turmas, eventos acadêmicos e formandos.',
         'badge': 'Universitário',
-        'icone': '🎓'
+        'icone': '🎓',
+        'banner_imagem': 'img/universitarios-destaque.png',
     })
 
 
@@ -149,7 +150,8 @@ def empresariais(request):
         'subtitulo': 'Uniformes profissionais personalizados',
         'descricao_pagina': 'Polos bordadas para empresas, equipes, instituições e eventos corporativos.',
         'badge': 'Empresarial',
-        'icone': '🏢'
+        'icone': '🏢',
+        'banner_imagem': 'img/empresariais-destaque.png',
     })
 
 def produto_detalhe(request, id):

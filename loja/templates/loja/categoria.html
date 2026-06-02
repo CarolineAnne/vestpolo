@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -207,11 +209,33 @@
             margin-top: 40px;
         }
 
+        .banner-destaque-categoria {
+            width: 92%;
+            max-width: 1400px;
+            margin: 30px auto 0;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            background: #111;
+        }
+
+        .banner-destaque-categoria img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
         @media (max-width: 600px) {
             header {
                 flex-direction: column;
                 align-items: flex-start;
                 padding: 16px 20px;
+            }
+
+            .banner-destaque-categoria {
+                width: calc(100% - 24px);
+                margin: 18px auto 0;
+                border-radius: 18px;
             }
 
             nav {
@@ -279,6 +303,12 @@
         <a href="{% url 'carrinho' %}">Carrinho</a>
     </nav>
 </header>
+
+{% if banner_imagem %}
+<section class="banner-destaque-categoria">
+    <img src="{% static banner_imagem %}" alt="{{ titulo }} VestPolo">
+</section>
+{% endif %}
 
 <section class="hero-categoria">
     <div class="icone">{{ icone }}</div>
