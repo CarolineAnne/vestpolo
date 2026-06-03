@@ -253,6 +253,32 @@
             background: #444;
         }
 
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(0,0,0,0.58),
+                    rgba(0,0,0,0.48)
+                ),
+                url('/static/img/banner-hover.png');
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero:hover::after {
+            opacity: 1;
+        }
+
         /* Títulos e seções */
 
         .titulo-secao {
@@ -954,6 +980,10 @@
             .footer-right {
                 justify-content: center;
                 flex-wrap: wrap;
+            }
+
+            .hero::after {
+                display: none;
             }
         }
 
