@@ -13,7 +13,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             width: 100%;
             overflow-x: hidden;
         }
@@ -34,6 +35,7 @@
         select,
         textarea {
             max-width: 100%;
+            font-family: inherit;
         }
 
         a {
@@ -148,25 +150,20 @@
             position: relative;
             width: 100%;
             min-height: 65vh;
-
             background-image:
                 linear-gradient(
                     rgba(0,0,0,0.58),
                     rgba(0,0,0,0.48)
                 ),
                 url('/static/img/banner.png');
-
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-
             display: flex;
             align-items: center;
-
             padding: 120px 8% 80px;
             overflow: hidden;
-
-            margin-bottom: 80px;
+            margin-bottom: 70px;
         }
 
         .hero-content {
@@ -239,6 +236,31 @@
             color: #111;
         }
 
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(
+                    rgba(0,0,0,0.58),
+                    rgba(0,0,0,0.48)
+                ),
+                url('/static/img/banner-hover.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero:hover::after {
+            opacity: 1;
+        }
+
+        /* Botões gerais */
+
         button {
             background: #111;
             color: white;
@@ -251,32 +273,6 @@
 
         button:hover {
             background: #444;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-
-            background-image:
-                linear-gradient(
-                    rgba(0,0,0,0.58),
-                    rgba(0,0,0,0.48)
-                ),
-                url('/static/img/banner-hover.png');
-
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-
-            opacity: 0;
-            transition: opacity 0.45s ease;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .hero:hover::after {
-            opacity: 1;
         }
 
         /* Títulos e seções */
@@ -363,7 +359,7 @@
         .vitrine-premium {
             width: 92%;
             max-width: 1200px;
-            margin: 45px auto;
+            margin: 35px auto;
         }
 
         .vitrine-topo {
@@ -453,6 +449,80 @@
             color: #128a3c;
             font-weight: bold;
             margin: 0;
+        }
+
+        /* Título premium do catálogo */
+
+        .titulo-produtos-gerais {
+            width: 92%;
+            max-width: 1200px;
+            margin: 44px auto 28px;
+            background: linear-gradient(135deg, #0f0f0f, #252525);
+            border-radius: 30px;
+            padding: 70px 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.16);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .titulo-produtos-gerais::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.10);
+            top: -100px;
+            right: -80px;
+        }
+
+        .titulo-produtos-gerais::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+            bottom: -70px;
+            left: -60px;
+        }
+
+        .titulo-produtos-conteudo {
+            max-width: 780px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .titulo-produtos-icone {
+            font-size: 54px;
+            margin-bottom: 16px;
+        }
+
+        .titulo-produtos-gerais span {
+            display: block;
+            color: #25D366;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            margin-bottom: 12px;
+        }
+
+        .titulo-produtos-gerais h2 {
+            font-size: 58px;
+            line-height: 1.08;
+            margin: 0 0 18px;
+            color: white;
+        }
+
+        .titulo-produtos-gerais p {
+            margin: 0;
+            font-size: 20px;
+            line-height: 1.6;
+            color: #dddddd;
         }
 
         /* Produtos principais */
@@ -594,10 +664,11 @@
         /* Rodapé */
 
         footer {
-            background: #111;
+            background: #0f0f0f;
             color: white;
-            padding: 30px 40px;
-            margin-top: 40px;
+            padding: 34px 40px;
+            margin-top: 45px;
+            border-top: 4px solid #25D366;
         }
 
         .footer-container {
@@ -660,13 +731,21 @@
             }
 
             .hero {
-                min-height: 620px;
-                padding: 110px 6% 70px;
+                min-height: 560px;
+                padding: 100px 6% 65px;
                 background-position: center;
             }
 
             .hero h1 {
                 font-size: 54px;
+            }
+
+            .titulo-produtos-gerais {
+                padding: 58px 26px;
+            }
+
+            .titulo-produtos-gerais h2 {
+                font-size: 46px;
             }
         }
 
@@ -854,7 +933,7 @@
             .vitrine-topo {
                 display: flex;
                 flex-direction: row;
-                align-items: flex-end;
+                align-items: center;
                 justify-content: space-between;
                 gap: 12px;
                 margin-bottom: 16px;
@@ -867,7 +946,7 @@
             }
 
             .vitrine-topo h2 {
-                font-size: 24px;
+                font-size: 22px;
                 line-height: 1.15;
                 margin: 6px 0 0;
                 color: #111;
@@ -878,6 +957,10 @@
                 white-space: nowrap;
                 color: #111;
                 font-weight: bold;
+                background: white;
+                padding: 7px 11px;
+                border-radius: 999px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             }
 
             .carrossel-produtos {
@@ -932,6 +1015,33 @@
                 font-size: 16px;
                 color: #128a3c;
                 font-weight: bold;
+            }
+
+            .titulo-produtos-gerais {
+                width: calc(100% - 24px);
+                margin: 28px auto 18px;
+                border-radius: 22px;
+                padding: 46px 22px;
+            }
+
+            .titulo-produtos-icone {
+                font-size: 42px;
+                margin-bottom: 12px;
+            }
+
+            .titulo-produtos-gerais span {
+                font-size: 11px;
+                letter-spacing: 1.8px;
+                margin-bottom: 10px;
+            }
+
+            .titulo-produtos-gerais h2 {
+                font-size: 34px;
+                margin-bottom: 14px;
+            }
+
+            .titulo-produtos-gerais p {
+                font-size: 15px;
             }
 
             .container {
@@ -1087,7 +1197,7 @@
             }
 
             .vitrine-topo h2 {
-                font-size: 22px;
+                font-size: 21px;
             }
 
             .mini-produto img,
@@ -1105,6 +1215,25 @@
                 font-size: 15px;
             }
 
+            .titulo-produtos-gerais {
+                width: calc(100% - 20px);
+                margin: 24px auto 16px;
+                border-radius: 18px;
+                padding: 38px 18px;
+            }
+
+            .titulo-produtos-icone {
+                font-size: 36px;
+            }
+
+            .titulo-produtos-gerais h2 {
+                font-size: 28px;
+            }
+
+            .titulo-produtos-gerais p {
+                font-size: 14px;
+            }
+
             .container {
                 width: calc(100% - 20px);
                 gap: 10px;
@@ -1117,33 +1246,8 @@
             .icon-link::after {
                 font-size: 9px;
             }
-
-            .titulo-produtos-gerais {
-                width: 92%;
-                max-width: 1200px;
-                margin: 35px auto 10px;
-                text-align: left;
-            }
-
-            .titulo-produtos-gerais span {
-                color: #128a3c;
-                font-size: 13px;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
-
-            .titulo-produtos-gerais h2 {
-                font-size: 32px;
-                margin: 8px 0 6px;
-            }
-
-            .titulo-produtos-gerais p {
-                color: #666;
-                margin: 0;
-            }
         }
-    </style>
+        </style>
 </head>
 
 <body>
@@ -1220,7 +1324,7 @@
 
 </div>
 </header>
-
+<!--
 <section class="hero">
 
     <div class="hero-overlay"></div>
@@ -1228,7 +1332,7 @@
     <div class="hero-content"></div>
 
 </section>
-<!--
+
 <section class="secao-premium">
     <span class="subtitulo">Coleção VestPolo</span>
     <h2>Produtos em destaque</h2>
@@ -1354,9 +1458,12 @@
 </section>
 
 <section class="titulo-produtos-gerais">
-    <span>Catálogo VestPolo</span>
-    <h2>Todos os produtos</h2>
-    <p>Escolha sua polo, confira os detalhes e personalize do seu jeito.</p>
+    <div class="titulo-produtos-conteudo">
+        <div class="titulo-produtos-icone">🛍️</div>
+        <span>Catálogo VestPolo</span>
+        <h2>Todos os produtos</h2>
+        <p>Escolha sua polo, confira os detalhes e personalize do seu jeito.</p>
+    </div>
 </section>
 
 <div class="container" id="produtos">
