@@ -819,15 +819,37 @@
 
             <div class="miniaturas-produto" id="miniaturasProduto">
 
+                <!-- Miniatura da frente -->
                 <button type="button"
+                        id="miniaturaFrenteBotao"
                         class="miniatura-produto ativo"
                         data-slide="produto"
                         onclick="mostrarSlideProduto('produto', this)">
+
                     {% if produto.imagem %}
-                        <img id="miniaturaImagemPrincipal" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                        <img id="miniaturaImagemPrincipal"
+                            src="{{ produto.imagem.url }}"
+                            alt="{{ produto.nome }}">
                     {% else %}
-                        <img id="miniaturaImagemPrincipal" src="https://via.placeholder.com/120x120?text=Sem+Imagem" alt="Sem imagem">
+                        <img id="miniaturaImagemPrincipal"
+                            src="https://via.placeholder.com/120x120?text=Sem+Imagem"
+                            alt="Sem imagem">
                     {% endif %}
+
+                </button>
+
+                <!-- Miniatura das costas. Só aparece quando a cor escolhida tiver imagem de costas -->
+                <button type="button"
+                        id="miniaturaCostasBotao"
+                        class="miniatura-produto"
+                        data-slide="costas"
+                        onclick="mostrarSlideProduto('costas', this)"
+                        style="display: none;">
+
+                    <img id="miniaturaImagemCostas"
+                        src=""
+                        alt="Costas da camisa">
+
                 </button>
 
                 {% if produto.imagem_logo %}
@@ -835,7 +857,10 @@
                             class="miniatura-produto"
                             data-slide="logo"
                             onclick="mostrarSlideProduto('logo', this)">
-                        <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
+
+                        <img src="{{ produto.imagem_logo.url }}"
+                            alt="Logo do bordado {{ produto.nome }}">
+
                     </button>
                 {% endif %}
 
@@ -844,7 +869,10 @@
                             class="miniatura-produto"
                             data-slide="tamanho"
                             onclick="mostrarSlideProduto('tamanho', this)">
-                        <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
+
+                        <img src="{{ produto.imagem_tamanho.url }}"
+                            alt="Tabela de tamanhos {{ produto.nome }}">
+
                     </button>
                 {% endif %}
 
@@ -858,25 +886,51 @@
 
         <div class="imagem-principal zoom-container" id="zoomContainer">
 
+            <!-- Imagem da frente -->
             <div class="slide-produto ativo" data-slide="produto">
+
                 {% if produto.imagem %}
-                    <img id="produtoImagem" src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                    <img id="produtoImagem"
+                        src="{{ produto.imagem.url }}"
+                        alt="{{ produto.nome }}">
                 {% else %}
-                    <img id="produtoImagem" src="https://via.placeholder.com/600x520?text=Sem+Imagem" alt="Sem imagem">
+                    <img id="produtoImagem"
+                        src="https://via.placeholder.com/600x520?text=Sem+Imagem"
+                        alt="Sem imagem">
                 {% endif %}
+
+            </div>
+
+            <!-- Imagem das costas -->
+            <div class="slide-produto" data-slide="costas" id="slideCostas">
+
+                <span class="titulo-slide-produto">Costas da camisa</span>
+
+                <img id="produtoImagemCostas"
+                    src=""
+                    alt="Costas da camisa">
+
             </div>
 
             {% if produto.imagem_logo %}
                 <div class="slide-produto" data-slide="logo">
+
                     <span class="titulo-slide-produto">Logo do bordado</span>
-                    <img src="{{ produto.imagem_logo.url }}" alt="Logo do bordado {{ produto.nome }}">
+
+                    <img src="{{ produto.imagem_logo.url }}"
+                        alt="Logo do bordado {{ produto.nome }}">
+
                 </div>
             {% endif %}
 
             {% if produto.imagem_tamanho %}
                 <div class="slide-produto" data-slide="tamanho">
+
                     <span class="titulo-slide-produto">Tabela de tamanhos</span>
-                    <img src="{{ produto.imagem_tamanho.url }}" alt="Tabela de tamanhos {{ produto.nome }}">
+
+                    <img src="{{ produto.imagem_tamanho.url }}"
+                        alt="Tabela de tamanhos {{ produto.nome }}">
+
                 </div>
             {% endif %}
 
@@ -903,7 +957,12 @@
                     <button type="button"
                             class="cor-opcao cor-preto"
                             title="Preto"
-                            onclick="selecionarCor(this, 'Preto', '{{ produto.imagem_preta.url }}')">
+                            onclick="selecionarCor(
+                                this,
+                                'Preto',
+                                '{{ produto.imagem_preta.url }}',
+                                '{% if produto.imagem_preta_costas %}{{ produto.imagem_preta_costas.url }}{% endif %}'
+                            )">
                     </button>
                 {% endif %}
 
@@ -911,7 +970,12 @@
                     <button type="button"
                             class="cor-opcao cor-branca"
                             title="Branca"
-                            onclick="selecionarCor(this, 'Branca', '{{ produto.imagem_branca.url }}')">
+                            onclick="selecionarCor(
+                                this,
+                                'Branca',
+                                '{{ produto.imagem_branca.url }}',
+                                '{% if produto.imagem_branca_costas %}{{ produto.imagem_branca_costas.url }}{% endif %}'
+                            )">
                     </button>
                 {% endif %}
 
@@ -919,7 +983,12 @@
                     <button type="button"
                             class="cor-opcao cor-vinho"
                             title="Vinho"
-                            onclick="selecionarCor(this, 'Vinho', '{{ produto.imagem_vinho.url }}')">
+                            onclick="selecionarCor(
+                                this,
+                                'Vinho',
+                                '{{ produto.imagem_vinho.url }}',
+                                '{% if produto.imagem_vinho_costas %}{{ produto.imagem_vinho_costas.url }}{% endif %}'
+                            )">
                     </button>
                 {% endif %}
 
@@ -927,35 +996,18 @@
                     <button type="button"
                             class="cor-opcao cor-marinho"
                             title="Marinho"
-                            onclick="selecionarCor(this, 'Marinho', '{{ produto.imagem_marinho.url }}')">
-                    </button>
-                {% endif %}
-
-                {% if produto.imagem_azul %}
-                    <button type="button"
-                            class="cor-opcao cor-azul"
-                            title="Azul"
-                            onclick="selecionarCor(this, 'Azul', '{{ produto.imagem_azul.url }}')">
-                    </button>
-                {% endif %}
-
-                {% if produto.imagem_amarelo %}
-                    <button type="button"
-                            class="cor-opcao cor-amarelo"
-                            title="Amarelo"
-                            onclick="selecionarCor(this, 'Amarelo', '{{ produto.imagem_amarelo.url }}')">
-                    </button>
-                {% endif %}
-
-                {% if produto.imagem_verde %}
-                    <button type="button"
-                            class="cor-opcao cor-verde"
-                            title="Verde"
-                            onclick="selecionarCor(this, 'Verde', '{{ produto.imagem_verde.url }}')">
+                            onclick="selecionarCor(
+                                this,
+                                'Marinho',
+                                '{{ produto.imagem_marinho.url }}',
+                                '{% if produto.imagem_marinho_costas %}{{ produto.imagem_marinho_costas.url }}{% endif %}'
+                            )">
                     </button>
                 {% endif %}
 
             </div>
+
+            <input type="hidden" id="corSelecionada" value="">
 
             <input type="hidden" id="corSelecionada" value="">
         </div>

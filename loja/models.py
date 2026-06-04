@@ -25,12 +25,22 @@ class Produto(models.Model):
     )
 
     imagem_preta = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_preta_costas = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+
     imagem_branca = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_branca_costas = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+
     imagem_vinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_vinho_costas = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+
     imagem_marinho = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
-    imagem_azul = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_marinho_costas = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+
     imagem_amarelo = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_amarelo_costas = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+
     imagem_verde = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
+    imagem_verde_costas = models.ImageField(upload_to='produtos/cores/', blank=True, null=True)
 
     imagem_logo = models.ImageField(
         upload_to='produtos/logos/',
