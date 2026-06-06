@@ -1005,6 +1005,32 @@
                     </button>
                 {% endif %}
 
+                {% if produto.imagem_amarelo %}
+                    <button type="button"
+                            class="cor-opcao cor-amarelo"
+                            title="Amarelo"
+                            onclick="selecionarCor(
+                                this,
+                                'Amarelo',
+                                '{{ produto.imagem_amarelo.url }}',
+                                '{% if produto.imagem_amarelo_costas %}{{ produto.imagem_amarelo_costas.url }}{% endif %}'
+                            )">
+                    </button>
+                {% endif %}
+
+                {% if produto.imagem_verde %}
+                    <button type="button"
+                            class="cor-opcao cor-verde"
+                            title="Verde"
+                            onclick="selecionarCor(
+                                this,
+                                'Verde',
+                                '{{ produto.imagem_verde.url }}',
+                                '{% if produto.imagem_verde_costas %}{{ produto.imagem_verde_costas.url }}{% endif %}'
+                            )">
+                    </button>
+                {% endif %}
+
             </div>
 
             <input type="hidden" id="corSelecionada" value="">
@@ -1151,7 +1177,7 @@
             }
 
             if (miniaturaCostasBotao) {
-                miniaturaCostasBotao.style.display = "";
+                miniaturaCostasBotao.style.display = "block";
             }
         } else {
             if (imagemCostasPrincipal) {
