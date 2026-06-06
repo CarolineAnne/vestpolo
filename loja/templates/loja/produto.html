@@ -1388,7 +1388,13 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        mostrarSlideProduto("produto");
+        const primeiraCor = document.querySelector(".cor-opcao");
+
+        if (primeiraCor) {
+            primeiraCor.click();
+        } else {
+            mostrarSlideProduto("produto");
+        }
     });
 
     let imagensModal = [];
