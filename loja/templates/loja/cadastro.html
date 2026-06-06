@@ -139,37 +139,70 @@
                 font-size: 24px;
             }
         }
+
+        .btn-voltar {
+            position: fixed;
+            top: 22px;
+            left: 22px;
+            background: #111;
+            color: white;
+            padding: 11px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+            z-index: 1000;
+            transition: 0.3s ease;
+        }
+
+        .btn-voltar:hover {
+            background: #25D366;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .btn-voltar {
+                position: static;
+                display: inline-flex;
+                margin: 16px 0 0 16px;
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>Criar conta</h1>
+    <a href="{% url 'home' %}" class="btn-voltar">⬅ Voltar para loja</a>
 
-    {% for message in messages %}
-        <p class="msg">{{ message }}</p>
-    {% endfor %}
+    <div class="container">
+        <h1>Criar conta</h1>
 
-    <form method="POST">
-        {% csrf_token %}
+        {% for message in messages %}
+            <p class="msg">{{ message }}</p>
+        {% endfor %}
 
-        <label>Nome</label>
-        <input type="text" name="nome" required>
+        <form method="POST">
+            {% csrf_token %}
 
-        <label>E-mail</label>
-        <input type="email" name="email" required>
+            <label>Nome</label>
+            <input type="text" name="nome" required>
 
-        <label>Senha</label>
-        <input type="password" name="senha" required>
+            <label>E-mail</label>
+            <input type="email" name="email" required>
 
-        <button type="submit">Cadastrar</button>
-    </form>
+            <label>Senha</label>
+            <input type="password" name="senha" required>
 
-    <p class="link-login">
-        Já tem conta? <a href="{% url 'login' %}">Entrar</a>
-    </p>
-</div>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <p class="link-login">
+            Já tem conta? <a href="{% url 'login' %}">Entrar</a>
+        </p>
+    </div>
 
 </body>
 </html>
