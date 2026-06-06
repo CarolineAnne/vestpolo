@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>E-mail enviado | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            color: #222;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 90px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 18px;
+            background: #111;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background: #25D366;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Verifique seu e-mail</h1>
+
+    <p>
+        Se o e-mail informado estiver cadastrado, você receberá uma mensagem com o link para redefinir sua senha.
+    </p>
+
+    <a href="{% url 'login' %}">Voltar para o login</a>
+</div>
+
+</body>
+</html>

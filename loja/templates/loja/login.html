@@ -170,6 +170,21 @@
                 font-size: 13px;
             }
         }
+
+        .link-extra {
+            text-align: center;
+            margin-top: 14px;
+        }
+
+        .link-extra a {
+            color: #128a3c;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .link-extra a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -194,6 +209,10 @@
             <input type="password" name="senha" required>
 
             <button type="submit">Entrar</button>
+
+            <p class="link-extra">
+                <a href="{% url 'password_reset' %}">Esqueci minha senha</a>
+            </p>
         </form>
 
         <p class="link-cadastro">

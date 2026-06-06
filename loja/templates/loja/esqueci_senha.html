@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Esqueci minha senha | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            color: #222;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 80px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            background: #111;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 999px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #25D366;
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #111;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .voltar:hover {
+            color: #128a3c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Esqueci minha senha</h1>
+
+    <p>Informe seu e-mail cadastrado. Enviaremos um link para você criar uma nova senha.</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="id_email">E-mail</label>
+        {{ form.email }}
+
+        <button type="submit">Enviar link de recuperação</button>
+    </form>
+
+    <a href="{% url 'login' %}" class="voltar">⬅ Voltar para o login</a>
+</div>
+
+</body>
+</html>

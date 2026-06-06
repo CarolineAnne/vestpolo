@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Redefinir senha | VestPolo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            color: #222;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 70px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 14px 0 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            background: #111;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 999px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 18px;
+        }
+
+        button:hover {
+            background: #25D366;
+        }
+
+        .erro {
+            color: #b00020;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Crie uma nova senha</h1>
+
+    {% if validlink %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Nova senha</label>
+            {{ form.new_password1 }}
+
+            <label>Confirme a nova senha</label>
+            {{ form.new_password2 }}
+
+            {% if form.errors %}
+                <p class="erro">Verifique se as senhas são iguais e atendem aos requisitos.</p>
+            {% endif %}
+
+            <button type="submit">Salvar nova senha</button>
+        </form>
+
+    {% else %}
+
+        <p class="erro">
+            Este link é inválido ou expirou. Solicite uma nova recuperação de senha.
+        </p>
+
+    {% endif %}
+</div>
+
+</body>
+</html>
