@@ -1008,8 +1008,6 @@
             </div>
 
             <input type="hidden" id="corSelecionada" value="">
-
-            <input type="hidden" id="corSelecionada" value="">
         </div>
 
         <div class="tamanho-box">
@@ -1117,8 +1115,12 @@
         }
     }
 
-    function selecionarCor(botao, cor, imagemUrl) {
-        document.getElementById("corSelecionada").value = cor;
+    function selecionarCor(botao, cor, imagemFrente, imagemCostas) {
+        const campoCor = document.getElementById("corSelecionada");
+
+        if (campoCor) {
+            campoCor.value = cor;
+        }
 
         document.querySelectorAll(".cor-opcao").forEach(function (item) {
             item.classList.remove("ativa");
@@ -1126,18 +1128,46 @@
 
         botao.classList.add("ativa");
 
-        let imagem = document.getElementById("produtoImagem");
-        let miniatura = document.getElementById("miniaturaImagemPrincipal");
+        const imagemPrincipal = document.getElementById("produtoImagem");
+        const miniaturaFrente = document.getElementById("miniaturaImagemPrincipal");
+        const miniaturaFrenteBotao = document.getElementById("miniaturaFrenteBotao");
 
-        if (imagemUrl && imagemUrl !== "None") {
-            imagem.src = imagemUrl;
+        const imagemCostasPrincipal = document.getElementById("produtoImagemCostas");
+        const miniaturaCostas = document.getElementById("miniaturaImagemCostas");
+        const miniaturaCostasBotao = document.getElementById("miniaturaCostasBotao");
 
-            if (miniatura) {
-                miniatura.src = imagemUrl;
+        if (imagemFrente && imagemPrincipal && miniaturaFrente) {
+            imagemPrincipal.src = imagemFrente;
+            miniaturaFrente.src = imagemFrente;
+        }
+
+        if (imagemCostas && imagemCostas.trim() !== "") {
+            if (imagemCostasPrincipal) {
+                imagemCostasPrincipal.src = imagemCostas;
             }
 
-            mostrarSlideProduto("produto");
+            if (miniaturaCostas) {
+                miniaturaCostas.src = imagemCostas;
+            }
+
+            if (miniaturaCostasBotao) {
+                miniaturaCostasBotao.style.display = "";
+            }
+        } else {
+            if (imagemCostasPrincipal) {
+                imagemCostasPrincipal.src = "";
+            }
+
+            if (miniaturaCostas) {
+                miniaturaCostas.src = "";
+            }
+
+            if (miniaturaCostasBotao) {
+                miniaturaCostasBotao.style.display = "none";
+            }
         }
+
+        mostrarSlideProduto("produto", miniaturaFrenteBotao);
     }
     function selecionarTamanho(botao, tamanho) {
         document.getElementById("tamanhoSelecionado").value = tamanho;
@@ -1350,12 +1380,27 @@
 
             const tipo = slide.getAttribute("data-slide");
 
+            if (tipo === "costas") {
+                const miniaturaCostasBotao = document.getElementById("miniaturaCostasBotao");
+
+                if (
+                    !img.src ||
+                    img.getAttribute("src") === "" ||
+                    !miniaturaCostasBotao ||
+                    miniaturaCostasBotao.style.display === "none"
+                ) {
+                    return;
+                }
+            }
+
             let titulo = "{{ produto.nome }}";
 
             if (tipo === "logo") {
                 titulo = "Logo do bordado";
             } else if (tipo === "tamanho") {
                 titulo = "Tabela de tamanhos";
+            } else if (tipo === "costas") {
+                titulo = "Costas da camisa";
             }
 
             imagensModal.push({
