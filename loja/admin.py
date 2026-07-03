@@ -42,8 +42,6 @@ class ItemPedidoInline(admin.TabularInline):
         'observacao',
         'arte',
         'subtotal',
-        'imagem_logo',
-        'imagem_tamanho',
     )
 
     can_delete = False
@@ -56,16 +54,21 @@ class PedidoAdmin(admin.ModelAdmin):
         'nome_cliente',
         'telefone',
         'forma_entrega',
+        'forma_pagamento',
+        'valor_frete',
         'status',
+        'status_pagamento',
         'total',
         'data_pedido',
     )
 
-    list_editable = ('status',)
+    list_editable = ('status', 'status_pagamento')
 
     list_filter = (
         'status',
+        'status_pagamento',
         'forma_entrega',
+        'forma_pagamento',
         'data_pedido',
     )
 
@@ -84,14 +87,34 @@ class PedidoAdmin(admin.ModelAdmin):
                 'nome_cliente',
                 'telefone',
                 'forma_entrega',
+                'forma_pagamento',
                 'observacao',
+            )
+        }),
+
+        ('Endereco de entrega', {
+            'fields': (
+                'cep_entrega',
+                'endereco',
+                'numero',
+                'complemento',
+                'bairro',
+                'cidade',
+                'estado',
             )
         }),
 
         ('Dados do pedido', {
             'fields': (
+                'subtotal',
+                'valor_frete',
+                'transportadora',
+                'servico_frete',
+                'prazo_entrega',
                 'total',
                 'status',
+                'status_pagamento',
+                'mercado_pago_id',
                 'data_pedido',
             )
         }),

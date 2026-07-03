@@ -92,6 +92,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': config('CLOUDINARY_API_KEY'),
@@ -118,3 +121,59 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
 DEFAULT_FROM_EMAIL = f'VestPolo <{EMAIL_HOST_USER}>'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+
+# Melhor Envio
+MELHOR_ENVIO_BASE_URL = config(
+    'MELHOR_ENVIO_BASE_URL',
+    default='https://sandbox.melhorenvio.com.br'
+)
+
+MELHOR_ENVIO_TOKEN = config(
+    'MELHOR_ENVIO_TOKEN',
+    default=''
+)
+
+MELHOR_ENVIO_CLIENT_ID = config(
+    'MELHOR_ENVIO_CLIENT_ID',
+    default=''
+)
+
+MELHOR_ENVIO_CLIENT_SECRET = config(
+    'MELHOR_ENVIO_CLIENT_SECRET',
+    default=''
+)
+
+MELHOR_ENVIO_CEP_ORIGEM = config(
+    'MELHOR_ENVIO_CEP_ORIGEM',
+    default='48913126'
+)
+
+MELHOR_ENVIO_PESO = config(
+    'MELHOR_ENVIO_PESO',
+    default=0.35,
+    cast=float
+)
+
+MELHOR_ENVIO_COMPRIMENTO = config(
+    'MELHOR_ENVIO_COMPRIMENTO',
+    default=30,
+    cast=int
+)
+
+MELHOR_ENVIO_LARGURA = config(
+    'MELHOR_ENVIO_LARGURA',
+    default=25,
+    cast=int
+)
+
+MELHOR_ENVIO_ALTURA = config(
+    'MELHOR_ENVIO_ALTURA',
+    default=5,
+    cast=int
+)
+
+MELHOR_ENVIO_USER_AGENT = config(
+    'MELHOR_ENVIO_USER_AGENT',
+    default='VestPolo - vestpolopolos@gmail.com'
+)

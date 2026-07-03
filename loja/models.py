@@ -63,23 +63,107 @@ class Produto(models.Model):
 class Pedido(models.Model):
 
     STATUS_CHOICES = [
-        ('Pendente', 'Pendente'),
-        ('Em produção', 'Em produção'),
-        ('Finalizado', 'Finalizado'),
-        ('Cancelado', 'Cancelado'),
+        ("Pendente", "Pendente"),
+        ("Em produção", "Em produção"),
+        ("Finalizado", "Finalizado"),
+        ("Cancelado", "Cancelado"),
+    ]
+
+    STATUS_PAGAMENTO_CHOICES = [
+        ("Pendente", "Pendente"),
+        ("Aprovado", "Aprovado"),
+        ("Recusado", "Recusado"),
+        ("Cancelado", "Cancelado"),
+        ("Reembolsado", "Reembolsado"),
     ]
 
     usuario = models.ForeignKey(
-        'auth.User',
+        "auth.User",
         on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
 
-    nome_cliente = models.CharField(max_length=100, blank=True)
-    telefone = models.CharField(max_length=20, blank=True)
-    forma_entrega = models.CharField(max_length=50, blank=True)
-    observacao = models.TextField(blank=True)
+    nome_cliente = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    telefone = models.CharField(
+        max_length=20,
+        blank=True
+    )
+
+    forma_entrega = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    cep_entrega = models.CharField(
+        max_length=9,
+        blank=True
+    )
+
+    endereco = models.CharField(
+        max_length=150,
+        blank=True
+    )
+
+    numero = models.CharField(
+        max_length=20,
+        blank=True
+    )
+
+    complemento = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    bairro = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    cidade = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    estado = models.CharField(
+        max_length=2,
+        blank=True
+    )
+
+    observacao = models.TextField(
+        blank=True
+    )
+
+    subtotal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    valor_frete = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    transportadora = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    servico_frete = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    prazo_entrega = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
 
     total = models.DecimalField(
         max_digits=10,
@@ -90,10 +174,28 @@ class Pedido(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default='Pendente'
+        default="Pendente"
     )
 
-    data_pedido = models.DateTimeField(auto_now_add=True)
+    status_pagamento = models.CharField(
+        max_length=20,
+        choices=STATUS_PAGAMENTO_CHOICES,
+        default="Pendente"
+    )
+
+    forma_pagamento = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    mercado_pago_id = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    data_pedido = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
         return f"Pedido #{self.id} - {self.status}"

@@ -103,6 +103,12 @@
             word-break: break-word;
         }
 
+        .detalhe {
+            color: #555;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
         .total {
             font-size: 18px;
             font-weight: bold;
@@ -279,6 +285,19 @@
                     {{ item.produto.nome }} — {{ item.quantidade }} un. — R$ {{ item.subtotal }}
                 </p>
             {% endfor %}
+
+            <p class="detalhe">
+                Entrega: {{ pedido.forma_entrega }}
+                {% if pedido.servico_frete %} - {{ pedido.servico_frete }}{% endif %}
+            </p>
+
+            {% if pedido.valor_frete %}
+                <p class="detalhe">Frete: R$ {{ pedido.valor_frete }}</p>
+            {% endif %}
+
+            {% if pedido.forma_pagamento %}
+                <p class="detalhe">Pagamento: {{ pedido.forma_pagamento }} - {{ pedido.status_pagamento }}</p>
+            {% endif %}
 
             <p class="total">Total: R$ {{ pedido.total }}</p>
 

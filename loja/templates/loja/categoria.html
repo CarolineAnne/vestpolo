@@ -14,7 +14,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f6f7f9;
             margin: 0;
             color: #222;
         }
@@ -62,28 +62,37 @@
         }
 
         .hero-categoria {
-            background: linear-gradient(135deg, #111, #2b2b2b);
+            background:
+                linear-gradient(135deg, rgba(10,10,10,0.88), rgba(10,10,10,0.72)),
+                var(--hero-image),
+                linear-gradient(135deg, #111, #2b2b2b);
+            background-position: center;
+            background-size: cover;
             color: white;
-            padding: 65px 8%;
+            min-height: 365px;
+            padding: 78px 8% 88px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .hero-categoria .icone {
-            font-size: 58px;
-            margin-bottom: 14px;
+            display: none;
         }
 
-        .hero-categoria span {
+        .hero-categoria .eyebrow {
             color: #25D366;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             font-size: 13px;
         }
 
         .hero-categoria h1 {
-            font-size: 44px;
-            margin: 12px 0;
+            font-size: 48px;
+            margin: 12px 0 10px;
         }
 
         .hero-categoria p {
@@ -94,22 +103,43 @@
             line-height: 1.6;
         }
 
+        .hero-pontos {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .hero-pontos span {
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
         .produtos {
             width: 92%;
-            max-width: 1200px;
-            margin: 45px auto;
+            max-width: 1180px;
+            margin: 38px auto 56px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 24px;
         }
 
         .card {
             background: white;
-            border-radius: 18px;
-            padding: 14px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            border-radius: 8px;
+            border: 1px solid #e7e8ea;
+            box-shadow: 0 8px 24px rgba(17,17,17,0.08);
             transition: 0.3s;
             position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
@@ -123,39 +153,68 @@
             right: 14px;
             background: white;
             border-radius: 50%;
-            padding: 6px 8px;
-            font-size: 20px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.12);
             z-index: 10;
+            color: #111;
+        }
+
+        .favorito.ativo {
+            color: #c62828;
+        }
+
+        .produto-link {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
 
         .imagem-card {
-            height: 230px;
-            border-radius: 14px;
+            height: 255px;
             overflow: hidden;
-            background: #eee;
+            background: #e8eaed;
         }
 
         .imagem-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center 62%;
             display: block;
+        }
+
+        .imagem-card img.imagem-fallback {
+            filter: saturate(0.9);
+            height: 165%;
+            transform: translateY(-28%);
+        }
+
+        .card-conteudo {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
 
         .badge {
             display: inline-block;
-            margin-top: 12px;
-            background: #111;
-            color: white;
+            width: fit-content;
+            background: #eaf8ef;
+            color: #128a3c;
             font-size: 12px;
             padding: 5px 10px;
             border-radius: 20px;
+            font-weight: bold;
         }
 
         .card h3 {
             margin: 12px 0 6px;
-            font-size: 18px;
+            font-size: 19px;
             line-height: 1.3;
         }
 
@@ -169,23 +228,44 @@
             overflow: hidden;
         }
 
+        .beneficios-card {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 10px;
+        }
+
+        .beneficios-card span {
+            background: #f2f3f5;
+            color: #444;
+            border-radius: 999px;
+            padding: 6px 9px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
         .price {
             color: #128a3c;
-            font-size: 20px;
+            font-size: 13px;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 14px 0 0;
+        }
+
+        .price strong {
+            display: block;
+            font-size: 22px;
+            margin-top: 2px;
         }
 
         .btn-ver {
             display: block;
-            width: 100%;
             background: #111;
             color: white;
             text-align: center;
             padding: 13px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: bold;
-            margin-top: 12px;
+            margin: 0 16px 16px;
         }
 
         .btn-ver:hover {
@@ -210,13 +290,7 @@
         }
 
         .banner-destaque-categoria {
-            width: 92%;
-            max-width: 1400px;
-            margin: 30px auto 0;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-            background: #111;
+            display: none;
         }
 
         .banner-destaque-categoria img {
@@ -243,11 +317,12 @@
             }
 
             .hero-categoria {
-                padding: 45px 22px;
+                min-height: 320px;
+                padding: 50px 22px 58px;
             }
 
             .hero-categoria h1 {
-                font-size: 32px;
+                font-size: 34px;
             }
 
             .hero-categoria p {
@@ -262,12 +337,11 @@
             }
 
             .card {
-                padding: 10px;
-                border-radius: 14px;
+                border-radius: 8px;
             }
 
             .imagem-card {
-                height: 145px;
+                height: 150px;
             }
 
             .card h3 {
@@ -279,12 +353,25 @@
             }
 
             .price {
-                font-size: 16px;
+                font-size: 12px;
+            }
+
+            .price strong {
+                font-size: 17px;
             }
 
             .btn-ver {
                 padding: 11px 8px;
-                font-size: 13px;
+                font-size: 12px;
+                margin: 0 10px 10px;
+            }
+
+            .card-conteudo {
+                padding: 10px;
+            }
+
+            .beneficios-card {
+                display: none;
             }
         }
     </style>
@@ -310,11 +397,16 @@
 </section>
 {% endif %}
 
-<section class="hero-categoria">
+<section class="hero-categoria" {% if banner_imagem %}style="--hero-image: url('{% static banner_imagem %}')"{% endif %}>
     <div class="icone">{{ icone }}</div>
-    <span>{{ subtitulo }}</span>
+    <span class="eyebrow">{{ subtitulo }}</span>
     <h1>{{ titulo }}</h1>
     <p>{{ descricao_pagina }}</p>
+    <div class="hero-pontos">
+        <span>Bordado premium</span>
+        <span>Personalização por curso</span>
+        <span>Pedido direto pelo WhatsApp</span>
+    </div>
 </section>
 
 <section class="produtos">
@@ -322,7 +414,7 @@
     {% for produto in produtos %}
         <div class="card">
 
-            <a href="{% url 'favoritar' produto.id %}" class="favorito">
+            <a href="{% url 'favoritar' produto.id %}" class="favorito {% if produto.id in favoritos %}ativo{% endif %}" aria-label="Favoritar {{ produto.nome }}">
                 {% if produto.id in favoritos %}
                     ❤️
                 {% else %}
@@ -330,26 +422,35 @@
                 {% endif %}
             </a>
 
-            <a href="{% url 'produto_detalhe' produto.id %}">
+            <a href="{% url 'produto_detalhe' produto.id %}" class="produto-link">
                 <div class="imagem-card">
-                    {% if produto.imagem %}
-                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                    {% if banner_imagem %}
+                        <img src="{% static banner_imagem %}" alt="{{ produto.nome }}" loading="lazy" class="imagem-fallback">
+                    {% elif produto.imagem %}
+                        <img src="/media/{{ produto.imagem }}" alt="{{ produto.nome }}" loading="lazy" data-cloudinary="{{ produto.imagem.url }}" onerror="if (!this.dataset.cloudinaryTried) { this.dataset.cloudinaryTried = '1'; this.src = this.dataset.cloudinary; } else { this.onerror = null; this.src = '{% static 'img/logo_vestpolo.png' %}'; this.classList.add('imagem-fallback'); }">
                     {% else %}
-                        <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+                        <img src="{% static 'img/logo_vestpolo.png' %}" alt="{{ produto.nome }}" loading="lazy" class="imagem-fallback">
                     {% endif %}
                 </div>
 
-                <span class="badge">{{ badge }}</span>
+                <div class="card-conteudo">
+                    <span class="badge">{{ badge }}</span>
 
-                <h3>{{ produto.nome }}</h3>
+                    <h3>{{ produto.nome }}</h3>
 
-                <p>{{ produto.descricao }}</p>
+                    <p>{{ produto.descricao }}</p>
 
-                <div class="price">R$ {{ produto.preco }}</div>
+                    <div class="beneficios-card">
+                        <span>Bordado incluso</span>
+                        <span>Sob medida</span>
+                    </div>
+
+                    <div class="price">A partir de <strong>R$ {{ produto.preco }}</strong></div>
+                </div>
             </a>
 
             <a href="{% url 'produto_detalhe' produto.id %}" class="btn-ver">
-                Ver detalhes
+                Personalizar polo
             </a>
         </div>
     {% empty %}

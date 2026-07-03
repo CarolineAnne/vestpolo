@@ -116,6 +116,35 @@
             background: #fafafa;
         }
 
+        .messages {
+            margin: 14px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .messages li {
+            background: #fff3cd;
+            border: 1px solid #ffe69c;
+            border-radius: 10px;
+            color: #7a5b00;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 12px;
+        }
+
+        .campos-entrega {
+            display: none;
+        }
+
+        .campos-entrega.ativo {
+            display: block;
+        }
+
         .item {
             border-bottom: 1px solid #eee;
             padding: 12px 0;
@@ -128,6 +157,25 @@
             margin-bottom: 5px;
             color: #222;
             word-break: break-word;
+        }
+
+        .resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: #555;
+            margin-top: 12px;
+        }
+
+        .resumo-linha strong {
+            color: #222;
+        }
+
+        .frete-info {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-top: 8px;
         }
 
         .total {
@@ -218,6 +266,11 @@
                 font-size: 14px;
             }
 
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
             .item {
                 font-size: 14px;
             }
@@ -277,6 +330,14 @@
         <h1>Dados do cliente</h1>
         <p>Preencha seus dados para finalizar o pedido pelo WhatsApp.</p>
 
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -287,11 +348,54 @@
             <input type="text" name="telefone" required>
 
             <label>Forma de entrega</label>
-            <select name="forma_entrega" required>
+            <select name="forma_entrega" id="formaEntrega" required>
                 <option value="">Selecione</option>
                 <option value="Retirada">Retirada</option>
                 <option value="Entrega">Entrega</option>
                 <option value="Combinar pelo WhatsApp">Combinar pelo WhatsApp</option>
+            </select>
+
+            <div class="campos-entrega" id="camposEntrega">
+                <label>CEP de entrega</label>
+                <input type="text" name="cep_entrega" id="cepEntrega" inputmode="numeric" maxlength="9" placeholder="Ex: 56300-000">
+
+                <label>Endereco</label>
+                <input type="text" name="endereco" data-entrega-obrigatorio placeholder="Rua, avenida, travessa...">
+
+                <div class="grid-2">
+                    <div>
+                        <label>Numero</label>
+                        <input type="text" name="numero" data-entrega-obrigatorio>
+                    </div>
+
+                    <div>
+                        <label>Complemento</label>
+                        <input type="text" name="complemento" placeholder="Apto, bloco, referencia...">
+                    </div>
+                </div>
+
+                <label>Bairro</label>
+                <input type="text" name="bairro" data-entrega-obrigatorio>
+
+                <div class="grid-2">
+                    <div>
+                        <label>Cidade</label>
+                        <input type="text" name="cidade" data-entrega-obrigatorio>
+                    </div>
+
+                    <div>
+                        <label>Estado</label>
+                        <input type="text" name="estado" data-entrega-obrigatorio maxlength="2" placeholder="UF">
+                    </div>
+                </div>
+            </div>
+
+            <label>Forma de pagamento</label>
+            <select name="forma_pagamento" required>
+                <option value="">Selecione</option>
+                {% for forma in formas_pagamento %}
+                    <option value="{{ forma }}">{{ forma }}</option>
+                {% endfor %}
             </select>
 
             <label>Observação</label>
@@ -314,7 +418,7 @@
             <label>Detalhes do bordado</label>
             <textarea name="observacao_item" placeholder="Ex: bordado no lado esquerdo, logo nas costas, manga com nome..."></textarea>
 
-            <button type="submit">💬 Enviar pedido pelo WhatsApp</button>
+            <button type="submit">Enviar pedido pelo WhatsApp</button>
         </form>
     </div>
 
@@ -331,13 +435,152 @@
             </div>
         {% endfor %}
 
-        <div class="total">
-            <span>Total</span>
-            <span>R$ {{ total }}</span>
+        <div class="resumo-valores"
+             data-subtotal="{{ subtotal|stringformat:'.2f' }}"
+             data-total-itens="{{ total_itens }}">
+            <div class="resumo-linha">
+                <span>Produtos</span>
+                <strong id="subtotalResumo">R$ {{ subtotal }}</strong>
+            </div>
+
+            <div class="resumo-linha">
+                <span>Frete</span>
+                <strong id="freteResumo">A calcular</strong>
+            </div>
+            <div class="frete-info" id="freteInfo">Informe a entrega para ver o frete estimado.</div>
+
+            <div class="total">
+                <span>Total</span>
+                <span id="totalResumo">R$ {{ total }}</span>
+            </div>
         </div>
     </div>
 
 </div>
+
+<script>
+    const formaEntrega = document.getElementById('formaEntrega');
+    const camposEntrega = document.getElementById('camposEntrega');
+    const cepEntrega = document.getElementById('cepEntrega');
+    const camposObrigatoriosEntrega = document.querySelectorAll('[data-entrega-obrigatorio]');
+    const resumoValores = document.querySelector('.resumo-valores');
+    const subtotalResumo = document.getElementById('subtotalResumo');
+    const freteResumo = document.getElementById('freteResumo');
+    const freteInfo = document.getElementById('freteInfo');
+    const totalResumo = document.getElementById('totalResumo');
+
+    const subtotalPedido = parseFloat((resumoValores.dataset.subtotal || '0').replace(',', '.'));
+    const totalItens = parseInt(resumoValores.dataset.totalItens || '1', 10);
+
+    function apenasDigitos(valor) {
+        return valor.replace(/\D/g, '');
+    }
+
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+    }
+
+    function calcularFreteEstimado(cep, quantidade, forma) {
+        const quantidadeFinal = Math.max(quantidade || 1, 1);
+
+        if (forma === 'Retirada') {
+            return {
+                valor: 0,
+                descricao: 'Retirada sem frete'
+            };
+        }
+
+        if (forma === 'Combinar pelo WhatsApp') {
+            return {
+                valor: 0,
+                descricao: 'Frete a combinar'
+            };
+        }
+
+        const digitos = apenasDigitos(cep);
+        if (digitos.length !== 8) {
+            return null;
+        }
+
+        const prefixo = parseInt(digitos[0], 10);
+        let base = 46.90;
+        let extra = 5.90;
+        let prazo = 12;
+        let servico = 'PAC estimado - Norte';
+
+        if (digitos.startsWith('489') || digitos.startsWith('563')) {
+            base = 15.00;
+            extra = 1.50;
+            prazo = 2;
+            servico = 'Entrega local';
+        } else if (prefixo === 4 || prefixo === 5) {
+            base = 32.90;
+            extra = 3.50;
+            prazo = 7;
+            servico = 'PAC estimado - Nordeste';
+        } else if ([0, 1, 2, 3].includes(prefixo)) {
+            base = 39.90;
+            extra = 4.50;
+            prazo = 9;
+            servico = 'PAC estimado - Sudeste';
+        } else if (prefixo === 7) {
+            base = 42.90;
+            extra = 4.90;
+            prazo = 10;
+            servico = 'PAC estimado - Centro-Oeste';
+        } else if (prefixo === 8 || prefixo === 9) {
+            base = 44.90;
+            extra = 5.50;
+            prazo = 11;
+            servico = 'PAC estimado - Sul';
+        }
+
+        return {
+            valor: base + (extra * (quantidadeFinal - 1)),
+            descricao: `${servico} - ate ${prazo} dias uteis`
+        };
+    }
+
+    function atualizarResumo() {
+        const forma = formaEntrega.value;
+        const entregaAtiva = forma === 'Entrega';
+
+        camposEntrega.classList.toggle('ativo', entregaAtiva);
+        cepEntrega.required = entregaAtiva;
+        camposObrigatoriosEntrega.forEach((campo) => {
+            campo.required = entregaAtiva;
+        });
+
+        const frete = calcularFreteEstimado(cepEntrega.value, totalItens, forma);
+
+        subtotalResumo.textContent = formatarMoeda(subtotalPedido);
+
+        if (!forma) {
+            freteResumo.textContent = 'A calcular';
+            freteInfo.textContent = 'Informe a entrega para ver o frete estimado.';
+            totalResumo.textContent = formatarMoeda(subtotalPedido);
+            return;
+        }
+
+        if (forma === 'Entrega' && !frete) {
+            freteResumo.textContent = 'A calcular';
+            freteInfo.textContent = 'Digite um CEP com 8 numeros.';
+            totalResumo.textContent = formatarMoeda(subtotalPedido);
+            return;
+        }
+
+        freteResumo.textContent = formatarMoeda(frete.valor);
+        freteInfo.textContent = frete.descricao;
+        totalResumo.textContent = formatarMoeda(subtotalPedido + frete.valor);
+    }
+
+    formaEntrega.addEventListener('change', atualizarResumo);
+    cepEntrega.addEventListener('input', atualizarResumo);
+    atualizarResumo();
+</script>
 
 </body>
 </html>

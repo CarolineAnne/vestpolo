@@ -1,10 +1,107 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from urllib.parse import quote
+from decimal import Decimal
 from .models import Produto, Pedido, ItemPedido, Favorito
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+
+
+FORMAS_ENTREGA = ("Retirada", "Entrega", "Combinar pelo WhatsApp")
+
+FORMAS_PAGAMENTO = (
+    "Pix",
+    "Cartao de credito",
+    "Cartao de debito",
+    "Boleto",
+    "Dinheiro na retirada",
+    "Combinar pelo WhatsApp",
+)
+
+
+def apenas_digitos(valor):
+    return ''.join(caractere for caractere in valor if caractere.isdigit())
+
+
+def formatar_cep(cep):
+    digitos = apenas_digitos(cep)
+    if len(digitos) == 8:
+        return f"{digitos[:5]}-{digitos[5:]}"
+    return cep
+
+
+def formatar_moeda(valor):
+    return f"{valor:.2f}".replace('.', ',')
+
+
+def calcular_frete(cep, quantidade_total, forma_entrega):
+    quantidade_total = max(int(quantidade_total or 1), 1)
+
+    if forma_entrega == "Retirada":
+        return {
+            "valor": Decimal("0.00"),
+            "transportadora": "VestPolo",
+            "servico": "Retirada",
+            "prazo": 0,
+            "descricao": "Retirada sem frete",
+        }
+
+    if forma_entrega == "Combinar pelo WhatsApp":
+        return {
+            "valor": Decimal("0.00"),
+            "transportadora": "A combinar",
+            "servico": "A combinar pelo WhatsApp",
+            "prazo": None,
+            "descricao": "Frete a combinar",
+        }
+
+    digitos = apenas_digitos(cep)
+    if len(digitos) != 8:
+        return None
+
+    prefixo = int(digitos[0])
+
+    if digitos.startswith(("489", "563")):
+        base = Decimal("15.00")
+        extra = Decimal("1.50")
+        prazo = 2
+        servico = "Entrega local"
+    elif prefixo in (4, 5):
+        base = Decimal("32.90")
+        extra = Decimal("3.50")
+        prazo = 7
+        servico = "PAC estimado - Nordeste"
+    elif prefixo in (0, 1, 2, 3):
+        base = Decimal("39.90")
+        extra = Decimal("4.50")
+        prazo = 9
+        servico = "PAC estimado - Sudeste"
+    elif prefixo == 7:
+        base = Decimal("42.90")
+        extra = Decimal("4.90")
+        prazo = 10
+        servico = "PAC estimado - Centro-Oeste"
+    elif prefixo in (8, 9):
+        base = Decimal("44.90")
+        extra = Decimal("5.50")
+        prazo = 11
+        servico = "PAC estimado - Sul"
+    else:
+        base = Decimal("46.90")
+        extra = Decimal("5.90")
+        prazo = 12
+        servico = "PAC estimado - Norte"
+
+    valor = base + (extra * Decimal(quantidade_total - 1))
+
+    return {
+        "valor": valor,
+        "transportadora": "Transportadora parceira",
+        "servico": servico,
+        "prazo": prazo,
+        "descricao": f"{servico} - ate {prazo} dias uteis",
+    }
 
 def home(request):
     produtos = Produto.objects.all()
@@ -313,13 +410,15 @@ def checkout(request):
         return redirect('carrinho')
 
     produtos = []
-    total = 0
+    subtotal_pedido = Decimal("0.00")
+    total_itens = 0
 
     for chave, dados in carrinho.items():
         produto = get_object_or_404(Produto, id=dados['produto_id'])
         quantidade = dados['quantidade']
         subtotal = produto.preco * quantidade
-        total += subtotal
+        subtotal_pedido += subtotal
+        total_itens += quantidade
 
         produtos.append({
             'chave': chave,
@@ -330,10 +429,19 @@ def checkout(request):
             'subtotal': subtotal
         })
     if request.method == 'POST':
-        nome_cliente = request.POST.get('nome_cliente')
-        telefone = request.POST.get('telefone')
-        forma_entrega = request.POST.get('forma_entrega')
-        observacao = request.POST.get('observacao')
+        nome_cliente = request.POST.get('nome_cliente', '').strip()
+        telefone = request.POST.get('telefone', '').strip()
+        forma_entrega = request.POST.get('forma_entrega', '').strip()
+        forma_pagamento = request.POST.get('forma_pagamento', '').strip()
+        observacao = request.POST.get('observacao', '').strip()
+
+        cep_entrega = request.POST.get('cep_entrega', '').strip()
+        endereco = request.POST.get('endereco', '').strip()
+        numero = request.POST.get('numero', '').strip()
+        complemento = request.POST.get('complemento', '').strip()
+        bairro = request.POST.get('bairro', '').strip()
+        cidade = request.POST.get('cidade', '').strip()
+        estado = request.POST.get('estado', '').strip().upper()[:2]
 
         curso = request.POST.get('curso', '')
         nome_bordado = request.POST.get('nome_bordado', '')
@@ -341,13 +449,48 @@ def checkout(request):
 
         arte = request.FILES.get('arte')
 
+        if forma_entrega not in FORMAS_ENTREGA:
+            messages.error(request, 'Escolha uma forma de entrega valida.')
+            return redirect('checkout')
+
+        if forma_pagamento not in FORMAS_PAGAMENTO:
+            messages.error(request, 'Escolha uma forma de pagamento valida.')
+            return redirect('checkout')
+
+        if forma_entrega == "Entrega":
+            campos_entrega = [cep_entrega, endereco, numero, bairro, cidade, estado]
+            if any(not campo for campo in campos_entrega):
+                messages.error(request, 'Preencha o endereco completo para entrega.')
+                return redirect('checkout')
+
+        frete = calcular_frete(cep_entrega, total_itens, forma_entrega)
+
+        if frete is None:
+            messages.error(request, 'Informe um CEP valido com 8 numeros.')
+            return redirect('checkout')
+
+        total_final = subtotal_pedido + frete["valor"]
+
         pedido = Pedido.objects.create(
             usuario=request.user if request.user.is_authenticated else None,
             nome_cliente=nome_cliente,
             telefone=telefone,
             forma_entrega=forma_entrega,
+            cep_entrega=formatar_cep(cep_entrega),
+            endereco=endereco,
+            numero=numero,
+            complemento=complemento,
+            bairro=bairro,
+            cidade=cidade,
+            estado=estado,
             observacao=observacao,
-            total=total
+            subtotal=subtotal_pedido,
+            valor_frete=frete["valor"],
+            transportadora=frete["transportadora"],
+            servico_frete=frete["servico"],
+            prazo_entrega=frete["prazo"],
+            total=total_final,
+            forma_pagamento=forma_pagamento,
         )
 
         mensagem = "Olá! Quero finalizar este pedido:\n\n"
@@ -356,6 +499,16 @@ def checkout(request):
         mensagem += f"Cliente: {nome_cliente}\n"
         mensagem += f"Telefone: {telefone}\n"
         mensagem += f"Entrega/Retirada: {forma_entrega}\n"
+        mensagem += f"Forma de pagamento: {forma_pagamento}\n"
+
+        if forma_entrega == "Entrega":
+            mensagem += "\nEndereco de entrega:\n"
+            mensagem += f"CEP: {formatar_cep(cep_entrega)}\n"
+            mensagem += f"Endereco: {endereco}, {numero}\n"
+            if complemento:
+                mensagem += f"Complemento: {complemento}\n"
+            mensagem += f"Bairro: {bairro}\n"
+            mensagem += f"Cidade/UF: {cidade}/{estado}\n"
 
         if observacao:
             mensagem += f"Observação: {observacao}\n"
@@ -396,7 +549,9 @@ def checkout(request):
 
             mensagem += f"  Subtotal: R$ {item['subtotal']:.2f}\n\n"
 
-        mensagem += f"Total: R$ {total:.2f}\n\n"
+        mensagem += f"Subtotal dos produtos: R$ {formatar_moeda(subtotal_pedido)}\n"
+        mensagem += f"Frete: R$ {formatar_moeda(frete['valor'])} ({frete['descricao']})\n"
+        mensagem += f"Total: R$ {formatar_moeda(total_final)}\n\n"
         mensagem += "Aguardo o atendimento."
 
         request.session['carrinho'] = {}
@@ -408,7 +563,10 @@ def checkout(request):
 
     return render(request, 'loja/checkout.html', {
         'itens': produtos,
-        'total': total
+        'subtotal': subtotal_pedido,
+        'total': subtotal_pedido,
+        'total_itens': total_itens,
+        'formas_pagamento': FORMAS_PAGAMENTO
     })
 
 def cadastro(request):
