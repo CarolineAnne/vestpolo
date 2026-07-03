@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -46,6 +48,19 @@
         header a:first-child {
             font-size: 24px;
             white-space: nowrap;
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-link img {
+            height: 32px;
+            width: auto;
+            border-radius: 5px;
+            flex: 0 0 auto;
         }
 
         .container {
@@ -272,7 +287,10 @@
 <body>
 
 <header>
-    <a href="{% url 'home' %}">VestPolo</a>
+    <a href="{% url 'home' %}" class="brand-link">
+        <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
+        <span>VestPolo</span>
+    </a>
     <a href="{% url 'home' %}">Voltar à loja</a>
 </header>
 

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -35,6 +37,30 @@
             padding: 30px;
             border-radius: 18px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+        }
+
+        .brand-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: fit-content;
+            margin: 0 auto 18px;
+            color: #111;
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .brand-card img {
+            height: 34px;
+            width: auto;
+            border-radius: 5px;
+            flex: 0 0 auto;
+        }
+
+        .brand-card:hover {
+            text-decoration: none;
         }
 
         h1 {
@@ -178,6 +204,11 @@
     <a href="{% url 'home' %}" class="btn-voltar">⬅ Voltar para loja</a>
 
     <div class="container">
+        <a href="{% url 'home' %}" class="brand-card">
+            <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
+            <span>VestPolo</span>
+        </a>
+
         <h1>Criar conta</h1>
 
         {% for message in messages %}

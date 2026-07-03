@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -48,6 +50,23 @@
         header a {
             color: white;
             text-decoration: none;
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .brand-logo {
+            height: 32px;
+            width: auto;
+            border-radius: 5px;
+            flex: 0 0 auto;
         }
 
         .container {
@@ -207,6 +226,15 @@
             background: #1ebe5d;
         }
 
+        .btn-calcular-frete {
+            background: #111;
+            margin-top: 14px;
+        }
+
+        .btn-calcular-frete:hover {
+            background: #333;
+        }
+
         /* Tablets e telas médias */
         @media (max-width: 900px) {
             header {
@@ -320,7 +348,10 @@
 <body>
 
 <header>
-    <a href="{% url 'home' %}"><strong>VestPolo</strong></a>
+    <a href="{% url 'home' %}" class="brand-link">
+        <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo" class="brand-logo">
+        <span>VestPolo</span>
+    </a>
     <a href="{% url 'carrinho' %}">⬅ Voltar ao carrinho</a>
 </header>
 
@@ -390,6 +421,8 @@
                 </div>
             </div>
 
+            <button type="button" class="btn-calcular-frete" id="btnCalcularFrete">Calcular frete</button>
+
             <label>Forma de pagamento</label>
             <select name="forma_pagamento" required>
                 <option value="">Selecione</option>
@@ -447,7 +480,7 @@
                 <span>Frete</span>
                 <strong id="freteResumo">A calcular</strong>
             </div>
-            <div class="frete-info" id="freteInfo">Informe a entrega para ver o frete estimado.</div>
+            <div class="frete-info" id="freteInfo">Escolha a entrega e clique em Calcular frete.</div>
 
             <div class="total">
                 <span>Total</span>
@@ -468,6 +501,7 @@
     const freteResumo = document.getElementById('freteResumo');
     const freteInfo = document.getElementById('freteInfo');
     const totalResumo = document.getElementById('totalResumo');
+    const btnCalcularFrete = document.getElementById('btnCalcularFrete');
 
     const subtotalPedido = parseFloat((resumoValores.dataset.subtotal || '0').replace(',', '.'));
     const totalItens = parseInt(resumoValores.dataset.totalItens || '1', 10);
@@ -560,14 +594,14 @@
 
         if (!forma) {
             freteResumo.textContent = 'A calcular';
-            freteInfo.textContent = 'Informe a entrega para ver o frete estimado.';
+            freteInfo.textContent = 'Escolha a entrega e clique em Calcular frete.';
             totalResumo.textContent = formatarMoeda(subtotalPedido);
             return;
         }
 
         if (forma === 'Entrega' && !frete) {
             freteResumo.textContent = 'A calcular';
-            freteInfo.textContent = 'Digite um CEP com 8 numeros.';
+            freteInfo.textContent = 'Digite um CEP com 8 numeros e clique em Calcular frete.';
             totalResumo.textContent = formatarMoeda(subtotalPedido);
             return;
         }
@@ -579,6 +613,7 @@
 
     formaEntrega.addEventListener('change', atualizarResumo);
     cepEntrega.addEventListener('input', atualizarResumo);
+    btnCalcularFrete.addEventListener('click', atualizarResumo);
     atualizarResumo();
 </script>
 

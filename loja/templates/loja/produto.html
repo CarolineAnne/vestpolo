@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -42,10 +44,21 @@
         }
 
         .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             font-size: 24px;
             font-weight: bold;
             text-decoration: none;
             color: white;
+            white-space: nowrap;
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+            border-radius: 5px;
+            flex: 0 0 auto;
         }
 
         .voltar {
@@ -807,7 +820,10 @@
 <body>
 
 <header>
-    <a href="{% url 'home' %}" class="logo">VestPolo</a>
+    <a href="{% url 'home' %}" class="logo">
+        <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
+        <span>VestPolo</span>
+    </a>
     <a href="{% url 'home' %}" class="voltar">⬅ Voltar para loja</a>
 </header>
 
