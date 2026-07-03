@@ -89,26 +89,48 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 28px;
-            background: transparent;
-            padding: 0;
-            border: none;
+            gap: 4px;
+            background: rgba(255,255,255,0.08);
+            padding: 6px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
             position: static;
         }
 
         .menu-loja a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: white;
             font-weight: bold;
             font-size: 15px;
+            padding: 10px 13px;
+            border-radius: 999px;
             white-space: nowrap;
+            transition: 0.25s ease;
+        }
+
+        .menu-loja a i {
+            color: #25D366;
+            font-size: 13px;
+            width: 14px;
+            text-align: center;
         }
 
         .menu-loja a:hover {
-            color: #25D366;
+            background: #25D366;
+            color: white;
+        }
+
+        .menu-loja a:hover i {
+            color: white;
         }
 
         .menu-toggle {
             display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             background: #25D366;
             color: white;
             border: none;
@@ -124,7 +146,7 @@
 
         .header-icons {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             align-items: center;
             flex-shrink: 0;
         }
@@ -132,7 +154,22 @@
         .icon-link {
             position: relative;
             color: white;
-            font-size: 24px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            font-size: 19px;
+            transition: 0.25s ease;
+        }
+
+        .icon-link:hover {
+            background: #25D366;
+            color: white;
+            transform: translateY(-1px);
         }
 
         .badge {
@@ -1248,6 +1285,94 @@
             .icon-link::after {
                 font-size: 9px;
             }
+        }
+        .menu-toggle {
+            font-size: 0;
+        }
+
+        .menu-toggle::before {
+            content: "\f0c9";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .menu-toggle::after {
+            content: "Menu";
+            font-size: 14px;
+        }
+
+        .menu-loja a::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #25D366;
+            font-size: 13px;
+            width: 15px;
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .menu-loja a:hover::before {
+            color: white;
+        }
+
+        .menu-loja a:nth-child(1)::before {
+            content: "\f015";
+        }
+
+        .menu-loja a:nth-child(2)::before {
+            content: "\f19d";
+        }
+
+        .menu-loja a:nth-child(3)::before {
+            content: "\f1ad";
+        }
+
+        .menu-loja a:nth-child(4)::before {
+            content: "\f553";
+        }
+
+        .menu-loja a:nth-child(5)::before {
+            content: "\f005";
+        }
+
+        .menu-loja a:nth-child(6)::before {
+            content: "\f27a";
+        }
+
+        .icon-link {
+            font-size: 0;
+        }
+
+        .icon-link > i {
+            font-size: 19px;
+        }
+
+        .icon-link[data-label="Conta"]::before,
+        .icon-link[data-label="Entrar"]::before,
+        .icon-link[data-label="Pedidos"]::before,
+        .icon-link[data-label="Favoritos"]::before,
+        .icon-link[data-label="Carrinho"]::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 19px;
+        }
+
+        .icon-link[data-label="Conta"]::before,
+        .icon-link[data-label="Entrar"]::before {
+            content: "\f007";
+        }
+
+        .icon-link[data-label="Pedidos"]::before {
+            content: "\f49e";
+        }
+
+        .icon-link[data-label="Favoritos"]::before {
+            content: "\f004";
+        }
+
+        .icon-link[data-label="Carrinho"]::before {
+            content: "\f07a";
         }
         </style>
 </head>

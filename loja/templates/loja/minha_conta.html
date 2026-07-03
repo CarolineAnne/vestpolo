@@ -50,6 +50,24 @@
             white-space: nowrap;
         }
 
+        header > a:not(.brand-link) {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            transition: 0.25s ease;
+        }
+
+        header > a:not(.brand-link):hover {
+            background: #25D366;
+            border-color: #25D366;
+            color: #111;
+        }
+
         .brand-link {
             display: inline-flex;
             align-items: center;

@@ -63,11 +63,15 @@ def calcular_frete(cep, quantidade_total, forma_entrega):
     prefixo = int(digitos[0])
 
     if digitos.startswith(("489", "563")):
-        base = Decimal("15.00")
-        extra = Decimal("1.50")
-        prazo = 2
-        servico = "Entrega local"
-    elif prefixo in (4, 5):
+        return {
+            "valor": Decimal("0.00"),
+            "transportadora": "VestPolo",
+            "servico": "Entrega local gratuita",
+            "prazo": 2,
+            "descricao": "Entrega gratis para Petrolina e Juazeiro - ate 2 dias uteis",
+        }
+
+    if prefixo in (4, 5):
         base = Decimal("32.90")
         extra = Decimal("3.50")
         prazo = 7

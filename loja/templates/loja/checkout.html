@@ -52,6 +52,25 @@
             text-decoration: none;
         }
 
+        header > a:not(.brand-link) {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: bold;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            transition: 0.25s ease;
+        }
+
+        header > a:not(.brand-link):hover {
+            background: #25D366;
+            border-color: #25D366;
+            color: #111;
+        }
+
         .brand-link {
             display: inline-flex;
             align-items: center;
@@ -546,11 +565,13 @@
         let servico = 'PAC estimado - Norte';
 
         if (digitos.startsWith('489') || digitos.startsWith('563')) {
-            base = 15.00;
-            extra = 1.50;
-            prazo = 2;
-            servico = 'Entrega local';
-        } else if (prefixo === 4 || prefixo === 5) {
+            return {
+                valor: 0,
+                descricao: 'Entrega gratis para Petrolina e Juazeiro - ate 2 dias uteis'
+            };
+        }
+
+        if (prefixo === 4 || prefixo === 5) {
             base = 32.90;
             extra = 3.50;
             prazo = 7;
