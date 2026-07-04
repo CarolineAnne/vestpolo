@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ produto.nome }} | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -41,6 +44,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -81,6 +86,44 @@
             background: #25D366;
             border-color: #25D366;
             color: #111;
+        }
+
+        nav {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 6px;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 9px 12px;
+            border-radius: 999px;
+            transition: 0.25s ease;
+        }
+
+        nav a:hover {
+            background: #25D366;
+        }
+
+        nav a i {
+            color: #25D366;
+            font-size: 13px;
+        }
+
+        nav a:hover i {
+            color: white;
         }
 
         .produto-container {
@@ -625,6 +668,11 @@
                 gap: 10px;
             }
 
+            nav {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
             .logo {
                 font-size: 21px;
             }
@@ -840,7 +888,14 @@
         <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
         <span>VestPolo</span>
     </a>
-    <a href="{% url 'home' %}" class="voltar">⬅ Voltar para loja</a>
+    <nav>
+        <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+        <a href="{% url 'universitarios' %}"><i class="fa-solid fa-graduation-cap"></i><span>Universitarios</span></a>
+        <a href="{% url 'empresariais' %}"><i class="fa-solid fa-building"></i><span>Empresas</span></a>
+        <a href="{% url 'personalizados' %}"><i class="fa-solid fa-shirt"></i><span>Personalizados</span></a>
+        <a href="{% url 'carrinho' %}"><i class="fa-solid fa-cart-shopping"></i><span>Carrinho</span></a>
+    </nav>
+    <a href="{% url 'home' %}" class="voltar"><i class="fa-solid fa-arrow-left"></i><span>Voltar</span></a>
 </header>
 
 <main class="produto-container">
@@ -1104,14 +1159,14 @@
                 <input type="hidden" name="cor" id="corCarrinho">
 
                 <button type="submit" class="btn-carrinho">
-                    🛒 Adicionar ao carrinho
+                    <i class="fa-solid fa-cart-shopping"></i> Adicionar ao carrinho
                 </button>
             </form>
 
             <button class="btn-whatsapp"
                     type="button"
                     onclick="abrirWhatsapp()">
-                💬 Comprar pelo WhatsApp
+                <i class="fa-brands fa-whatsapp"></i> Comprar pelo WhatsApp
             </button>
 
         </div>

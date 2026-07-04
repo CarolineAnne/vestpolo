@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ titulo }} | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -67,6 +70,9 @@
         }
 
         nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: white;
             font-weight: bold;
             font-size: 14px;
@@ -77,6 +83,15 @@
 
         nav a:hover {
             background: #25D366;
+            color: white;
+        }
+
+        nav a i {
+            color: #25D366;
+            font-size: 13px;
+        }
+
+        nav a:hover i {
             color: white;
         }
 
@@ -170,17 +185,24 @@
             position: absolute;
             top: 14px;
             right: 14px;
-            background: white;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
+            background: transparent;
+            border: none;
+            width: auto;
+            height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            font-size: 28px;
+            box-shadow: none;
             z-index: 10;
-            color: #111;
+            color: white;
+            line-height: 1;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .favorito:hover {
+            transform: scale(1.12);
         }
 
         .favorito.ativo {
@@ -405,11 +427,11 @@
     </a>
 
     <nav>
-        <a href="{% url 'home' %}">Início</a>
-        <a href="{% url 'universitarios' %}">Universitários</a>
-        <a href="{% url 'empresariais' %}">Empresariais</a>
-        <a href="{% url 'personalizados' %}">Personalizados</a>
-        <a href="{% url 'carrinho' %}">Carrinho</a>
+        <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+        <a href="{% url 'universitarios' %}"><i class="fa-solid fa-graduation-cap"></i><span>Universitarios</span></a>
+        <a href="{% url 'empresariais' %}"><i class="fa-solid fa-building"></i><span>Empresas</span></a>
+        <a href="{% url 'personalizados' %}"><i class="fa-solid fa-shirt"></i><span>Personalizados</span></a>
+        <a href="{% url 'carrinho' %}"><i class="fa-solid fa-cart-shopping"></i><span>Carrinho</span></a>
     </nav>
 </header>
 
@@ -438,9 +460,9 @@
 
             <a href="{% url 'favoritar' produto.id %}" class="favorito {% if produto.id in favoritos %}ativo{% endif %}" aria-label="Favoritar {{ produto.nome }}">
                 {% if produto.id in favoritos %}
-                    ❤️
+                    ♥
                 {% else %}
-                    🤍
+                    ♡
                 {% endif %}
             </a>
 

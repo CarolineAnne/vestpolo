@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar pedido | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -100,7 +103,7 @@
 
         .box {
             background: white;
-            border-radius: 18px;
+            border-radius: 8px;
             padding: 25px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
             min-width: 0;
@@ -371,7 +374,7 @@
         <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo" class="brand-logo">
         <span>VestPolo</span>
     </a>
-    <a href="{% url 'carrinho' %}">⬅ Voltar ao carrinho</a>
+    <a href="{% url 'carrinho' %}"><i class="fa-solid fa-arrow-left"></i><span>Voltar ao carrinho</span></a>
 </header>
 
 <div class="container">

@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +23,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f6f7f9;
             margin: 0;
             color: #222;
         }
@@ -41,9 +44,12 @@
         }
 
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: #111;
             color: white;
-            padding: 18px 40px;
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -55,23 +61,41 @@
             text-decoration: none;
         }
 
-        header > a:not(.logo) {
+        nav {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 6px;
+        }
+
+        nav a {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             font-weight: bold;
-            padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,0.18);
+            font-size: 14px;
+            padding: 9px 12px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.08);
             transition: 0.25s ease;
         }
 
-        header > a:not(.logo):hover {
+        nav a:hover {
             background: #25D366;
-            border-color: #25D366;
-            color: #111;
+            color: white;
+        }
+
+        nav a i {
+            color: #25D366;
+            font-size: 13px;
+        }
+
+        nav a:hover i {
+            color: white;
         }
 
         .logo {
@@ -97,18 +121,22 @@
         }
 
         .titulo {
-            text-align: center;
+            background: #111;
+            color: white;
+            border-radius: 8px;
+            padding: 28px;
             margin-bottom: 30px;
+            box-shadow: 0 10px 24px rgba(17,17,17,0.10);
         }
 
         .titulo h1 {
             margin: 0 0 5px;
-            font-size: 32px;
+            font-size: 34px;
         }
 
         .titulo p {
             margin: 0;
-            color: #666;
+            color: #ddd;
             line-height: 1.5;
         }
 
@@ -121,14 +149,15 @@
 
         .item {
             background: white;
-            border-radius: 16px;
-            padding: 18px;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 20px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            border: 1px solid #e7e8ea;
+            box-shadow: 0 8px 20px rgba(17,17,17,0.06);
             min-width: 0;
         }
 
@@ -150,10 +179,14 @@
         }
 
         .qtd-area {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
             margin-top: 12px;
+            background: #f6f7f9;
+            border: 1px solid #e7e8ea;
+            border-radius: 999px;
+            padding: 5px;
         }
 
         button {
@@ -165,7 +198,7 @@
         }
 
         .btn-qtd {
-            background: #eee;
+            background: white;
             color: #111;
             width: 35px;
             height: 35px;
@@ -178,7 +211,8 @@
         }
 
         .btn-qtd:hover {
-            background: #ddd;
+            background: #25D366;
+            color: white;
         }
 
         .qtd-numero {
@@ -189,12 +223,13 @@
         }
 
         .btn-remover {
-            background: #ffefef;
+            background: #fff5f5;
             color: #b00020;
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 11px 14px;
+            border-radius: 8px;
             height: fit-content;
             white-space: nowrap;
+            border: 1px solid #ffd6d6;
         }
 
         .btn-remover:hover {
@@ -204,12 +239,13 @@
 
         .resumo {
             background: white;
-            border-radius: 18px;
+            border-radius: 8px;
             padding: 24px;
             height: fit-content;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            border: 1px solid #e7e8ea;
+            box-shadow: 0 10px 24px rgba(17,17,17,0.08);
             position: sticky;
-            top: 20px;
+            top: 92px;
         }
 
         .resumo h2 {
@@ -241,7 +277,7 @@
             background: #25D366;
             color: white;
             padding: 15px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 16px;
             margin-top: 20px;
         }
@@ -255,7 +291,7 @@
             background: #111;
             color: white;
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 8px;
             margin-top: 10px;
         }
 
@@ -267,8 +303,9 @@
             background: white;
             text-align: center;
             padding: 50px;
-            border-radius: 18px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            border: 1px solid #e7e8ea;
+            box-shadow: 0 8px 20px rgba(17,17,17,0.06);
         }
 
         .vazio h2 {
@@ -287,6 +324,11 @@
             header {
                 padding: 16px 22px;
                 flex-wrap: wrap;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: flex-start;
             }
 
             .layout-carrinho {
@@ -356,7 +398,7 @@
 
             .resumo {
                 padding: 18px;
-                border-radius: 16px;
+                border-radius: 8px;
             }
 
             .resumo h2 {
@@ -433,13 +475,18 @@
         <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
         <span>VestPolo</span>
     </a>
-    <a href="{% url 'home' %}">⬅ Continuar comprando</a>
+    <nav>
+        <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+        <a href="{% url 'universitarios' %}"><i class="fa-solid fa-graduation-cap"></i><span>Universitarios</span></a>
+        <a href="{% url 'empresariais' %}"><i class="fa-solid fa-building"></i><span>Empresas</span></a>
+        <a href="{% url 'personalizados' %}"><i class="fa-solid fa-shirt"></i><span>Personalizados</span></a>
+    </nav>
 </header>
 
 <div class="container">
 
     <div class="titulo">
-        <h1>Meu carrinho</h1>
+        <h1><i class="fa-solid fa-cart-shopping"></i> Meu carrinho</h1>
         <p>Revise seus produtos antes de finalizar pelo WhatsApp.</p>
     </div>
 
@@ -498,11 +545,11 @@
             </div>
 
             <a href="{% url 'finalizar_whatsapp' %}">
-                <button class="finalizar">💬 Finalizar pelo WhatsApp</button>
+                <button class="finalizar"><i class="fa-brands fa-whatsapp"></i> Finalizar pelo WhatsApp</button>
             </a>
 
             <a href="{% url 'home' %}">
-                <button class="continuar">Continuar comprando</button>
+                <button class="continuar"><i class="fa-solid fa-arrow-left"></i> Continuar comprando</button>
             </a>
         </aside>
 
@@ -511,11 +558,11 @@
     {% else %}
 
     <div class="vazio">
-        <h2>Seu carrinho está vazio 😢</h2>
+        <h2><i class="fa-regular fa-face-meh"></i> Seu carrinho esta vazio</h2>
         <p>Escolha uma polo bordada para começar seu pedido.</p>
 
         <a href="{% url 'home' %}">
-            <button class="continuar">Ver produtos</button>
+            <button class="continuar"><i class="fa-solid fa-shirt"></i> Ver produtos</button>
         </a>
     </div>
 

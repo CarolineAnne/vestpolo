@@ -6,22 +6,39 @@
     <meta charset="UTF-8">
     <title>E-mail enviado | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background:
+                linear-gradient(135deg, rgba(17,17,17,0.82), rgba(17,17,17,0.58)),
+                url("{% static 'img/banner-hover.png' %}");
+            background-size: cover;
+            background-position: center;
             margin: 0;
             color: #222;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
         }
 
         .container {
+            width: 100%;
             max-width: 430px;
-            margin: 90px auto;
             background: white;
             padding: 32px;
-            border-radius: 18px;
+            border-radius: 8px;
             text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+            border: 1px solid rgba(255,255,255,0.30);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.24);
         }
 
         .brand-card {
@@ -54,19 +71,22 @@
             line-height: 1.6;
         }
 
-        a {
-            display: inline-block;
+        .btn-login {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             margin-top: 18px;
-            background: #111;
+            background: #25D366;
             color: white;
             padding: 13px 20px;
-            border-radius: 999px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
         }
 
-        a:hover {
-            background: #25D366;
+        .btn-login:hover {
+            background: #1ebe5d;
         }
     </style>
 </head>
@@ -84,7 +104,7 @@
         Se o e-mail informado estiver cadastrado, você receberá uma mensagem com o link para redefinir sua senha.
     </p>
 
-    <a href="{% url 'login' %}">Voltar para o login</a>
+    <a href="{% url 'login' %}" class="btn-login"><i class="fa-solid fa-arrow-left"></i> Voltar para o login</a>
 </div>
 
 </body>

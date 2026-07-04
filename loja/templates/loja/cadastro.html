@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +23,11 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background:
+                linear-gradient(135deg, rgba(17,17,17,0.88), rgba(17,17,17,0.62)),
+                url("{% static 'img/personalizados-destaque.png' %}");
+            background-size: cover;
+            background-position: center;
             margin: 0;
             color: #222;
             min-height: 100vh;
@@ -32,11 +39,12 @@
 
         .container {
             width: 100%;
-            max-width: 430px;
+            max-width: 460px;
             background: white;
-            padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+            border: 1px solid rgba(255,255,255,0.36);
         }
 
         .brand-card {
@@ -65,8 +73,16 @@
 
         h1 {
             text-align: center;
-            margin: 0 0 25px;
+            margin: 0 0 8px;
             font-size: 30px;
+        }
+
+        .intro {
+            text-align: center;
+            margin: 0 0 24px;
+            color: #666;
+            line-height: 1.5;
+            font-size: 14px;
         }
 
         label {
@@ -80,18 +96,23 @@
             width: 100%;
             padding: 13px;
             border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #25D366;
+            outline: 2px solid rgba(37, 211, 102, 0.16);
         }
 
         button {
             width: 100%;
             margin-top: 22px;
-            background: #111;
+            background: #25D366;
             color: white;
             border: none;
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 15px;
             cursor: pointer;
@@ -99,7 +120,7 @@
         }
 
         button:hover {
-            background: #333;
+            background: #1ebe5d;
         }
 
         a {
@@ -174,7 +195,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: #111;
+            background: rgba(17,17,17,0.90);
             color: white;
             padding: 11px 16px;
             border-radius: 999px;
@@ -185,11 +206,13 @@
             z-index: 1000;
             transition: 0.3s ease;
             border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(8px);
         }
 
         .btn-voltar:hover {
             background: #25D366;
-            color: white;
+            color: #111;
+            text-decoration: none;
         }
 
         @media (max-width: 600px) {
@@ -206,7 +229,7 @@
 
 <body>
 
-    <a href="{% url 'home' %}" class="btn-voltar">⬅ Voltar para loja</a>
+    <a href="{% url 'home' %}" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para loja</a>
 
     <div class="container">
         <a href="{% url 'home' %}" class="brand-card">
@@ -215,6 +238,7 @@
         </a>
 
         <h1>Criar conta</h1>
+        <p class="intro">Salve favoritos, acompanhe pedidos e finalize suas polos com mais facilidade.</p>
 
         {% for message in messages %}
             <p class="msg">{{ message }}</p>
@@ -232,7 +256,7 @@
             <label>Senha</label>
             <input type="password" name="senha" required>
 
-            <button type="submit">Cadastrar</button>
+            <button type="submit"><i class="fa-solid fa-user-plus"></i> Criar conta</button>
         </form>
 
         <p class="link-login">

@@ -415,12 +415,24 @@
             position: absolute;
             top: 14px;
             right: 14px;
-            background: white;
-            border-radius: 50%;
-            padding: 6px 8px;
-            font-size: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-size: 28px;
+            box-shadow: none;
             z-index: 10;
+            color: white;
+            line-height: 1;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .favorito:hover {
+            transform: scale(1.12);
+        }
+
+        .favorito.ativo {
+            color: #c62828;
         }
 
         .imagem-card {
@@ -785,9 +797,9 @@
 
             <a href="{% url 'favoritar' produto.id %}" class="favorito">
                 {% if produto.id in favoritos %}
-                    ❤️
+                    ♥
                 {% else %}
-                    🤍
+                    ♡
                 {% endif %}
             </a>
 

@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus pedidos | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -48,6 +51,43 @@
             font-size: 24px;
         }
 
+        nav {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 6px;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            transition: 0.25s ease;
+        }
+
+        nav a:hover {
+            background: #25D366;
+            color: white;
+        }
+
+        nav a i {
+            color: #25D366;
+            font-size: 13px;
+        }
+
+        nav a:hover i {
+            color: white;
+        }
+
         .brand-link {
             display: inline-flex;
             align-items: center;
@@ -79,8 +119,9 @@
         .pedido {
             background: white;
             padding: 22px;
-            border-radius: 16px;
+            border-radius: 8px;
             margin-bottom: 18px;
+            border: 1px solid #e7e8ea;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
             min-width: 0;
         }
@@ -138,8 +179,9 @@
         .vazio {
             background: white;
             padding: 35px;
-            border-radius: 16px;
+            border-radius: 8px;
             text-align: center;
+            border: 1px solid #e7e8ea;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
         }
 
@@ -159,6 +201,11 @@
             header {
                 padding: 16px 22px;
                 flex-wrap: wrap;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: flex-start;
             }
 
             header strong {
@@ -283,12 +330,17 @@
         <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo" class="brand-logo">
         <span>VestPolo</span>
     </a>
-    <a href="{% url 'minha_conta' %}">Minha conta</a>
+    <nav>
+        <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+        <a href="{% url 'minha_conta' %}"><i class="fa-solid fa-user"></i><span>Minha conta</span></a>
+        <a href="{% url 'favoritos' %}"><i class="fa-solid fa-heart"></i><span>Favoritos</span></a>
+        <a href="{% url 'carrinho' %}"><i class="fa-solid fa-cart-shopping"></i><span>Carrinho</span></a>
+    </nav>
 </header>
 
 <div class="container">
 
-    <h1>Meus pedidos</h1>
+    <h1><i class="fa-solid fa-box-open"></i> Meus pedidos</h1>
 
     {% for pedido in pedidos %}
         <div class="pedido">
@@ -326,7 +378,7 @@
         </div>
     {% empty %}
         <div class="vazio">
-            <h2>Você ainda não fez pedidos 😢</h2>
+            <h2><i class="fa-regular fa-face-meh"></i> Voce ainda nao fez pedidos</h2>
             <p>Escolha uma polo e finalize pelo WhatsApp.</p>
         </div>
     {% endfor %}

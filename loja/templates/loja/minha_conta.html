@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha conta | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +23,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f6f7f9;
             margin: 0;
             color: #222;
         }
@@ -30,9 +33,12 @@
         }
 
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: #111;
             color: white;
-            padding: 18px 40px;
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -50,22 +56,40 @@
             white-space: nowrap;
         }
 
-        header > a:not(.brand-link) {
+        nav {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 6px;
+        }
+
+        nav a {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-size: 14px;
             padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,0.18);
             border-radius: 999px;
-            background: rgba(255,255,255,0.08);
             transition: 0.25s ease;
         }
 
-        header > a:not(.brand-link):hover {
+        nav a:hover {
             background: #25D366;
-            border-color: #25D366;
-            color: #111;
+            color: white;
+        }
+
+        nav a i {
+            color: #25D366;
+            font-size: 13px;
+        }
+
+        nav a:hover i {
+            color: white;
         }
 
         .brand-link {
@@ -88,12 +112,16 @@
         }
 
         .perfil {
-            background: linear-gradient(135deg, #111, #333);
+            background:
+                linear-gradient(135deg, rgba(17,17,17,0.94), rgba(17,17,17,0.70)),
+                url("{% static 'img/banner-hover.png' %}");
+            background-size: cover;
+            background-position: center;
             color: white;
             padding: 35px;
-            border-radius: 20px;
+            border-radius: 8px;
             margin-bottom: 28px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 28px rgba(17,17,17,0.12);
             min-width: 0;
         }
 
@@ -118,9 +146,10 @@
 
         .card {
             background: white;
-            border-radius: 18px;
+            border-radius: 8px;
             padding: 25px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            border: 1px solid #e7e8ea;
+            box-shadow: 0 8px 20px rgba(17,17,17,0.06);
             transition: 0.3s;
             min-width: 0;
         }
@@ -137,7 +166,15 @@
         }
 
         .card .icone {
-            font-size: 32px;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: #eaf8ef;
+            color: #128a3c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
             margin-bottom: 12px;
         }
 
@@ -155,10 +192,15 @@
         }
 
         .sair {
-            background: #fff0f0;
+            background: #fff5f5;
         }
 
         .sair h3 {
+            color: #b00020;
+        }
+
+        .sair .icone {
+            background: #ffecec;
             color: #b00020;
         }
 
@@ -176,6 +218,11 @@
                 flex-wrap: wrap;
             }
 
+            nav {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
             header a:first-child {
                 font-size: 22px;
             }
@@ -187,7 +234,7 @@
 
             .perfil {
                 padding: 28px;
-                border-radius: 18px;
+                border-radius: 8px;
             }
 
             .perfil h1 {
@@ -228,7 +275,7 @@
 
             .perfil {
                 padding: 24px;
-                border-radius: 16px;
+                border-radius: 8px;
                 margin-bottom: 22px;
             }
 
@@ -247,7 +294,7 @@
 
             .card {
                 padding: 20px;
-                border-radius: 16px;
+                border-radius: 8px;
             }
 
             .card:hover {
@@ -255,7 +302,7 @@
             }
 
             .card .icone {
-                font-size: 30px;
+                font-size: 19px;
             }
 
             .card h3 {
@@ -309,7 +356,13 @@
         <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
         <span>VestPolo</span>
     </a>
-    <a href="{% url 'home' %}">Voltar à loja</a>
+
+    <nav>
+        <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+        <a href="{% url 'meus_pedidos' %}"><i class="fa-solid fa-box-open"></i><span>Pedidos</span></a>
+        <a href="{% url 'favoritos' %}"><i class="fa-solid fa-heart"></i><span>Favoritos</span></a>
+        <a href="{% url 'carrinho' %}"><i class="fa-solid fa-cart-shopping"></i><span>Carrinho</span></a>
+    </nav>
 </header>
 
 <div class="container">
@@ -329,7 +382,7 @@
 
         <div class="card">
             <a href="{% url 'meus_pedidos' %}">
-                <div class="icone">📦</div>
+                <div class="icone"><i class="fa-solid fa-box-open"></i></div>
                 <h3>Meus pedidos</h3>
                 <p>Acompanhe seus pedidos, status e histórico de compras.</p>
             </a>
@@ -337,7 +390,7 @@
 
         <div class="card">
             <a href="{% url 'favoritos' %}">
-                <div class="icone">❤️</div>
+                <div class="icone"><i class="fa-solid fa-heart"></i></div>
                 <h3>Favoritos</h3>
                 <p>Veja os produtos que você salvou para comprar depois.</p>
             </a>
@@ -345,7 +398,7 @@
 
         <div class="card">
             <a href="{% url 'carrinho' %}">
-                <div class="icone">🛒</div>
+                <div class="icone"><i class="fa-solid fa-cart-shopping"></i></div>
                 <h3>Meu carrinho</h3>
                 <p>Revise os produtos escolhidos antes de finalizar.</p>
             </a>
@@ -353,7 +406,7 @@
 
         <div class="card">
             <a href="{% url 'home' %}">
-                <div class="icone">🛍️</div>
+                <div class="icone"><i class="fa-solid fa-shirt"></i></div>
                 <h3>Continuar comprando</h3>
                 <p>Volte para a loja e escolha sua próxima polo personalizada.</p>
             </a>
@@ -361,7 +414,7 @@
 
         <div class="card">
             <a href="{% url 'password_reset' %}">
-                <div class="icone">🔐</div>
+                <div class="icone"><i class="fa-solid fa-lock"></i></div>
                 <h3>Recuperar senha</h3>
                 <p>Receba um link por e-mail para redefinir ou alterar sua senha.</p>
             </a>
@@ -369,7 +422,7 @@
 
         <div class="card sair">
             <a href="{% url 'logout' %}">
-                <div class="icone">🚪</div>
+                <div class="icone"><i class="fa-solid fa-right-from-bracket"></i></div>
                 <h3>Sair da conta</h3>
                 <p>Encerrar sua sessão com segurança.</p>
             </a>

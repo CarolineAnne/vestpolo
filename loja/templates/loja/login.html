@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +23,11 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background:
+                linear-gradient(135deg, rgba(17,17,17,0.82), rgba(17,17,17,0.58)),
+                url("{% static 'img/banner-hover.png' %}");
+            background-size: cover;
+            background-position: center;
             margin: 0;
             color: #222;
             min-height: 100vh;
@@ -35,8 +42,9 @@
             max-width: 430px;
             background: white;
             padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.30);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.24);
         }
 
         .brand-card {
@@ -80,26 +88,37 @@
             width: 100%;
             padding: 13px;
             border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 15px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37,211,102,0.18);
         }
 
         button {
             width: 100%;
             margin-top: 22px;
-            background: #111;
+            background: #25D366;
             color: white;
             border: none;
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 15px;
             cursor: pointer;
             transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         button:hover {
-            background: #333;
+            background: #1ebe5d;
         }
 
         a {
@@ -177,7 +196,7 @@
             background: #111;
             color: white;
             padding: 11px 16px;
-            border-radius: 999px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: bold;
             text-decoration: none;
@@ -189,7 +208,8 @@
 
         .btn-voltar:hover {
             background: #25D366;
-            color: white;
+            color: #111;
+            text-decoration: none;
         }
 
         @media (max-width: 600px) {
@@ -221,7 +241,7 @@
 
 <body>
 
-    <a href="{% url 'home' %}" class="btn-voltar">⬅ Voltar para loja</a>
+    <a href="{% url 'home' %}" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para loja</a>
 
     <div class="container">
         <a href="{% url 'home' %}" class="brand-card">
@@ -244,7 +264,7 @@
             <label>Senha</label>
             <input type="password" name="senha" required>
 
-            <button type="submit">Entrar</button>
+            <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
 
             <p class="link-extra">
                 <a href="{% url 'password_reset' %}">Esqueci minha senha</a>

@@ -597,12 +597,25 @@
             position: absolute;
             top: 14px;
             right: 14px;
-            background: white;
-            border-radius: 50%;
-            padding: 6px 8px;
-            font-size: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            font-size: 28px;
+            box-shadow: none;
             z-index: 10;
+            color: white;
+            line-height: 1;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .favorito:hover {
+            transform: scale(1.12);
+        }
+
+        .favorito.ativo {
+            color: #c62828;
         }
 
         .produto-link {
@@ -1106,9 +1119,9 @@
             .favorito {
                 top: 10px;
                 right: 10px;
-                font-size: 17px;
-                padding: 5px 7px;
-                background: rgba(255,255,255,0.94);
+                font-size: 24px;
+                padding: 0;
+                background: transparent;
             }
 
             .imagem-card {
@@ -1374,6 +1387,11 @@
         .icon-link[data-label="Carrinho"]::before {
             content: "\f07a";
         }
+
+        .icon-link::before {
+            content: none;
+            display: none;
+        }
         </style>
 </head>
 
@@ -1390,7 +1408,7 @@
 
     <div class="topbar-right">🛠️ Site temporariamente em manutenção</div>
 -->    
-    <div class="topbar-right">🚚 Entrega grátis em Juazeiro-BA e Petrolina-PE</div>
+    <div class="topbar-right"><i class="fa-solid fa-truck-fast"></i> Entrega gratis em Juazeiro-BA e Petrolina-PE</div>
 </div>
 
 
@@ -1426,27 +1444,27 @@
 
         {% if request.user.is_authenticated %}
             <a href="{% url 'minha_conta' %}" class="icon-link" data-label="Conta">
-                👤
+                <i class="fa-solid fa-user"></i>
             </a>
 
             <a href="{% url 'meus_pedidos' %}" class="icon-link" data-label="Pedidos">
-                📦
+                <i class="fa-solid fa-box-open"></i>
             </a>
 
             <a href="{% url 'favoritos' %}" class="icon-link" data-label="Favoritos">
-                ❤️
+                <i class="fa-solid fa-heart"></i>
                 {% if total_favoritos > 0 %}
                     <span class="badge">{{ total_favoritos }}</span>
                 {% endif %}
             </a>
         {% else %}
             <a href="{% url 'login' %}" class="icon-link" data-label="Entrar">
-                👤
+                <i class="fa-solid fa-user"></i>
             </a>
         {% endif %}
 
         <a href="{% url 'carrinho' %}" class="icon-link" data-label="Carrinho">
-            🛒
+            <i class="fa-solid fa-cart-shopping"></i>
             {% if total_itens > 0 %}
                 <span class="badge">{{ total_itens }}</span>
             {% endif %}
@@ -1589,7 +1607,7 @@
 
 <section class="titulo-produtos-gerais">
     <div class="titulo-produtos-conteudo">
-        <div class="titulo-produtos-icone">🛍️</div>
+        <div class="titulo-produtos-icone"><i class="fa-solid fa-bag-shopping"></i></div>
         <span>Catálogo VestPolo</span>
         <h2>Todos os produtos</h2>
         <p>Escolha sua polo, confira os detalhes e personalize do seu jeito.</p>
@@ -1603,9 +1621,9 @@
 
         <a href="{% url 'favoritar' produto.id %}" class="favorito">
             {% if produto.id in favoritos %}
-                ❤️
+                ♥
             {% else %}
-                🤍
+                ♡
             {% endif %}
         </a>
 
@@ -1639,7 +1657,7 @@
     </div>
 
     {% empty %}
-        <p class="mensagem">Nenhum produto encontrado 😢</p>
+        <p class="mensagem"><i class="fa-regular fa-face-meh"></i> Nenhum produto encontrado.</p>
     {% endfor %}
 
 </div>
