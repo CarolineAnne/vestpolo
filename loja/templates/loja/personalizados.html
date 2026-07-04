@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalizados | VestPolo</title>
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +23,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f6f7f9;
             margin: 0;
             color: #222;
         }
@@ -35,9 +38,12 @@
         }
 
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: #111;
             color: white;
-            padding: 18px 40px;
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -73,6 +79,9 @@
         }
 
         nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: white;
             font-weight: bold;
             font-size: 14px;
@@ -86,14 +95,29 @@
             color: white;
         }
 
+        nav a i {
+            color: #25D366;
+            font-size: 13px;
+        }
+
+        nav a:hover i {
+            color: white;
+        }
+
         .hero-personalizados {
             width: 100%;
-            background: linear-gradient(135deg, #111, #242424);
+            min-height: 520px;
+            background:
+                linear-gradient(115deg, rgba(5,5,5,0.90), rgba(5,5,5,0.68) 54%, rgba(5,5,5,0.35)),
+                var(--hero-image),
+                linear-gradient(135deg, #111, #242424);
+            background-size: cover;
+            background-position: center;
             color: white;
-            padding: 70px 8%;
+            padding: 76px 8% 84px;
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
-            gap: 35px;
+            gap: 44px;
             align-items: center;
         }
 
@@ -111,9 +135,10 @@
         }
 
         .hero-texto h1 {
-            font-size: 46px;
+            font-size: 50px;
             line-height: 1.1;
             margin: 0 0 18px;
+            max-width: 760px;
         }
 
         .hero-texto p {
@@ -125,20 +150,38 @@
         }
 
         .hero-lista {
-            display: grid;
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 28px;
             color: #f1f1f1;
+        }
+
+        .hero-lista div {
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.09);
+            border-radius: 999px;
+            padding: 9px 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .hero-acoes {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn-whatsapp {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
             background: #25D366;
             color: white;
             padding: 15px 24px;
-            border-radius: 14px;
+            border-radius: 8px;
             font-weight: bold;
             transition: 0.3s;
         }
@@ -148,17 +191,32 @@
             transform: translateY(-2px);
         }
 
-        .hero-card {
+        .btn-secundario {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.28);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-weight: bold;
             background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 24px;
-            padding: 32px;
-            text-align: center;
+            transition: 0.25s ease;
         }
 
-        .hero-card .icone {
-            font-size: 72px;
-            margin-bottom: 14px;
+        .btn-secundario:hover {
+            background: white;
+            color: #111;
+        }
+
+        .hero-card {
+            background: rgba(10,10,10,0.58);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 8px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 18px 42px rgba(0,0,0,0.26);
         }
 
         .hero-card h2 {
@@ -172,6 +230,95 @@
             line-height: 1.5;
         }
 
+        .hero-checklist {
+            display: grid;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .hero-checklist div {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #f5f5f5;
+            line-height: 1.4;
+        }
+
+        .hero-checklist i {
+            color: #25D366;
+            margin-top: 2px;
+        }
+
+        .hero-metricas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .hero-metrica {
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 8px;
+            padding: 12px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-metrica strong {
+            display: block;
+            font-size: 21px;
+        }
+
+        .hero-metrica span {
+            display: block;
+            color: #d8d8d8;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .solucoes-personalizadas {
+            width: 92%;
+            max-width: 1200px;
+            margin: -36px auto 48px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .solucao {
+            background: white;
+            border: 1px solid #e7e8ea;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 10px 24px rgba(17,17,17,0.08);
+        }
+
+        .solucao-icone {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #eaf8ef;
+            color: #128a3c;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            font-size: 18px;
+        }
+
+        .solucao h3 {
+            margin: 0 0 8px;
+            font-size: 19px;
+        }
+
+        .solucao p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
         .como-funciona {
             width: 92%;
             max-width: 1200px;
@@ -183,8 +330,9 @@
 
         .etapa {
             background: white;
-            border-radius: 18px;
+            border-radius: 8px;
             padding: 24px;
+            border: 1px solid #e7e8ea;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
         }
 
@@ -229,7 +377,14 @@
 
         .titulo-secao h2 {
             font-size: 32px;
-            margin: 8px 0 0;
+            margin: 8px 0 8px;
+        }
+
+        .titulo-secao p {
+            max-width: 620px;
+            color: #666;
+            line-height: 1.5;
+            margin: 0;
         }
 
         .produtos {
@@ -243,8 +398,9 @@
 
         .card {
             background: white;
-            border-radius: 18px;
+            border-radius: 8px;
             padding: 14px;
+            border: 1px solid #e7e8ea;
             box-shadow: 0 4px 14px rgba(0,0,0,0.10);
             transition: 0.3s;
             position: relative;
@@ -269,7 +425,7 @@
 
         .imagem-card {
             height: 230px;
-            border-radius: 14px;
+            border-radius: 8px;
             overflow: hidden;
             background: #eee;
         }
@@ -321,7 +477,7 @@
             color: white;
             text-align: center;
             padding: 13px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: bold;
             margin-top: 12px;
         }
@@ -347,20 +503,29 @@
             margin-top: 40px;
         }
 
-        .banner-destaque-personalizados {
+        .cta-personalizados {
             width: 92%;
-            max-width: 1400px;
-            margin: 30px auto 0;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            max-width: 1200px;
+            margin: 10px auto 56px;
             background: #111;
+            color: white;
+            border-radius: 8px;
+            padding: 34px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
         }
 
-        .banner-destaque-personalizados img {
-            width: 100%;
-            display: block;
-            height: auto;
+        .cta-personalizados h2 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .cta-personalizados p {
+            margin: 0;
+            color: #d8d8d8;
+            line-height: 1.5;
         }
 
         @media (max-width: 900px) {
@@ -373,9 +538,14 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .banner-destaque-personalizados {
-                width: calc(100% - 40px);
-                border-radius: 22px;
+            .solucoes-personalizadas {
+                grid-template-columns: 1fr;
+                margin: 24px auto 40px;
+            }
+
+            .cta-personalizados {
+                align-items: flex-start;
+                flex-direction: column;
             }
         }
 
@@ -387,15 +557,18 @@
             }
 
             nav {
-                gap: 14px;
+                border-radius: 18px;
+                width: 100%;
+                justify-content: flex-start;
             }
 
             .hero-personalizados {
-                padding: 42px 22px;
+                min-height: 500px;
+                padding: 48px 22px 54px;
             }
 
             .hero-texto h1 {
-                font-size: 32px;
+                font-size: 34px;
             }
 
             .hero-texto p {
@@ -403,7 +576,21 @@
             }
 
             .hero-card {
-                padding: 24px;
+                padding: 22px;
+            }
+
+            .hero-acoes,
+            .btn-whatsapp,
+            .btn-secundario {
+                width: 100%;
+            }
+
+            .hero-metricas {
+                grid-template-columns: 1fr;
+            }
+
+            .solucoes-personalizadas {
+                width: calc(100% - 24px);
             }
 
             .como-funciona {
@@ -428,7 +615,7 @@
 
             .card {
                 padding: 10px;
-                border-radius: 14px;
+                border-radius: 8px;
             }
 
             .imagem-card {
@@ -452,10 +639,9 @@
                 font-size: 13px;
             }
 
-            .banner-destaque-personalizados {
+            .cta-personalizados {
                 width: calc(100% - 24px);
-                margin: 18px auto 0;
-                border-radius: 18px;
+                padding: 24px;
             }
         }
     </style>
@@ -470,48 +656,93 @@
     </a>
 
     <nav>
-        <a href="{% url 'home' %}">Início</a>
-        <a href="{% url 'personalizados' %}">Personalizados</a>
-        <a href="{% url 'carrinho' %}">Carrinho</a>
+        <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+        <a href="{% url 'universitarios' %}"><i class="fa-solid fa-graduation-cap"></i><span>Universitarios</span></a>
+        <a href="{% url 'empresariais' %}"><i class="fa-solid fa-building"></i><span>Empresas</span></a>
+        <a href="{% url 'personalizados' %}"><i class="fa-solid fa-shirt"></i><span>Personalizados</span></a>
+        <a href="{% url 'carrinho' %}"><i class="fa-solid fa-cart-shopping"></i><span>Carrinho</span></a>
     </nav>
 </header>
 
-<section class="banner-destaque-personalizados">
-    <img src="{% static 'img/personalizados-destaque.png' %}" alt="Personalize sua polo - VestPolo">
-</section>
-
-<section class="hero-personalizados">
+<section class="hero-personalizados" style="--hero-image: url('{% static 'img/personalizados-destaque.png' %}')">
     <div class="hero-texto">
         <span>Personalizados VestPolo</span>
 
-        <h1>Crie sua polo personalizada do seu jeito</h1>
+        <h1>Polos personalizadas para sua turma, empresa ou evento</h1>
 
         <p>
-            Produzimos polos com bordado personalizado para cursos, turmas, empresas,
-            eventos, formandos e grupos especiais. Você pode enviar sua logo, nome,
-            arte de referência ou identidade visual.
+            Escolha o modelo, envie sua ideia e transforme nome, curso, empresa ou logo
+            em uma polo com acabamento profissional e identidade própria.
         </p>
 
         <div class="hero-lista">
-            <div>✔ Bordado com nome, curso, turma ou empresa</div>
-            <div>✔ Envio de arte/logo/referência pelo cliente</div>
-            <div>✔ Ideal para universitários, equipes e eventos</div>
-            <div>✔ Atendimento direto pelo WhatsApp</div>
+            <div>Bordado sob medida</div>
+            <div>Logo, nome ou curso</div>
+            <div>Atendimento pelo WhatsApp</div>
+            <div>Entrega local grátis</div>
         </div>
 
-        <a class="btn-whatsapp"
-           href="https://wa.me/5574999087655?text=Olá! Tenho interesse em uma polo personalizada."
-           target="_blank">
-            Personalizar pelo WhatsApp
-        </a>
+        <div class="hero-acoes">
+            <a class="btn-whatsapp"
+               href="https://wa.me/5574999087655?text=Ola! Tenho interesse em uma polo personalizada."
+               target="_blank">
+                <i class="fa-brands fa-whatsapp"></i>
+                Personalizar pelo WhatsApp
+            </a>
+
+            <a class="btn-secundario" href="#produtos-personalizados">
+                <i class="fa-solid fa-arrow-down"></i>
+                Ver modelos
+            </a>
+        </div>
     </div>
 
     <div class="hero-card">
-        <div class="icone">✨</div>
-        <h2>Sua ideia em bordado</h2>
+        <h2>Como começamos seu pedido</h2>
         <p>
-            Envie sua referência e transforme sua farda em uma peça exclusiva.
+            Você pode chegar com uma arte pronta ou só com a ideia. A gente organiza os detalhes antes da produção.
         </p>
+
+        <div class="hero-checklist">
+            <div><i class="fa-solid fa-check"></i><span>Definimos modelo, cor e quantidade.</span></div>
+            <div><i class="fa-solid fa-check"></i><span>Ajustamos logo, nome, curso ou empresa.</span></div>
+            <div><i class="fa-solid fa-check"></i><span>Confirmamos tudo pelo WhatsApp antes de finalizar.</span></div>
+        </div>
+
+        <div class="hero-metricas">
+            <div class="hero-metrica">
+                <strong>1</strong>
+                <span>unidade ou grupo</span>
+            </div>
+            <div class="hero-metrica">
+                <strong>2</strong>
+                <span>cidades com frete grátis</span>
+            </div>
+            <div class="hero-metrica">
+                <strong>100%</strong>
+                <span>pedido combinado</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="solucoes-personalizadas">
+    <div class="solucao">
+        <div class="solucao-icone"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h3>Turmas e cursos</h3>
+        <p>Polos para universitários, formandos, ligas, atléticas e grupos acadêmicos.</p>
+    </div>
+
+    <div class="solucao">
+        <div class="solucao-icone"><i class="fa-solid fa-briefcase"></i></div>
+        <h3>Empresas e equipes</h3>
+        <p>Uniformes profissionais com logo, nome, função ou identidade visual da marca.</p>
+    </div>
+
+    <div class="solucao">
+        <div class="solucao-icone"><i class="fa-solid fa-users"></i></div>
+        <h3>Eventos e grupos</h3>
+        <p>Peças personalizadas para ações, congressos, encontros e projetos especiais.</p>
     </div>
 </section>
 
@@ -541,9 +772,10 @@
     </div>
 </section>
 
-<section class="titulo-secao">
+<section class="titulo-secao" id="produtos-personalizados">
     <span>Produtos personalizados</span>
     <h2>Escolha sua base para personalizar</h2>
+    <p>Comece por um modelo e depois informe cor, bordado, nome, logo ou referência no pedido.</p>
 </section>
 
 <section class="produtos">
@@ -587,6 +819,20 @@
         </div>
     {% endfor %}
 
+</section>
+
+<section class="cta-personalizados">
+    <div>
+        <h2>Quer uma polo que ainda não está no catálogo?</h2>
+        <p>Chame no WhatsApp com sua ideia, logo ou referência. A gente combina o melhor caminho para produzir.</p>
+    </div>
+
+    <a class="btn-whatsapp"
+       href="https://wa.me/5574999087655?text=Ola! Quero criar uma polo personalizada do zero."
+       target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        Criar pelo WhatsApp
+    </a>
 </section>
 
 <footer>
