@@ -99,6 +99,14 @@
             box-shadow: 0 0 0 3px rgba(37,211,102,0.18);
         }
 
+        .password-field {
+            position: relative;
+        }
+
+        .password-field input {
+            padding-right: 48px;
+        }
+
         button {
             width: 100%;
             margin-top: 22px;
@@ -119,6 +127,27 @@
 
         button:hover {
             background: #1ebe5d;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 38px;
+            height: 38px;
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #128a3c;
+            box-shadow: none;
+        }
+
+        .password-toggle:hover {
+            background: #eaf8ef;
+            color: #111;
         }
 
         a {
@@ -168,6 +197,13 @@
             button {
                 padding: 13px;
                 font-size: 14px;
+            }
+
+            .password-toggle {
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                font-size: 15px;
             }
 
             .link-cadastro {
@@ -261,8 +297,13 @@
             <label>E-mail</label>
             <input type="email" name="email" required>
 
-            <label>Senha</label>
-            <input type="password" name="senha" required>
+            <label for="senhaLogin">Senha</label>
+            <div class="password-field">
+                <input type="password" id="senhaLogin" name="senha" autocomplete="current-password" required>
+                <button type="button" class="password-toggle" data-password-toggle="senhaLogin" aria-label="Mostrar senha">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
 
             <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
 
@@ -275,6 +316,20 @@
             Não tem conta? <a href="{% url 'cadastro' %}">Cadastrar</a>
         </p>
     </div>
+
+    <script>
+        document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var input = document.getElementById(button.dataset.passwordToggle);
+                var icon = button.querySelector('i');
+                var showing = input.type === 'text';
+
+                input.type = showing ? 'password' : 'text';
+                button.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+                icon.className = showing ? 'fa-regular fa-eye' : 'fa-regular fa-eye-slash';
+            });
+        });
+    </script>
 
 </body>
 </html>

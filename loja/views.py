@@ -575,9 +575,18 @@ def checkout(request):
 
 def cadastro(request):
     if request.method == 'POST':
-        nome = request.POST.get('nome')
-        email = request.POST.get('email')
-        senha = request.POST.get('senha')
+        nome = request.POST.get('nome', '').strip()
+        email = request.POST.get('email', '').strip()
+        senha = request.POST.get('senha', '')
+        senha_confirmacao = request.POST.get('senha_confirmacao', '')
+
+        if not nome or not email or not senha:
+            messages.error(request, 'Preencha nome, e-mail e senha para criar sua conta.')
+            return redirect('cadastro')
+
+        if senha != senha_confirmacao:
+            messages.error(request, 'As senhas nao conferem. Digite a mesma senha nos dois campos.')
+            return redirect('cadastro')
 
         if User.objects.filter(username=email).exists():
             messages.error(request, 'Este e-mail já está cadastrado.')

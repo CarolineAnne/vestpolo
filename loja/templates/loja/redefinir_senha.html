@@ -87,6 +87,14 @@
             box-shadow: 0 0 0 3px rgba(37,211,102,0.18);
         }
 
+        .password-field {
+            position: relative;
+        }
+
+        .password-field input {
+            padding-right: 48px;
+        }
+
         button {
             width: 100%;
             background: #25D366;
@@ -108,9 +116,57 @@
             background: #1ebe5d;
         }
 
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 38px;
+            height: 38px;
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #128a3c;
+            box-shadow: none;
+        }
+
+        .password-toggle:hover {
+            background: #eaf8ef;
+            color: #111;
+        }
+
+        .password-hint {
+            margin: 8px 0 4px;
+            color: #666;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
         .erro {
             color: #b00020;
             font-size: 14px;
+        }
+
+        .erro-box {
+            background: #fff5f5;
+            border: 1px solid #ffd6d6;
+            border-radius: 8px;
+            color: #8a0018;
+            margin-top: 14px;
+            padding: 12px 14px;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        .erro-box ul {
+            margin: 8px 0 0;
+            padding-left: 18px;
+        }
+
+        .erro-box li {
+            margin: 4px 0;
         }
     </style>
 </head>
@@ -129,14 +185,30 @@
         <form method="post">
             {% csrf_token %}
 
-            <label>Nova senha</label>
-            {{ form.new_password1 }}
+            <label for="id_new_password1">Nova senha</label>
+            <div class="password-field">
+                {{ form.new_password1 }}
+                <button type="button" class="password-toggle" data-password-toggle="id_new_password1" aria-label="Mostrar senha">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
+            <p class="password-hint">Use pelo menos 8 caracteres. Evite senha comum ou somente numeros.</p>
 
-            <label>Confirme a nova senha</label>
-            {{ form.new_password2 }}
+            <label for="id_new_password2">Confirme a nova senha</label>
+            <div class="password-field">
+                {{ form.new_password2 }}
+                <button type="button" class="password-toggle" data-password-toggle="id_new_password2" aria-label="Mostrar senha">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
 
             {% if form.errors %}
-                <p class="erro">Verifique se as senhas são iguais e atendem aos requisitos.</p>
+                <div class="erro-box">
+                    <strong>Nao consegui salvar a nova senha.</strong>
+                    {{ form.non_field_errors }}
+                    {{ form.new_password1.errors }}
+                    {{ form.new_password2.errors }}
+                </div>
             {% endif %}
 
             <button type="submit"><i class="fa-solid fa-lock"></i> Salvar nova senha</button>
@@ -150,6 +222,20 @@
 
     {% endif %}
 </div>
+
+<script>
+    document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var input = document.getElementById(button.dataset.passwordToggle);
+            var icon = button.querySelector('i');
+            var showing = input.type === 'text';
+
+            input.type = showing ? 'password' : 'text';
+            button.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+            icon.className = showing ? 'fa-regular fa-eye' : 'fa-regular fa-eye-slash';
+        });
+    });
+</script>
 
 </body>
 </html>
