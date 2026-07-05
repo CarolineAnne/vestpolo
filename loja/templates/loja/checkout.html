@@ -219,6 +219,16 @@
             margin-top: 8px;
         }
 
+        .frete-info.sucesso {
+            color: #128a3c;
+            font-weight: bold;
+        }
+
+        .frete-info.aviso {
+            color: #9a6a00;
+            font-weight: bold;
+        }
+
         .total {
             font-size: 22px;
             font-weight: bold;
@@ -255,6 +265,10 @@
 
         .btn-calcular-frete:hover {
             background: #333;
+        }
+
+        .btn-calcular-frete.calculado {
+            background: #128a3c;
         }
 
         /* Tablets e telas médias */
@@ -443,7 +457,9 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-calcular-frete" id="btnCalcularFrete">Calcular frete</button>
+            <button type="button" class="btn-calcular-frete" id="btnCalcularFrete">
+                <i class="fa-solid fa-truck-fast"></i> Calcular frete
+            </button>
 
             <label>Forma de pagamento</label>
             <select name="forma_pagamento" required>
@@ -602,7 +618,24 @@
         };
     }
 
-    function atualizarResumo() {
+    function marcarFreteInfo(texto, tipo) {
+        freteInfo.textContent = texto;
+        freteInfo.classList.remove('sucesso', 'aviso');
+
+        if (tipo) {
+            freteInfo.classList.add(tipo);
+        }
+    }
+
+    function resetarResumoFrete(mensagem) {
+        freteResumo.textContent = 'A calcular';
+        totalResumo.textContent = formatarMoeda(subtotalPedido);
+        btnCalcularFrete.classList.remove('calculado');
+        btnCalcularFrete.innerHTML = '<i class="fa-solid fa-truck-fast"></i> Calcular frete';
+        marcarFreteInfo(mensagem, 'aviso');
+    }
+
+    function atualizarCamposEntrega() {
         const forma = formaEntrega.value;
         const entregaAtiva = forma === 'Entrega';
 
@@ -612,33 +645,65 @@
             campo.required = entregaAtiva;
         });
 
-        const frete = calcularFreteEstimado(cepEntrega.value, totalItens, forma);
-
         subtotalResumo.textContent = formatarMoeda(subtotalPedido);
 
         if (!forma) {
-            freteResumo.textContent = 'A calcular';
-            freteInfo.textContent = 'Escolha a entrega e clique em Calcular frete.';
-            totalResumo.textContent = formatarMoeda(subtotalPedido);
+            resetarResumoFrete('Escolha a entrega e clique em Calcular frete.');
             return;
         }
 
-        if (forma === 'Entrega' && !frete) {
-            freteResumo.textContent = 'A calcular';
-            freteInfo.textContent = 'Digite um CEP com 8 numeros e clique em Calcular frete.';
-            totalResumo.textContent = formatarMoeda(subtotalPedido);
+        if (forma === 'Entrega') {
+            resetarResumoFrete('Digite o CEP com 8 numeros e depois clique em Calcular frete.');
+            return;
+        }
+
+        resetarResumoFrete('Clique em Calcular frete para confirmar esta forma de entrega.');
+    }
+
+    function calcularFretePeloBotao() {
+        atualizarCamposEntrega();
+
+        const forma = formaEntrega.value;
+
+        if (!forma) {
+            formaEntrega.focus();
+            return;
+        }
+
+        if (forma === 'Entrega' && apenasDigitos(cepEntrega.value).length !== 8) {
+            cepEntrega.focus();
+            resetarResumoFrete('Informe um CEP com 8 numeros para calcular o frete.');
+            return;
+        }
+
+        const frete = calcularFreteEstimado(cepEntrega.value, totalItens, forma);
+
+        if (!frete) {
+            resetarResumoFrete('Nao consegui calcular com este CEP. Confira os numeros e tente novamente.');
             return;
         }
 
         freteResumo.textContent = formatarMoeda(frete.valor);
-        freteInfo.textContent = frete.descricao;
         totalResumo.textContent = formatarMoeda(subtotalPedido + frete.valor);
+        btnCalcularFrete.classList.add('calculado');
+        btnCalcularFrete.innerHTML = '<i class="fa-solid fa-circle-check"></i> Frete calculado';
+        marcarFreteInfo(frete.descricao, 'sucesso');
     }
 
-    formaEntrega.addEventListener('change', atualizarResumo);
-    cepEntrega.addEventListener('input', atualizarResumo);
-    btnCalcularFrete.addEventListener('click', atualizarResumo);
-    atualizarResumo();
+    formaEntrega.addEventListener('change', atualizarCamposEntrega);
+    cepEntrega.addEventListener('input', () => {
+        if (formaEntrega.value === 'Entrega') {
+            resetarResumoFrete('CEP alterado. Clique em Calcular frete para atualizar o valor.');
+        }
+    });
+    cepEntrega.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            calcularFretePeloBotao();
+        }
+    });
+    btnCalcularFrete.addEventListener('click', calcularFretePeloBotao);
+    atualizarCamposEntrega();
 </script>
 
 </body>
