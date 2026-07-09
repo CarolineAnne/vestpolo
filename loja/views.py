@@ -1,11 +1,14 @@
+import json
 import re
 import unicodedata
 
 import requests
 from django.conf import settings
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from urllib.parse import quote
 from decimal import Decimal
 from .models import Produto, Pedido, ItemPedido, Favorito
@@ -121,6 +124,7 @@ def criar_preferencia_mercado_pago(pedido, request):
     url_retorno = request.build_absolute_uri(
         reverse("pagamento_pedido", args=[pedido.id])
     )
+    url_webhook = request.build_absolute_uri(reverse("mercado_pago_webhook"))
 
     payload = {
         "items": [
@@ -141,6 +145,7 @@ def criar_preferencia_mercado_pago(pedido, request):
             "pending": f"{url_retorno}?status=pendente",
             "failure": f"{url_retorno}?status=recusado",
         },
+        "notification_url": url_webhook,
         "auto_return": "approved",
         "metadata": {
             "pedido_id": pedido.id,
@@ -227,6 +232,55 @@ def montar_mensagem_pedido(pedido):
 def montar_link_whatsapp_pedido(pedido):
     texto = quote(montar_mensagem_pedido(pedido))
     return f"https://wa.me/{NUMERO_WHATSAPP_ATENDIMENTO}?text={texto}"
+
+
+def status_pagamento_mercado_pago(status):
+    mapa = {
+        "approved": "Aprovado",
+        "rejected": "Recusado",
+        "cancelled": "Cancelado",
+        "refunded": "Reembolsado",
+        "charged_back": "Reembolsado",
+    }
+    return mapa.get(status, "Pendente")
+
+
+def atualizar_pedido_por_pagamento_mercado_pago(pagamento_id):
+    token = settings.MERCADO_PAGO_ACCESS_TOKEN.strip()
+
+    if not token or not pagamento_id:
+        return None
+
+    try:
+        resposta = requests.get(
+            f"https://api.mercadopago.com/v1/payments/{pagamento_id}",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=12,
+        )
+        resposta.raise_for_status()
+    except requests.RequestException:
+        return None
+
+    pagamento = resposta.json()
+    pedido_id = pagamento.get("external_reference")
+
+    if not pedido_id:
+        pedido_id = (pagamento.get("metadata") or {}).get("pedido_id")
+
+    try:
+        pedido = Pedido.objects.get(id=pedido_id)
+    except (Pedido.DoesNotExist, TypeError, ValueError):
+        return None
+
+    novo_status = status_pagamento_mercado_pago(pagamento.get("status"))
+    pedido.status_pagamento = novo_status
+    pedido.mercado_pago_id = str(pagamento.get("id", ""))[:100]
+
+    if novo_status == "Aprovado":
+        pedido.status = "Em produção"
+
+    pedido.save(update_fields=["status_pagamento", "mercado_pago_id", "status"])
+    return pedido
 
 
 def calcular_frete(cep, quantidade_total, forma_entrega):
@@ -813,6 +867,31 @@ def pagamento_pedido(request, pedido_id):
         'whatsapp_url': montar_link_whatsapp_pedido(pedido),
         'status_retorno': request.GET.get('status', ''),
     })
+
+
+@csrf_exempt
+def mercado_pago_webhook(request):
+    if request.method != "POST":
+        return JsonResponse({"erro": "metodo nao permitido"}, status=405)
+
+    try:
+        payload = request.body.decode("utf-8")
+        dados = json.loads(payload) if payload else {}
+    except ValueError:
+        dados = {}
+
+    tipo = dados.get("type") or dados.get("topic") or request.GET.get("type")
+    pagamento_id = (
+        (dados.get("data") or {}).get("id")
+        or request.GET.get("data.id")
+        or request.GET.get("id")
+    )
+
+    if tipo == "payment" and pagamento_id:
+        atualizar_pedido_por_pagamento_mercado_pago(pagamento_id)
+
+    return JsonResponse({"recebido": True})
+
 
 def cadastro(request):
     if request.method == 'POST':
