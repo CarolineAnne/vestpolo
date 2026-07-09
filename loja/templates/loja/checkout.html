@@ -229,6 +229,23 @@
             font-weight: bold;
         }
 
+        .endereco-info {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.4;
+            margin: 7px 0 2px;
+        }
+
+        .endereco-info.sucesso {
+            color: #128a3c;
+            font-weight: bold;
+        }
+
+        .endereco-info.aviso {
+            color: #9a6a00;
+            font-weight: bold;
+        }
+
         .total {
             font-size: 22px;
             font-weight: bold;
@@ -425,9 +442,10 @@
             <div class="campos-entrega" id="camposEntrega">
                 <label>CEP de entrega</label>
                 <input type="text" name="cep_entrega" id="cepEntrega" inputmode="numeric" maxlength="9" placeholder="Ex: 56300-000">
+                <div class="endereco-info" id="enderecoInfo">Informe o CEP para preencher o endereco automaticamente.</div>
 
                 <label>Endereco</label>
-                <input type="text" name="endereco" data-entrega-obrigatorio placeholder="Rua, avenida, travessa...">
+                <input type="text" name="endereco" id="enderecoEntrega" data-entrega-obrigatorio placeholder="Rua, avenida, travessa...">
 
                 <div class="grid-2">
                     <div>
@@ -442,17 +460,17 @@
                 </div>
 
                 <label>Bairro</label>
-                <input type="text" name="bairro" data-entrega-obrigatorio>
+                <input type="text" name="bairro" id="bairroEntrega" data-entrega-obrigatorio>
 
                 <div class="grid-2">
                     <div>
                         <label>Cidade</label>
-                        <input type="text" name="cidade" data-entrega-obrigatorio>
+                        <input type="text" name="cidade" id="cidadeEntrega" data-entrega-obrigatorio>
                     </div>
 
                     <div>
                         <label>Estado</label>
-                        <input type="text" name="estado" data-entrega-obrigatorio maxlength="2" placeholder="UF">
+                        <input type="text" name="estado" id="estadoEntrega" data-entrega-obrigatorio maxlength="2" placeholder="UF">
                     </div>
                 </div>
             </div>
@@ -533,6 +551,11 @@
     const formaEntrega = document.getElementById('formaEntrega');
     const camposEntrega = document.getElementById('camposEntrega');
     const cepEntrega = document.getElementById('cepEntrega');
+    const enderecoEntrega = document.getElementById('enderecoEntrega');
+    const bairroEntrega = document.getElementById('bairroEntrega');
+    const cidadeEntrega = document.getElementById('cidadeEntrega');
+    const estadoEntrega = document.getElementById('estadoEntrega');
+    const enderecoInfo = document.getElementById('enderecoInfo');
     const camposObrigatoriosEntrega = document.querySelectorAll('[data-entrega-obrigatorio]');
     const resumoValores = document.querySelector('.resumo-valores');
     const subtotalResumo = document.getElementById('subtotalResumo');
@@ -543,6 +566,8 @@
 
     const subtotalPedido = parseFloat((resumoValores.dataset.subtotal || '0').replace(',', '.'));
     const totalItens = parseInt(resumoValores.dataset.totalItens || '1', 10);
+    let buscaEnderecoTimer = null;
+    let ultimoCepBuscado = '';
 
     function apenasDigitos(valor) {
         return valor.replace(/\D/g, '');
@@ -627,6 +652,91 @@
         }
     }
 
+    function marcarEnderecoInfo(texto, tipo) {
+        enderecoInfo.textContent = texto;
+        enderecoInfo.classList.remove('sucesso', 'aviso');
+
+        if (tipo) {
+            enderecoInfo.classList.add(tipo);
+        }
+    }
+
+    function preencherCampoEndereco(campo, valor) {
+        if (!valor) {
+            return;
+        }
+
+        if (!campo.value || campo.dataset.preenchidoCep === '1') {
+            campo.value = valor;
+            campo.dataset.preenchidoCep = '1';
+        }
+    }
+
+    function limparEnderecoPreenchidoPorCep() {
+        [enderecoEntrega, bairroEntrega, cidadeEntrega, estadoEntrega].forEach((campo) => {
+            if (campo.dataset.preenchidoCep === '1') {
+                campo.value = '';
+                campo.dataset.preenchidoCep = '0';
+            }
+        });
+    }
+
+    function preencherEndereco(endereco) {
+        preencherCampoEndereco(enderecoEntrega, endereco.logradouro || '');
+        preencherCampoEndereco(bairroEntrega, endereco.bairro || '');
+        preencherCampoEndereco(cidadeEntrega, endereco.localidade || '');
+        preencherCampoEndereco(estadoEntrega, endereco.uf || '');
+    }
+
+    async function buscarEnderecoPorCep(cep, silencioso = false) {
+        const digitos = apenasDigitos(cep);
+
+        if (digitos.length !== 8) {
+            ultimoCepBuscado = '';
+            limparEnderecoPreenchidoPorCep();
+            marcarEnderecoInfo('Informe o CEP para preencher o endereco automaticamente.', '');
+            return null;
+        }
+
+        if (
+            ultimoCepBuscado === digitos &&
+            (enderecoEntrega.value || bairroEntrega.value || cidadeEntrega.value || estadoEntrega.value)
+        ) {
+            return true;
+        }
+
+        if (!silencioso) {
+            marcarEnderecoInfo('Buscando endereco pelo CEP...', 'aviso');
+        }
+
+        try {
+            limparEnderecoPreenchidoPorCep();
+
+            const resposta = await fetch(`https://viacep.com.br/ws/${digitos}/json/`);
+
+            if (!resposta.ok) {
+                throw new Error('Falha ao buscar CEP');
+            }
+
+            const endereco = await resposta.json();
+
+            if (endereco.erro) {
+                ultimoCepBuscado = '';
+                marcarEnderecoInfo('Nao encontrei este CEP. Preencha o endereco manualmente.', 'aviso');
+                return null;
+            }
+
+            preencherEndereco(endereco);
+            ultimoCepBuscado = digitos;
+            marcarEnderecoInfo('Endereco preenchido automaticamente pelo CEP.', 'sucesso');
+            return endereco;
+        } catch (erro) {
+            ultimoCepBuscado = '';
+            marcarEnderecoInfo('Nao foi possivel buscar o CEP agora. Preencha o endereco manualmente.', 'aviso');
+            return null;
+        }
+    }
+
     function resetarResumoFrete(mensagem) {
         freteResumo.textContent = 'A calcular';
         totalResumo.textContent = formatarMoeda(subtotalPedido);
@@ -649,18 +759,23 @@
 
         if (!forma) {
             resetarResumoFrete('Escolha a entrega e clique em Calcular frete.');
+            marcarEnderecoInfo('Informe o CEP para preencher o endereco automaticamente.', '');
             return;
         }
 
         if (forma === 'Entrega') {
             resetarResumoFrete('Digite o CEP com 8 numeros e depois clique em Calcular frete.');
+            if (apenasDigitos(cepEntrega.value).length !== 8) {
+                marcarEnderecoInfo('Informe o CEP para preencher o endereco automaticamente.', '');
+            }
             return;
         }
 
         resetarResumoFrete('Clique em Calcular frete para confirmar esta forma de entrega.');
+        marcarEnderecoInfo('', '');
     }
 
-    function calcularFretePeloBotao() {
+    async function calcularFretePeloBotao() {
         atualizarCamposEntrega();
 
         const forma = formaEntrega.value;
@@ -674,6 +789,10 @@
             cepEntrega.focus();
             resetarResumoFrete('Informe um CEP com 8 numeros para calcular o frete.');
             return;
+        }
+
+        if (forma === 'Entrega') {
+            await buscarEnderecoPorCep(cepEntrega.value);
         }
 
         const frete = calcularFreteEstimado(cepEntrega.value, totalItens, forma);
@@ -690,10 +809,21 @@
         marcarFreteInfo(frete.descricao, 'sucesso');
     }
 
+    [enderecoEntrega, bairroEntrega, cidadeEntrega, estadoEntrega].forEach((campo) => {
+        campo.addEventListener('input', () => {
+            campo.dataset.preenchidoCep = '0';
+        });
+    });
+
     formaEntrega.addEventListener('change', atualizarCamposEntrega);
     cepEntrega.addEventListener('input', () => {
         if (formaEntrega.value === 'Entrega') {
             resetarResumoFrete('CEP alterado. Clique em Calcular frete para atualizar o valor.');
+
+            window.clearTimeout(buscaEnderecoTimer);
+            buscaEnderecoTimer = window.setTimeout(() => {
+                buscarEnderecoPorCep(cepEntrega.value, true);
+            }, 450);
         }
     });
     cepEntrega.addEventListener('keydown', (event) => {
