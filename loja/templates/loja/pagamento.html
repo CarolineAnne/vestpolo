@@ -1,0 +1,419 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento do pedido | VestPolo</title>
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #222;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header a {
+            color: white;
+        }
+
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .brand-logo {
+            height: 32px;
+            width: auto;
+            border-radius: 5px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: bold;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            transition: 0.25s ease;
+        }
+
+        .back-link:hover {
+            background: #25D366;
+            border-color: #25D366;
+            color: #111;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.8fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .box {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            min-width: 0;
+        }
+
+        h1,
+        h2 {
+            margin-top: 0;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .status {
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 16px 0;
+            font-weight: bold;
+            background: #ecfff3;
+            color: #128a3c;
+            border: 1px solid #bdf3ce;
+        }
+
+        .status.aviso {
+            background: #fff8e5;
+            color: #8a5c00;
+            border-color: #ffe0a3;
+        }
+
+        .pagamento-metodo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #128a3c;
+            font-weight: bold;
+            background: #ecfff3;
+            border: 1px solid #bdf3ce;
+            border-radius: 999px;
+            padding: 9px 12px;
+            margin: 10px 0 18px;
+        }
+
+        .pix-area {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .pix-qr {
+            width: 100%;
+            max-width: 280px;
+            border: 1px solid #e2e2e2;
+            border-radius: 8px;
+            padding: 12px;
+            background: #fff;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 126px;
+            resize: vertical;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 12px;
+            font: 13px/1.4 Arial, sans-serif;
+            color: #222;
+        }
+
+        .aviso-box {
+            border: 1px solid #ffe0a3;
+            background: #fff8e5;
+            color: #7a5500;
+            border-radius: 8px;
+            padding: 14px;
+            line-height: 1.5;
+        }
+
+        .acao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            min-height: 48px;
+            border-radius: 12px;
+            border: none;
+            background: #25D366;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 14px;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .acao:hover {
+            background: #1ebe5d;
+        }
+
+        .acao.secundaria {
+            background: #111;
+        }
+
+        .acao.secundaria:hover {
+            background: #333;
+        }
+
+        .resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: #555;
+            margin-top: 12px;
+        }
+
+        .resumo-linha strong {
+            color: #222;
+            text-align: right;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid #ddd;
+            padding-top: 18px;
+            margin-top: 18px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .item {
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .item strong {
+            display: block;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 900px) {
+            header {
+                padding: 16px 22px;
+                flex-wrap: wrap;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+                margin: 28px auto;
+            }
+
+            .pix-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 18px;
+            }
+
+            .container {
+                width: calc(100% - 24px);
+                margin: 24px auto;
+            }
+
+            .box {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .total {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}" class="brand-link">
+        <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo" class="brand-logo">
+        <span>VestPolo</span>
+    </a>
+    <a href="{% url 'home' %}" class="back-link"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+</header>
+
+<main class="container">
+    <section class="box">
+        <h1>Pagamento do pedido #{{ pedido.id }}</h1>
+        <p>Confira os dados e finalize pelo metodo escolhido.</p>
+
+        {% if status_retorno == "aprovado" %}
+            <div class="status"><i class="fa-solid fa-circle-check"></i> Pagamento aprovado ou em confirmacao.</div>
+        {% elif status_retorno == "pendente" %}
+            <div class="status aviso"><i class="fa-solid fa-clock"></i> Pagamento pendente. Aguarde a confirmacao.</div>
+        {% elif status_retorno == "recusado" %}
+            <div class="status aviso"><i class="fa-solid fa-triangle-exclamation"></i> Pagamento nao aprovado. Tente novamente ou fale pelo WhatsApp.</div>
+        {% endif %}
+
+        <div class="pagamento-metodo">
+            {% if pedido.forma_pagamento == "Pix" %}
+                <i class="fa-brands fa-pix"></i>
+            {% elif pedido.forma_pagamento == "Boleto" %}
+                <i class="fa-solid fa-barcode"></i>
+            {% elif "Cartao" in pedido.forma_pagamento %}
+                <i class="fa-regular fa-credit-card"></i>
+            {% else %}
+                <i class="fa-solid fa-handshake"></i>
+            {% endif %}
+            <span>{{ pedido.forma_pagamento }}</span>
+        </div>
+
+        {% if pedido.forma_pagamento == "Pix" %}
+            {% if pix_codigo %}
+                <div class="pix-area">
+                    <img src="{{ pix_qrcode_url }}" alt="QR Code Pix" class="pix-qr">
+                    <div>
+                        <h2>Pix copia e cola</h2>
+                        <textarea id="pixCodigo" readonly>{{ pix_codigo }}</textarea>
+                        <button type="button" class="acao" id="copiarPix">
+                            <i class="fa-regular fa-copy"></i> Copiar codigo Pix
+                        </button>
+                    </div>
+                </div>
+            {% else %}
+                <div class="aviso-box">
+                    Para gerar o QR Code Pix automaticamente, configure a chave Pix da loja no Render usando a variavel PIX_CHAVE.
+                </div>
+            {% endif %}
+        {% elif "Cartao" in pedido.forma_pagamento %}
+            {% if mercado_pago_url %}
+                <a href="{{ mercado_pago_url }}" class="acao">
+                    <i class="fa-regular fa-credit-card"></i> Pagar com cartao em ambiente seguro
+                </a>
+            {% else %}
+                <div class="aviso-box">
+                    Para receber cartao online, conecte uma conta Mercado Pago no Render usando MERCADO_PAGO_ACCESS_TOKEN.
+                </div>
+            {% endif %}
+        {% elif pedido.forma_pagamento == "Boleto" %}
+            {% if mercado_pago_url %}
+                <a href="{{ mercado_pago_url }}" class="acao">
+                    <i class="fa-solid fa-barcode"></i> Gerar boleto seguro
+                </a>
+            {% else %}
+                <div class="aviso-box">
+                    Para gerar boleto real, conecte uma conta Mercado Pago no Render usando MERCADO_PAGO_ACCESS_TOKEN.
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if mercado_pago_url and pedido.forma_pagamento == "Pix" %}
+            <a href="{{ mercado_pago_url }}" class="acao secundaria">
+                <i class="fa-solid fa-shield-halved"></i> Pagar pelo Mercado Pago
+            </a>
+        {% endif %}
+
+        <a href="{{ whatsapp_url }}" class="acao secundaria">
+            <i class="fa-brands fa-whatsapp"></i> Enviar pedido no WhatsApp
+        </a>
+    </section>
+
+    <aside class="box">
+        <h2>Resumo</h2>
+
+        {% for item in pedido.itens.all %}
+            <div class="item">
+                <strong>{{ item.produto.nome }}</strong>
+                <span>Tamanho: {{ item.tamanho }}</span><br>
+                <span>Cor: {{ item.cor }}</span><br>
+                <span>Quantidade: {{ item.quantidade }}</span><br>
+                <span>Subtotal: R$ {{ item.subtotal }}</span>
+            </div>
+        {% endfor %}
+
+        <div class="resumo-linha">
+            <span>Produtos</span>
+            <strong>R$ {{ pedido.subtotal }}</strong>
+        </div>
+        <div class="resumo-linha">
+            <span>Frete</span>
+            <strong>R$ {{ pedido.valor_frete }}</strong>
+        </div>
+        <div class="total">
+            <span>Total</span>
+            <span>R$ {{ pedido.total }}</span>
+        </div>
+    </aside>
+</main>
+
+<script>
+    const copiarPix = document.getElementById('copiarPix');
+    const pixCodigo = document.getElementById('pixCodigo');
+
+    if (copiarPix && pixCodigo) {
+        copiarPix.addEventListener('click', async () => {
+            await navigator.clipboard.writeText(pixCodigo.value);
+            copiarPix.innerHTML = '<i class="fa-solid fa-circle-check"></i> Codigo copiado';
+        });
+    }
+</script>
+
+</body>
+</html>

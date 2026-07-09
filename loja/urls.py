@@ -14,6 +14,7 @@ urlpatterns = [
     path('menos/<str:chave>/', views.diminuir_quantidade, name='menos'),
     path('finalizar-whatsapp/', views.finalizar_whatsapp, name='finalizar_whatsapp'),
     path('checkout/', views.checkout, name='checkout'),
+    path('pagamento/<int:pedido_id>/', views.pagamento_pedido, name='pagamento_pedido'),
     path('cadastro/', views.cadastro, name='cadastro'),
     path('login/', views.login_usuario, name='login'),
     path('logout/', views.logout_usuario, name='logout'),

@@ -186,6 +186,113 @@
             display: block;
         }
 
+        .pagamentos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .pagamento-opcao {
+            position: relative;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .pagamento-opcao input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: auto;
+        }
+
+        .pagamento-card {
+            min-height: 78px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #d8d8d8;
+            border-radius: 8px;
+            padding: 12px;
+            background: #fff;
+            transition: 0.25s ease;
+        }
+
+        .pagamento-opcao input:checked + .pagamento-card {
+            border-color: #25D366;
+            background: #ecfff3;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.12);
+        }
+
+        .pagamento-icone {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #128a3c;
+            background: #e7f8ee;
+            flex: 0 0 auto;
+        }
+
+        .pagamento-card strong,
+        .pagamento-card small {
+            display: block;
+            line-height: 1.25;
+        }
+
+        .pagamento-card strong {
+            color: #222;
+            font-size: 14px;
+        }
+
+        .pagamento-card small {
+            color: #666;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .pagamento-detalhes {
+            display: none;
+            margin-top: 12px;
+            border: 1px solid #dff4e6;
+            border-radius: 8px;
+            background: #fbfffc;
+            padding: 14px;
+        }
+
+        .pagamento-detalhes.ativo {
+            display: block;
+        }
+
+        .pagamento-detalhes h3 {
+            margin: 0 0 8px;
+            font-size: 17px;
+        }
+
+        .pagamento-detalhes p {
+            margin: 0 0 12px;
+            font-size: 14px;
+        }
+
+        .cartao-preview {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 12px;
+        }
+
+        .pagamento-alerta {
+            border: 1px solid #ffe0a3;
+            background: #fff8e5;
+            color: #7a5500;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            margin-top: 12px;
+        }
+
         .item {
             border-bottom: 1px solid #eee;
             padding: 12px 0;
@@ -352,6 +459,12 @@
                 gap: 0;
             }
 
+            .pagamentos-grid,
+            .cartao-preview {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
             .item {
                 font-size: 14px;
             }
@@ -480,12 +593,80 @@
             </button>
 
             <label>Forma de pagamento</label>
-            <select name="forma_pagamento" required>
-                <option value="">Selecione</option>
+            <div class="pagamentos-grid" id="pagamentosGrid">
                 {% for forma in formas_pagamento %}
-                    <option value="{{ forma }}">{{ forma }}</option>
+                    <label class="pagamento-opcao">
+                        <input type="radio" name="forma_pagamento" value="{{ forma }}" data-pagamento-radio required>
+                        <span class="pagamento-card">
+                            <span class="pagamento-icone">
+                                {% if forma == "Pix" %}
+                                    <i class="fa-brands fa-pix"></i>
+                                {% elif forma == "Boleto" %}
+                                    <i class="fa-solid fa-barcode"></i>
+                                {% elif "Cartao" in forma %}
+                                    <i class="fa-regular fa-credit-card"></i>
+                                {% elif forma == "Dinheiro na retirada" %}
+                                    <i class="fa-solid fa-money-bill-wave"></i>
+                                {% else %}
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                {% endif %}
+                            </span>
+                            <span>
+                                <strong>{{ forma }}</strong>
+                                {% if forma == "Pix" %}
+                                    <small>QR Code e copia e cola</small>
+                                {% elif forma == "Boleto" %}
+                                    <small>Boleto pela etapa segura</small>
+                                {% elif "Cartao" in forma %}
+                                    <small>Pagamento online seguro</small>
+                                {% elif forma == "Dinheiro na retirada" %}
+                                    <small>Acerto na retirada</small>
+                                {% else %}
+                                    <small>Atendimento final</small>
+                                {% endif %}
+                            </span>
+                        </span>
+                    </label>
                 {% endfor %}
-            </select>
+            </div>
+
+            <div class="pagamento-detalhes" data-pagamento-detalhe="Pix">
+                <h3><i class="fa-brands fa-pix"></i> Pix</h3>
+                <p>Depois de enviar o pedido, o site abre a tela com QR Code e codigo Pix para copiar.</p>
+            </div>
+
+            <div class="pagamento-detalhes" data-pagamento-detalhe="Cartao">
+                <h3><i class="fa-regular fa-credit-card"></i> Cartao</h3>
+                <p>Os dados do cartao devem ser confirmados em ambiente seguro de pagamento.</p>
+
+                <div class="cartao-preview">
+                    <div>
+                        <label>Numero do cartao</label>
+                        <input type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000">
+                    </div>
+                    <div>
+                        <label>Nome no cartao</label>
+                        <input type="text" autocomplete="cc-name" placeholder="Como esta no cartao">
+                    </div>
+                    <div>
+                        <label>Validade</label>
+                        <input type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA">
+                    </div>
+                    <div>
+                        <label>CVV</label>
+                        <input type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="000">
+                    </div>
+                </div>
+
+                <div class="pagamento-alerta">
+                    Estes campos nao sao salvos pelo site. Para cobrar cartao de verdade, conectamos Mercado Pago, Asaas ou PagSeguro.
+                </div>
+            </div>
+
+            <div class="pagamento-detalhes" data-pagamento-detalhe="Boleto">
+                <h3><i class="fa-solid fa-barcode"></i> Boleto</h3>
+                <p>Depois de enviar o pedido, a tela de pagamento mostra a opcao de gerar o boleto pelo gateway seguro configurado.</p>
+            </div>
 
             <label>Observação</label>
             <textarea name="observacao" placeholder="Ex: nome do curso, cor desejada, bordado, prazo..."></textarea>
@@ -507,7 +688,7 @@
             <label>Detalhes do bordado</label>
             <textarea name="observacao_item" placeholder="Ex: bordado no lado esquerdo, logo nas costas, manga com nome..."></textarea>
 
-            <button type="submit">Enviar pedido pelo WhatsApp</button>
+            <button type="submit" id="btnFinalizarPedido">Enviar pedido pelo WhatsApp</button>
         </form>
     </div>
 
@@ -563,6 +744,9 @@
     const freteInfo = document.getElementById('freteInfo');
     const totalResumo = document.getElementById('totalResumo');
     const btnCalcularFrete = document.getElementById('btnCalcularFrete');
+    const btnFinalizarPedido = document.getElementById('btnFinalizarPedido');
+    const pagamentoRadios = document.querySelectorAll('[data-pagamento-radio]');
+    const pagamentoDetalhes = document.querySelectorAll('[data-pagamento-detalhe]');
 
     const subtotalPedido = parseFloat((resumoValores.dataset.subtotal || '0').replace(',', '.'));
     const totalItens = parseInt(resumoValores.dataset.totalItens || '1', 10);
@@ -658,6 +842,30 @@
 
         if (tipo) {
             enderecoInfo.classList.add(tipo);
+        }
+    }
+
+    function atualizarPagamento() {
+        const selecionado = document.querySelector('[data-pagamento-radio]:checked');
+        const forma = selecionado ? selecionado.value : '';
+        const painelAtivo = forma === 'Cartao de credito' || forma === 'Cartao de debito'
+            ? 'Cartao'
+            : forma;
+
+        pagamentoDetalhes.forEach((painel) => {
+            painel.classList.toggle('ativo', painel.dataset.pagamentoDetalhe === painelAtivo);
+        });
+
+        if (!forma) {
+            btnFinalizarPedido.textContent = 'Enviar pedido pelo WhatsApp';
+        } else if (forma === 'Pix') {
+            btnFinalizarPedido.textContent = 'Continuar para Pix';
+        } else if (forma === 'Boleto') {
+            btnFinalizarPedido.textContent = 'Continuar para boleto';
+        } else if (forma === 'Cartao de credito' || forma === 'Cartao de debito') {
+            btnFinalizarPedido.textContent = 'Continuar para pagamento seguro';
+        } else {
+            btnFinalizarPedido.textContent = 'Enviar pedido pelo WhatsApp';
         }
     }
 
@@ -833,7 +1041,11 @@
         }
     });
     btnCalcularFrete.addEventListener('click', calcularFretePeloBotao);
+    pagamentoRadios.forEach((radio) => {
+        radio.addEventListener('change', atualizarPagamento);
+    });
     atualizarCamposEntrega();
+    atualizarPagamento();
 </script>
 
 </body>

@@ -177,3 +177,11 @@ MELHOR_ENVIO_USER_AGENT = config(
     'MELHOR_ENVIO_USER_AGENT',
     default='VestPolo - vestpolopolos@gmail.com'
 )
+
+
+# Pagamentos
+PIX_CHAVE = config('PIX_CHAVE', default='')
+PIX_NOME_RECEBEDOR = config('PIX_NOME_RECEBEDOR', default='VESTPOLO')
+PIX_CIDADE_RECEBEDOR = config('PIX_CIDADE_RECEBEDOR', default='PETROLINA')
+
+MERCADO_PAGO_ACCESS_TOKEN = config('MERCADO_PAGO_ACCESS_TOKEN', default='')
