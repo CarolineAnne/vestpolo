@@ -487,7 +487,7 @@
 
     <div class="titulo">
         <h1><i class="fa-solid fa-cart-shopping"></i> Meu carrinho</h1>
-        <p>Revise seus produtos antes de finalizar pelo WhatsApp.</p>
+        <p>Revise seus produtos antes de calcular o frete e escolher o pagamento.</p>
     </div>
 
     {% if itens %}
@@ -535,8 +535,8 @@
             </div>
 
             <div class="linha-resumo">
-                <span>Atendimento</span>
-                <strong>WhatsApp</strong>
+                <span>Proxima etapa</span>
+                <strong>Frete e pagamento</strong>
             </div>
 
             <div class="total">
@@ -544,8 +544,8 @@
                 <span>R$ {{ total }}</span>
             </div>
 
-            <a href="{% url 'finalizar_whatsapp' %}">
-                <button class="finalizar"><i class="fa-brands fa-whatsapp"></i> Finalizar pelo WhatsApp</button>
+            <a href="{% url 'checkout' %}">
+                <button class="finalizar"><i class="fa-solid fa-credit-card"></i> Ir para pagamento</button>
             </a>
 
             <a href="{% url 'home' %}">
