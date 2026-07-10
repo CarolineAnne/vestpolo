@@ -1,0 +1,252 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    body {
+        background: #f4f4f4;
+    }
+
+    .print-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin: 20px auto;
+        max-width: 900px;
+    }
+
+    .print-toolbar a,
+    .print-toolbar button {
+        border: none;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .print-toolbar a {
+        background: #222;
+        color: #fff;
+    }
+
+    .print-toolbar button {
+        background: #25D366;
+        color: #fff;
+    }
+
+    .print-page {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        background: #fff;
+        color: #111;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+        font-family: Arial, sans-serif;
+    }
+
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        border-bottom: 2px solid #111;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+    }
+
+    .print-header h1 {
+        margin: 0 0 6px;
+        font-size: 28px;
+    }
+
+    .print-header p,
+    .section p {
+        margin: 5px 0;
+        line-height: 1.45;
+    }
+
+    .badge {
+        display: inline-block;
+        border: 1px solid #111;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .section {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 18px;
+        margin-bottom: 18px;
+    }
+
+    .section h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0;
+    }
+
+    .address-label {
+        border: 2px solid #111;
+        border-radius: 8px;
+        padding: 22px;
+        margin-bottom: 18px;
+        min-height: 220px;
+    }
+
+    .address-label h2 {
+        margin: 0 0 16px;
+        font-size: 17px;
+        text-transform: uppercase;
+        letter-spacing: 0;
+    }
+
+    .recipient {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .address-line {
+        font-size: 19px;
+        line-height: 1.45;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .item {
+        border-bottom: 1px solid #e8e8e8;
+        padding: 10px 0;
+    }
+
+    .item:last-child {
+        border-bottom: none;
+    }
+
+    .muted {
+        color: #666;
+    }
+
+    @media print {
+        #header,
+        #nav-sidebar,
+        .breadcrumbs,
+        .print-toolbar {
+            display: none !important;
+        }
+
+        body,
+        #content,
+        .print-page {
+            background: #fff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .print-page {
+            max-width: none;
+        }
+
+        .section,
+        .address-label {
+            break-inside: avoid;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="print-toolbar">
+    <a href="{% url 'admin:loja_pedido_change' pedido.id %}">Voltar ao pedido</a>
+    <button type="button" onclick="window.print()">Imprimir dados de envio</button>
+</div>
+
+<div class="print-page">
+    <div class="print-header">
+        <div>
+            <h1>VestPolo</h1>
+            <p>Dados de envio para Correios/transportadora</p>
+        </div>
+        <div>
+            <span class="badge">Pedido #{{ pedido.id }}</span>
+            <p>{{ pedido.data_pedido|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    <div class="address-label">
+        <h2>Destinatario</h2>
+        <div class="recipient">{{ pedido.nome_cliente|default:"Cliente nao informado" }}</div>
+
+        {% if pedido.forma_entrega == "Entrega" %}
+            <div class="address-line">
+                {{ pedido.endereco }}, {{ pedido.numero }}{% if pedido.complemento %} - {{ pedido.complemento }}{% endif %}<br>
+                {{ pedido.bairro }}<br>
+                {{ pedido.cidade }} / {{ pedido.estado }}<br>
+                CEP: {{ pedido.cep_entrega }}
+            </div>
+        {% else %}
+            <div class="address-line">
+                Forma de entrega: {{ pedido.forma_entrega }}<br>
+                Endereco de entrega nao informado para este pedido.
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="grid">
+        <section class="section">
+            <h2>Cliente</h2>
+            <p><strong>Nome:</strong> {{ pedido.nome_cliente|default:"-" }}</p>
+            <p><strong>Telefone:</strong> {{ pedido.telefone|default:"-" }}</p>
+            <p><strong>Entrega:</strong> {{ pedido.forma_entrega|default:"-" }}</p>
+            <p><strong>Pagamento:</strong> {{ pedido.forma_pagamento|default:"-" }} - {{ pedido.status_pagamento }}</p>
+        </section>
+
+        <section class="section">
+            <h2>Pedido</h2>
+            <p><strong>Status:</strong> {{ pedido.status }}</p>
+            <p><strong>Frete:</strong> R$ {{ pedido.valor_frete }}</p>
+            <p><strong>Servico:</strong> {{ pedido.servico_frete|default:"-" }}</p>
+            <p><strong>Total:</strong> R$ {{ pedido.total }}</p>
+        </section>
+    </div>
+
+    <section class="section">
+        <h2>Itens</h2>
+        {% for item in pedido.itens.all %}
+            <div class="item">
+                <p><strong>{{ item.produto.nome }}</strong></p>
+                <p class="muted">
+                    Quantidade: {{ item.quantidade }} |
+                    Tamanho: {{ item.tamanho|default:"-" }} |
+                    Cor: {{ item.cor|default:"-" }}
+                </p>
+                {% if item.curso or item.nome_bordado or item.observacao %}
+                    <p class="muted">
+                        {% if item.curso %}Curso/Turma/Empresa: {{ item.curso }}{% endif %}
+                        {% if item.nome_bordado %} | Nome bordado: {{ item.nome_bordado }}{% endif %}
+                        {% if item.observacao %} | Detalhes: {{ item.observacao }}{% endif %}
+                    </p>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Nenhum item encontrado.</p>
+        {% endfor %}
+    </section>
+
+    {% if pedido.observacao %}
+        <section class="section">
+            <h2>Observacao</h2>
+            <p>{{ pedido.observacao }}</p>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

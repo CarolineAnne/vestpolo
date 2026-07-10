@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.shortcuts import get_object_or_404, render
+from django.urls import path, reverse
+from django.utils.html import format_html
 from .models import Produto, Pedido, ItemPedido, Favorito
 
 @admin.register(Favorito)
@@ -60,6 +63,7 @@ class PedidoAdmin(admin.ModelAdmin):
         'status_pagamento',
         'total',
         'data_pedido',
+        'imprimir_envio',
     )
 
     list_editable = ('status', 'status_pagamento')
@@ -79,7 +83,7 @@ class PedidoAdmin(admin.ModelAdmin):
         'observacao',
     )
 
-    readonly_fields = ('data_pedido',)
+    readonly_fields = ('data_pedido', 'imprimir_envio')
 
     fieldsets = (
         ('Dados do cliente', {
@@ -116,6 +120,7 @@ class PedidoAdmin(admin.ModelAdmin):
                 'status_pagamento',
                 'mercado_pago_id',
                 'data_pedido',
+                'imprimir_envio',
             )
         }),
     )
@@ -125,3 +130,39 @@ class PedidoAdmin(admin.ModelAdmin):
     list_per_page = 20
 
     ordering = ('-data_pedido',)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                '<int:pedido_id>/imprimir-envio/',
+                self.admin_site.admin_view(self.imprimir_envio_view),
+                name='loja_pedido_imprimir_envio',
+            ),
+        ]
+        return custom_urls + urls
+
+    def imprimir_envio(self, obj):
+        if not obj or not obj.id:
+            return '-'
+
+        url = reverse('admin:loja_pedido_imprimir_envio', args=[obj.id])
+        return format_html(
+            '<a class="button" href="{}" target="_blank">Imprimir envio</a>',
+            url
+        )
+
+    imprimir_envio.short_description = 'Correios'
+
+    def imprimir_envio_view(self, request, pedido_id):
+        pedido = get_object_or_404(
+            Pedido.objects.prefetch_related('itens__produto'),
+            id=pedido_id
+        )
+
+        context = {
+            **self.admin_site.each_context(request),
+            'title': f'Imprimir envio - Pedido #{pedido.id}',
+            'pedido': pedido,
+        }
+        return render(request, 'admin/loja/pedido/imprimir_envio.html', context)
