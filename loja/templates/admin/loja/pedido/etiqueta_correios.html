@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etiqueta Correios - Pedido #{{ pedido.id }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3f3f3;
+            color: #111;
+            font-family: Arial, sans-serif;
+        }
+
+        .toolbar {
+            width: 80mm;
+            max-width: calc(100% - 16px);
+            margin: 12px auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        .toolbar a,
+        .toolbar button {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .toolbar a {
+            background: #222;
+            color: #fff;
+        }
+
+        .toolbar button {
+            background: #25D366;
+            color: #fff;
+        }
+
+        .etiqueta {
+            width: 80mm;
+            max-width: calc(100% - 16px);
+            margin: 0 auto 20px;
+            padding: 4mm;
+            background: #fff;
+            border: 1px solid #111;
+            color: #111;
+        }
+
+        .topo {
+            border-bottom: 1px dashed #111;
+            padding-bottom: 3mm;
+            margin-bottom: 3mm;
+            text-align: center;
+        }
+
+        .marca {
+            font-size: 17px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .pedido {
+            font-size: 12px;
+            margin-top: 2mm;
+        }
+
+        .bloco {
+            border-bottom: 1px dashed #111;
+            padding-bottom: 3mm;
+            margin-bottom: 3mm;
+        }
+
+        .bloco:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .titulo {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 2mm;
+        }
+
+        .nome {
+            font-size: 18px;
+            line-height: 1.18;
+            font-weight: 800;
+            text-transform: uppercase;
+            word-break: break-word;
+        }
+
+        .linha {
+            font-size: 14px;
+            line-height: 1.28;
+            margin-top: 1.5mm;
+            word-break: break-word;
+        }
+
+        .cep {
+            display: inline-block;
+            border: 2px solid #111;
+            padding: 2mm 3mm;
+            margin-top: 3mm;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .telefone,
+        .observacao {
+            font-size: 12px;
+            line-height: 1.25;
+        }
+
+        .aviso {
+            border: 2px solid #111;
+            padding: 3mm;
+            font-size: 14px;
+            line-height: 1.3;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        @page {
+            size: 80mm auto;
+            margin: 2mm;
+        }
+
+        @media print {
+            html,
+            body {
+                width: 80mm;
+                background: #fff;
+            }
+
+            .toolbar {
+                display: none;
+            }
+
+            .etiqueta {
+                width: 76mm;
+                max-width: none;
+                margin: 0;
+                padding: 2mm;
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <a href="{% url 'admin:loja_pedido_change' pedido.id %}">Voltar</a>
+        <button type="button" onclick="window.print()">Imprimir</button>
+    </div>
+
+    <main class="etiqueta">
+        <section class="topo">
+            <div class="marca">VestPolo</div>
+            <div class="pedido">Pedido #{{ pedido.id }} - {{ pedido.data_pedido|date:"d/m/Y H:i" }}</div>
+        </section>
+
+        <section class="bloco">
+            <div class="titulo">Destinatario</div>
+            <div class="nome">{{ pedido.nome_cliente|default:"Cliente nao informado" }}</div>
+
+            {% if pedido.forma_entrega == "Entrega" %}
+                <div class="linha">
+                    {{ pedido.endereco }}, {{ pedido.numero }}{% if pedido.complemento %}<br>{{ pedido.complemento }}{% endif %}
+                </div>
+                <div class="linha">{{ pedido.bairro }}</div>
+                <div class="linha">{{ pedido.cidade }} / {{ pedido.estado }}</div>
+                <div class="cep">{{ pedido.cep_entrega }}</div>
+            {% else %}
+                <div class="aviso">
+                    {{ pedido.forma_entrega }}<br>
+                    Pedido sem endereco de entrega.
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="bloco">
+            <div class="titulo">Contato</div>
+            <div class="telefone">{{ pedido.telefone|default:"Telefone nao informado" }}</div>
+        </section>
+
+        {% if pedido.observacao %}
+            <section class="bloco">
+                <div class="titulo">Obs.</div>
+                <div class="observacao">{{ pedido.observacao }}</div>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>

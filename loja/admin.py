@@ -64,6 +64,7 @@ class PedidoAdmin(admin.ModelAdmin):
         'total',
         'data_pedido',
         'imprimir_envio',
+        'imprimir_etiqueta',
     )
 
     list_editable = ('status', 'status_pagamento')
@@ -83,7 +84,7 @@ class PedidoAdmin(admin.ModelAdmin):
         'observacao',
     )
 
-    readonly_fields = ('data_pedido', 'imprimir_envio')
+    readonly_fields = ('data_pedido', 'imprimir_envio', 'imprimir_etiqueta')
 
     fieldsets = (
         ('Dados do cliente', {
@@ -121,6 +122,7 @@ class PedidoAdmin(admin.ModelAdmin):
                 'mercado_pago_id',
                 'data_pedido',
                 'imprimir_envio',
+                'imprimir_etiqueta',
             )
         }),
     )
@@ -139,6 +141,11 @@ class PedidoAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.imprimir_envio_view),
                 name='loja_pedido_imprimir_envio',
             ),
+            path(
+                '<int:pedido_id>/etiqueta-correios/',
+                self.admin_site.admin_view(self.etiqueta_correios_view),
+                name='loja_pedido_etiqueta_correios',
+            ),
         ]
         return custom_urls + urls
 
@@ -154,6 +161,18 @@ class PedidoAdmin(admin.ModelAdmin):
 
     imprimir_envio.short_description = 'Correios'
 
+    def imprimir_etiqueta(self, obj):
+        if not obj or not obj.id:
+            return '-'
+
+        url = reverse('admin:loja_pedido_etiqueta_correios', args=[obj.id])
+        return format_html(
+            '<a class="button" href="{}" target="_blank">Etiqueta fina</a>',
+            url
+        )
+
+    imprimir_etiqueta.short_description = 'Etiqueta'
+
     def imprimir_envio_view(self, request, pedido_id):
         pedido = get_object_or_404(
             Pedido.objects.prefetch_related('itens__produto'),
@@ -166,3 +185,16 @@ class PedidoAdmin(admin.ModelAdmin):
             'pedido': pedido,
         }
         return render(request, 'admin/loja/pedido/imprimir_envio.html', context)
+
+    def etiqueta_correios_view(self, request, pedido_id):
+        pedido = get_object_or_404(
+            Pedido.objects.prefetch_related('itens__produto'),
+            id=pedido_id
+        )
+
+        context = {
+            **self.admin_site.each_context(request),
+            'title': f'Etiqueta Correios - Pedido #{pedido.id}',
+            'pedido': pedido,
+        }
+        return render(request, 'admin/loja/pedido/etiqueta_correios.html', context)
