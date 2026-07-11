@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 from .models import Produto, Pedido, ItemPedido, Favorito
@@ -52,6 +52,8 @@ class ItemPedidoInline(admin.TabularInline):
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/loja/pedido/change_form.html'
+
     list_display = (
         'id',
         'nome_cliente',
@@ -198,3 +200,16 @@ class PedidoAdmin(admin.ModelAdmin):
             'pedido': pedido,
         }
         return render(request, 'admin/loja/pedido/etiqueta_correios.html', context)
+
+    def response_change(self, request, obj):
+        if "_salvar_imprimir_envio" in request.POST:
+            return redirect(
+                reverse('admin:loja_pedido_imprimir_envio', args=[obj.id])
+            )
+
+        if "_salvar_imprimir_etiqueta" in request.POST:
+            return redirect(
+                reverse('admin:loja_pedido_etiqueta_correios', args=[obj.id])
+            )
+
+        return super().response_change(request, obj)

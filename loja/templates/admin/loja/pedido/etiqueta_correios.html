@@ -200,6 +200,14 @@
             <div class="telefone">{{ pedido.telefone|default:"Telefone nao informado" }}</div>
         </section>
 
+        <section class="bloco">
+            <div class="titulo">Status</div>
+            <div class="telefone">
+                Pedido: {{ pedido.status }}<br>
+                Pagamento: {{ pedido.status_pagamento }}
+            </div>
+        </section>
+
         {% if pedido.observacao %}
             <section class="bloco">
                 <div class="titulo">Obs.</div>
