@@ -1390,6 +1390,7 @@
             display: none;
         }
         </style>
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 </head>
 
 <body>
@@ -1658,6 +1659,8 @@
 
 </div>
 
+{% include 'loja/includes/footer.html' %}
+{% comment %}
 <footer>
     <div class="footer-container">
 
@@ -1689,6 +1692,7 @@
 
     </div>
 </footer>
+{% endcomment %}
 
 <script>
     function alternarMenu() {

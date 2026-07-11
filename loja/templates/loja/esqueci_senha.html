@@ -131,6 +131,7 @@
             color: #128a3c;
         }
     </style>
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 </head>
 <body>
 
@@ -156,5 +157,6 @@
     <a href="{% url 'login' %}" class="voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para o login</a>
 </div>
 
+{% include 'loja/includes/footer.html' %}
 </body>
 </html>

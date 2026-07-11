@@ -1038,6 +1038,7 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'css/menu-mobile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 </head>
 
 <body>
@@ -1422,9 +1423,12 @@
 </section>
 
 {% endcomment %}
+{% include 'loja/includes/footer.html' %}
+{% comment %}
 <footer>
     VestPolo — Seu curso. Seu estilo. Seu fardamento.
 </footer>
+{% endcomment %}
 
 <script src="{% static 'js/menu-mobile.js' %}"></script>
 <script>
