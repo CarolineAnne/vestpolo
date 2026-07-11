@@ -772,6 +772,7 @@
 
     const subtotalPedido = parseFloat((resumoValores.dataset.subtotal || '0').replace(',', '.'));
     const totalItens = parseInt(resumoValores.dataset.totalItens || '1', 10);
+    const observacaoPrazoEntrega = 'Prazo estimado sujeito a disponibilidade em estoque. Caso demore mais que o estimado, a VestPolo informara o cliente.';
     let buscaEnderecoTimer = null;
     let ultimoCepBuscado = '';
 
@@ -817,7 +818,7 @@
         if (digitos.startsWith('489') || digitos.startsWith('563')) {
             return {
                 valor: 0,
-                descricao: 'Entrega gratis para Petrolina e Juazeiro - ate 2 dias uteis'
+                descricao: `Entrega gratis para Petrolina e Juazeiro - ate 2 dias uteis. ${observacaoPrazoEntrega}`
             };
         }
 
@@ -845,7 +846,7 @@
 
         return {
             valor: base + (extra * (quantidadeFinal - 1)),
-            descricao: `${servico} - ate ${prazo} dias uteis`
+            descricao: `${servico} - ate ${prazo} dias uteis. ${observacaoPrazoEntrega}`
         };
     }
 

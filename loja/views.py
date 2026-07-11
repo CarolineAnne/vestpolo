@@ -35,6 +35,11 @@ PAGAMENTOS_ONLINE = (
     "Boleto",
 )
 
+OBSERVACAO_PRAZO_ENTREGA = (
+    "Prazo estimado sujeito a disponibilidade em estoque. "
+    "Caso demore mais que o estimado, a VestPolo informara o cliente."
+)
+
 NUMERO_WHATSAPP_ATENDIMENTO = "5574999087655"
 
 
@@ -223,6 +228,8 @@ def montar_mensagem_pedido(pedido):
         mensagem += f" ({pedido.servico_frete})"
 
     mensagem += "\n"
+    if pedido.forma_entrega == "Entrega":
+        mensagem += f"Prazo: {OBSERVACAO_PRAZO_ENTREGA}\n"
     mensagem += f"Total: R$ {formatar_moeda(pedido.total)}\n\n"
     mensagem += "Aguardo o atendimento."
 
@@ -316,7 +323,10 @@ def calcular_frete(cep, quantidade_total, forma_entrega):
             "transportadora": "VestPolo",
             "servico": "Entrega local gratuita",
             "prazo": 2,
-            "descricao": "Entrega gratis para Petrolina e Juazeiro - ate 2 dias uteis",
+            "descricao": (
+                "Entrega gratis para Petrolina e Juazeiro - ate 2 dias uteis. "
+                f"{OBSERVACAO_PRAZO_ENTREGA}"
+            ),
         }
 
     if prefixo in (4, 5):
@@ -352,7 +362,10 @@ def calcular_frete(cep, quantidade_total, forma_entrega):
         "transportadora": "Transportadora parceira",
         "servico": servico,
         "prazo": prazo,
-        "descricao": f"{servico} - ate {prazo} dias uteis",
+        "descricao": (
+            f"{servico} - ate {prazo} dias uteis. "
+            f"{OBSERVACAO_PRAZO_ENTREGA}"
+        ),
     }
 
 def home(request):
@@ -818,6 +831,8 @@ def checkout(request):
 
         mensagem += f"Subtotal dos produtos: R$ {formatar_moeda(subtotal_pedido)}\n"
         mensagem += f"Frete: R$ {formatar_moeda(frete['valor'])} ({frete['descricao']})\n"
+        if forma_entrega == "Entrega":
+            mensagem += f"Prazo: {OBSERVACAO_PRAZO_ENTREGA}\n"
         mensagem += f"Total: R$ {formatar_moeda(total_final)}\n\n"
         mensagem += "Aguardo o atendimento."
 

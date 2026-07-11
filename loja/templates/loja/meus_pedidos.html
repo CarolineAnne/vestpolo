@@ -369,6 +369,11 @@
                 Entrega: {{ pedido.forma_entrega }}
                 {% if pedido.servico_frete %} - {{ pedido.servico_frete }}{% endif %}
             </p>
+            {% if pedido.forma_entrega == "Entrega" %}
+                <p class="detalhe">
+                    Prazo estimado sujeito a disponibilidade em estoque. Caso demore mais que o estimado, a VestPolo informara o cliente.
+                </p>
+            {% endif %}
 
             {% if pedido.valor_frete %}
                 <p class="detalhe">Frete: R$ {{ pedido.valor_frete }}</p>

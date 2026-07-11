@@ -396,6 +396,11 @@
             <span>Frete</span>
             <strong>R$ {{ pedido.valor_frete }}</strong>
         </div>
+        {% if pedido.forma_entrega == "Entrega" %}
+            <p class="aviso-box">
+                Prazo estimado sujeito a disponibilidade em estoque. Caso demore mais que o estimado, a VestPolo informara o cliente.
+            </p>
+        {% endif %}
         <div class="total">
             <span>Total</span>
             <span>R$ {{ pedido.total }}</span>
