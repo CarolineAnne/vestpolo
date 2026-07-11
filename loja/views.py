@@ -710,9 +710,24 @@ def checkout(request):
             return redirect('checkout')
 
         if forma_entrega == "Entrega":
-            campos_entrega = [cep_entrega, endereco, numero, bairro, cidade, estado]
-            if any(not campo for campo in campos_entrega):
-                messages.error(request, 'Preencha o endereco completo para entrega.')
+            campos_entrega = {
+                "CEP": cep_entrega,
+                "endereco": endereco,
+                "numero": numero,
+                "bairro": bairro,
+                "cidade": cidade,
+                "estado": estado,
+            }
+            campos_faltando = [
+                nome for nome, valor in campos_entrega.items() if not valor
+            ]
+
+            if campos_faltando:
+                campos = ", ".join(campos_faltando)
+                messages.error(
+                    request,
+                    f"Preencha os campos obrigatorios da entrega: {campos}."
+                )
                 return redirect('checkout')
 
         frete = calcular_frete(cep_entrega, total_itens, forma_entrega)

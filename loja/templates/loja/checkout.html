@@ -136,6 +136,12 @@
             margin-bottom: 6px;
         }
 
+        .campo-obrigatorio::after {
+            content: " *";
+            color: #b00020;
+            font-weight: bold;
+        }
+
         input,
         select,
         textarea {
@@ -184,6 +190,18 @@
 
         .campos-entrega.ativo {
             display: block;
+        }
+
+        .aviso-obrigatorio {
+            background: #fff8e5;
+            border: 1px solid #ffe0a3;
+            border-radius: 8px;
+            color: #7a5500;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 1.4;
+            padding: 10px 12px;
+            margin: 12px 0 4px;
         }
 
         .pagamentos-grid {
@@ -553,16 +571,20 @@
             </select>
 
             <div class="campos-entrega" id="camposEntrega">
-                <label>CEP de entrega</label>
+                <div class="aviso-obrigatorio">
+                    Campos com * sao obrigatorios para entrega.
+                </div>
+
+                <label class="campo-obrigatorio">CEP de entrega</label>
                 <input type="text" name="cep_entrega" id="cepEntrega" inputmode="numeric" maxlength="9" placeholder="Ex: 56300-000">
                 <div class="endereco-info" id="enderecoInfo">Informe o CEP para preencher o endereco automaticamente.</div>
 
-                <label>Endereco</label>
+                <label class="campo-obrigatorio">Endereco</label>
                 <input type="text" name="endereco" id="enderecoEntrega" data-entrega-obrigatorio placeholder="Rua, avenida, travessa...">
 
                 <div class="grid-2">
                     <div>
-                        <label>Numero</label>
+                        <label class="campo-obrigatorio">Numero</label>
                         <input type="text" name="numero" data-entrega-obrigatorio>
                     </div>
 
@@ -572,17 +594,17 @@
                     </div>
                 </div>
 
-                <label>Bairro</label>
+                <label class="campo-obrigatorio">Bairro</label>
                 <input type="text" name="bairro" id="bairroEntrega" data-entrega-obrigatorio>
 
                 <div class="grid-2">
                     <div>
-                        <label>Cidade</label>
+                        <label class="campo-obrigatorio">Cidade</label>
                         <input type="text" name="cidade" id="cidadeEntrega" data-entrega-obrigatorio>
                     </div>
 
                     <div>
-                        <label>Estado</label>
+                        <label class="campo-obrigatorio">Estado</label>
                         <input type="text" name="estado" id="estadoEntrega" data-entrega-obrigatorio maxlength="2" placeholder="UF">
                     </div>
                 </div>
