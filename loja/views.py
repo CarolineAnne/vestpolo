@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from urllib.parse import quote
 from decimal import Decimal
-from .models import Produto, Pedido, ItemPedido, Favorito
+from .models import Produto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -415,6 +415,7 @@ def home(request):
 
 def personalizados(request):
     produtos = Produto.objects.filter(categoria='Personalizado')
+    adicionais_personalizacao = AdicionalPersonalizacao.objects.filter(ativo=True)
 
     if request.user.is_authenticated:
         favoritos = list(
@@ -438,6 +439,7 @@ def personalizados(request):
 
     return render(request, 'loja/personalizados.html', {
         'produtos': produtos,
+        'adicionais_personalizacao': adicionais_personalizacao,
         'favoritos': favoritos,
         'total_itens': total_itens,
         'total_favoritos': total_favoritos

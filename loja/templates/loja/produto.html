@@ -245,10 +245,29 @@
             border: 2px solid rgba(255, 255, 255, 0.95);
             border-radius: 50%;
             background-repeat: no-repeat;
-            display: none;
             pointer-events: none;
             z-index: 20;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(-9999px, -9999px, 0);
+            transition: opacity 0.12s ease;
+            will-change: transform, background-position;
+        }
+
+        .zoom-lente.ativo {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (hover: none), (pointer: coarse) {
+            .zoom-container {
+                cursor: default;
+            }
+
+            .zoom-lente {
+                display: none;
+            }
         }
 
         .slide-produto {
@@ -1363,8 +1382,14 @@
 
             if (!imagemAtiva) return;
 
+            const rect = container.getBoundingClientRect();
+
             lente.style.backgroundImage = `url('${imagemAtiva.src}')`;
-            lente.style.backgroundSize = `${imagemAtiva.offsetWidth * zoom}px ${imagemAtiva.offsetHeight * zoom}px`;
+            lente.style.backgroundSize = `${rect.width * zoom}px ${rect.height * zoom}px`;
+        }
+
+        function esconderLupa() {
+            lente.classList.remove("ativo");
         }
 
         function moverLupa(event) {
@@ -1372,7 +1397,7 @@
 
             if (!imagemAtiva) return;
 
-            const rect = imagemAtiva.getBoundingClientRect();
+            const rect = container.getBoundingClientRect();
 
             const clientX = event.touches ? event.touches[0].clientX : event.clientX;
             const clientY = event.touches ? event.touches[0].clientY : event.clientY;
@@ -1381,16 +1406,15 @@
             let y = clientY - rect.top;
 
             if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-                lente.style.display = "none";
+                esconderLupa();
                 return;
             }
 
             const metadeLargura = lente.offsetWidth / 2;
             const metadeAltura = lente.offsetHeight / 2;
 
-            lente.style.display = "block";
-            lente.style.left = `${x - metadeLargura}px`;
-            lente.style.top = `${y - metadeAltura}px`;
+            lente.classList.add("ativo");
+            lente.style.transform = `translate3d(${x - metadeLargura}px, ${y - metadeAltura}px, 0)`;
 
             const posicaoX = -(x * zoom - metadeLargura);
             const posicaoY = -(y * zoom - metadeAltura);
@@ -1405,7 +1429,7 @@
         container.addEventListener("mousemove", moverLupa);
 
         container.addEventListener("mouseleave", function () {
-            lente.style.display = "none";
+            esconderLupa();
         });
 
         container.addEventListener("touchstart", function (event) {
@@ -1419,7 +1443,7 @@
         }, { passive: false });
 
         container.addEventListener("touchend", function () {
-            lente.style.display = "none";
+            esconderLupa();
         });
 
         const imagens = container.querySelectorAll(".slide-produto img");
@@ -1464,7 +1488,7 @@
         }
 
         if (lente) {
-            lente.style.display = "none";
+            lente.classList.remove("ativo");
         }
     }
 

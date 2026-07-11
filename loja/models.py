@@ -60,6 +60,22 @@ class Produto(models.Model):
         return self.nome
 
 
+class AdicionalPersonalizacao(models.Model):
+    nome = models.CharField(max_length=100)
+    descricao = models.CharField(max_length=180, blank=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    ativo = models.BooleanField(default=True)
+    ordem = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ('ordem', 'nome')
+        verbose_name = 'Adicional de personalizacao'
+        verbose_name_plural = 'Adicionais de personalizacao'
+
+    def __str__(self):
+        return self.nome
+
+
 class Pedido(models.Model):
 
     STATUS_CHOICES = [

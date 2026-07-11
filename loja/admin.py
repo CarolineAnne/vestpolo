@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
-from .models import Produto, Pedido, ItemPedido, Favorito
+from .models import Produto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
 
 @admin.register(Favorito)
 class FavoritoAdmin(admin.ModelAdmin):
@@ -17,6 +17,15 @@ class ProdutoAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'descricao')
     list_filter = ('categoria',)
     list_per_page = 20
+
+
+@admin.register(AdicionalPersonalizacao)
+class AdicionalPersonalizacaoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'preco', 'ativo', 'ordem')
+    list_editable = ('preco', 'ativo', 'ordem')
+    search_fields = ('nome', 'descricao')
+    list_filter = ('ativo',)
+    ordering = ('ordem', 'nome')
 
 
 class ItemPedidoInline(admin.TabularInline):

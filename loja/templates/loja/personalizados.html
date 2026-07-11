@@ -275,6 +275,347 @@
             margin-top: 3px;
         }
 
+        .configurador-personalizados {
+            width: 92%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .configurador-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .configurador-head span {
+            color: #128a3c;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .configurador-head h2 {
+            margin: 8px 0 8px;
+            font-size: 32px;
+        }
+
+        .configurador-head p {
+            max-width: 660px;
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .configurador-selo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #eaf8ef;
+            color: #128a3c;
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .configurador-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 380px;
+            align-items: start;
+            gap: 24px;
+        }
+
+        .configurador-passos {
+            display: grid;
+            gap: 16px;
+        }
+
+        .config-card,
+        .config-resumo {
+            background: white;
+            border: 1px solid #e7e8ea;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(17,17,17,0.08);
+        }
+
+        .config-card {
+            padding: 22px;
+        }
+
+        .config-etiqueta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #128a3c;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .config-card h3,
+        .config-resumo h3 {
+            margin: 0 0 14px;
+            font-size: 22px;
+        }
+
+        .config-opcoes-produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
+        }
+
+        .config-produto {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .config-produto input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .config-produto-conteudo {
+            height: 100%;
+            border: 1px solid #e1e3e6;
+            border-radius: 8px;
+            padding: 10px;
+            transition: 0.2s ease;
+        }
+
+        .config-produto input:checked + .config-produto-conteudo {
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37,211,102,0.16);
+        }
+
+        .config-produto-imagem {
+            height: 128px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f0f1f3;
+            margin-bottom: 10px;
+        }
+
+        .config-produto-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .config-produto strong,
+        .config-produto span {
+            display: block;
+        }
+
+        .config-produto strong {
+            color: #222;
+            line-height: 1.3;
+        }
+
+        .config-produto span {
+            color: #128a3c;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        .config-linha {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .config-field {
+            display: grid;
+            gap: 7px;
+        }
+
+        .config-field label {
+            font-weight: bold;
+            color: #222;
+        }
+
+        .config-field input,
+        .config-field select,
+        .config-field textarea {
+            width: 100%;
+            border: 1px solid #d8dce0;
+            border-radius: 8px;
+            padding: 13px 14px;
+            font: inherit;
+            background: white;
+            outline: none;
+        }
+
+        .config-field textarea {
+            min-height: 118px;
+            resize: vertical;
+        }
+
+        .config-field input:focus,
+        .config-field select:focus,
+        .config-field textarea:focus {
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37,211,102,0.16);
+        }
+
+        .config-ajuda {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .config-adicionais {
+            display: grid;
+            gap: 10px;
+        }
+
+        .config-adicional {
+            display: grid;
+            grid-template-columns: 26px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e1e3e6;
+            border-radius: 8px;
+            padding: 14px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .config-adicional:hover {
+            border-color: #25D366;
+            background: #f8fffb;
+        }
+
+        .config-adicional input {
+            width: 18px;
+            height: 18px;
+            accent-color: #25D366;
+        }
+
+        .config-adicional strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .config-adicional span {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.35;
+        }
+
+        .config-preco {
+            color: #128a3c;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .config-upload {
+            border: 1px dashed #bfc6cc;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .config-resumo {
+            position: sticky;
+            top: 18px;
+            padding: 22px;
+        }
+
+        .config-preview {
+            height: 230px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f0f1f3;
+            margin-bottom: 16px;
+        }
+
+        .config-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .config-resumo-linhas {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .config-resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            color: #444;
+            line-height: 1.35;
+        }
+
+        .config-resumo-linha strong {
+            color: #111;
+        }
+
+        .config-lista {
+            display: grid;
+            gap: 6px;
+            margin: 0 0 16px;
+            padding: 0;
+            list-style: none;
+            color: #555;
+        }
+
+        .config-lista li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 6px;
+        }
+
+        .config-total {
+            border-top: 1px solid #e7e8ea;
+            padding-top: 16px;
+            margin-top: 14px;
+        }
+
+        .config-total div {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .config-total strong {
+            font-size: 26px;
+            color: #128a3c;
+        }
+
+        .config-aviso {
+            background: #fff8e5;
+            border: 1px solid #f0d999;
+            color: #6a4b00;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.45;
+            margin: 16px 0;
+        }
+
+        .config-resumo .btn-whatsapp {
+            width: 100%;
+        }
+
+        .config-bloqueado {
+            opacity: 0.58;
+            pointer-events: none;
+        }
+
         .solucoes-personalizadas {
             width: 92%;
             max-width: 1200px;
@@ -546,6 +887,19 @@
                 padding: 50px 6%;
             }
 
+            .configurador-head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .configurador-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .config-resumo {
+                position: static;
+            }
+
             .como-funciona {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -599,6 +953,32 @@
 
             .hero-metricas {
                 grid-template-columns: 1fr;
+            }
+
+            .configurador-personalizados {
+                width: calc(100% - 24px);
+                margin: 34px auto;
+            }
+
+            .configurador-head h2 {
+                font-size: 26px;
+            }
+
+            .config-linha {
+                grid-template-columns: 1fr;
+            }
+
+            .config-card,
+            .config-resumo {
+                padding: 16px;
+            }
+
+            .config-adicional {
+                grid-template-columns: 24px 1fr;
+            }
+
+            .config-preco {
+                grid-column: 2;
             }
 
             .solucoes-personalizadas {
@@ -701,10 +1081,9 @@
 
         <div class="hero-acoes">
             <a class="btn-whatsapp"
-               href="https://wa.me/5574999087655?text=Ola! Tenho interesse em uma polo personalizada."
-               target="_blank">
-                <i class="fa-brands fa-whatsapp"></i>
-                Personalizar pelo WhatsApp
+               href="#monte-sua-polo">
+                <i class="fa-solid fa-calculator"></i>
+                Montar or&ccedil;amento
             </a>
 
             <a class="btn-secundario" href="#produtos-personalizados">
@@ -740,6 +1119,193 @@
                 <span>pedido combinado</span>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="configurador-personalizados" id="monte-sua-polo">
+    <div class="configurador-head">
+        <div>
+            <span>Monte sua polo</span>
+            <h2>Or&ccedil;amento autom&aacute;tico por etapas</h2>
+            <p>
+                Escolha a base, marque os bordados e veja uma estimativa antes de chamar no WhatsApp.
+                O valor final ainda passa pela confirma&ccedil;&atilde;o da arte.
+            </p>
+        </div>
+
+        <div class="configurador-selo">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            Estimativa r&aacute;pida
+        </div>
+    </div>
+
+    <div class="configurador-grid">
+        <div class="configurador-passos">
+            <section class="config-card">
+                <div class="config-etiqueta"><i class="fa-solid fa-shirt"></i> Etapa 1</div>
+                <h3>Escolha a polo base</h3>
+
+                <div class="config-opcoes-produtos">
+                    {% for produto in produtos %}
+                        <label class="config-produto">
+                            <input type="radio"
+                                   name="configProduto"
+                                   value="{{ produto.id }}"
+                                   data-nome="{{ produto.nome }}"
+                                   data-preco="{{ produto.preco }}"
+                                   data-imagem="{% if produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=VestPolo{% endif %}"
+                                   {% if forloop.first %}checked{% endif %}>
+
+                            <span class="config-produto-conteudo">
+                                <span class="config-produto-imagem">
+                                    {% if produto.imagem %}
+                                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/600x520?text=VestPolo" alt="Produto personalizado">
+                                    {% endif %}
+                                </span>
+                                <strong>{{ produto.nome }}</strong>
+                                <span>R$ {{ produto.preco }}</span>
+                            </span>
+                        </label>
+                    {% empty %}
+                        <div class="mensagem">
+                            Cadastre pelo menos um produto da categoria Personalizado para ativar o configurador.
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="config-linha">
+                    <div class="config-field">
+                        <label for="configTamanho">Tamanho</label>
+                        <select id="configTamanho">
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M" selected>M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="XG">XG</option>
+                        </select>
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configCor">Cor desejada</label>
+                        <input id="configCor" type="text" placeholder="Ex: preta, vinho, azul marinho">
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configQuantidade">Quantidade</label>
+                        <input id="configQuantidade" type="number" min="1" value="1">
+                    </div>
+                </div>
+            </section>
+
+            <section class="config-card">
+                <div class="config-etiqueta"><i class="fa-solid fa-pen-nib"></i> Etapa 2</div>
+                <h3>Escolha os bordados</h3>
+
+                <div class="config-adicionais">
+                    {% for adicional in adicionais_personalizacao %}
+                        <label class="config-adicional">
+                            <input class="config-adicional-input"
+                                   type="checkbox"
+                                   data-nome="{{ adicional.nome }}"
+                                   data-preco="{{ adicional.preco }}">
+                            <span>
+                                <strong>{{ adicional.nome }}</strong>
+                                {% if adicional.descricao %}
+                                    <span>{{ adicional.descricao }}</span>
+                                {% endif %}
+                            </span>
+                            <strong class="config-preco">+ R$ {{ adicional.preco }}</strong>
+                        </label>
+                    {% empty %}
+                        <div class="mensagem">
+                            Nenhum adicional ativo no momento. Voc&ecirc; pode cadastrar os bordados no admin.
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="config-card">
+                <div class="config-etiqueta"><i class="fa-solid fa-cloud-arrow-up"></i> Etapa 3</div>
+                <h3>Dados e arte</h3>
+
+                <p class="config-ajuda">
+                    Campos do cliente marcados com * s&atilde;o obrigat&oacute;rios para enviar o or&ccedil;amento.
+                </p>
+
+                <div class="config-linha">
+                    <div class="config-field">
+                        <label for="configCliente">Nome / empresa *</label>
+                        <input id="configCliente" type="text" placeholder="Ex: Anne Caroline ou VestPolo">
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configContato">WhatsApp para contato *</label>
+                        <input id="configContato" type="tel" placeholder="Ex: (74) 99908-7655">
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configCurso">Curso / turma / setor</label>
+                        <input id="configCurso" type="text" placeholder="Ex: Zootecnia, vendas, recep&ccedil;&atilde;o">
+                    </div>
+                </div>
+
+                <div class="config-field" style="margin-top: 14px;">
+                    <label for="configArte">Enviar arte/logo/refer&ecirc;ncia</label>
+                    <div class="config-upload">
+                        <input id="configArte" type="file" accept="image/*,.pdf">
+                        <div class="config-ajuda">
+                            O arquivo n&atilde;o vai anexado automaticamente ao WhatsApp. O resumo vai avisar que voc&ecirc; enviar&aacute; a arte na conversa.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-field" style="margin-top: 14px;">
+                    <label for="configObservacao">Observa&ccedil;&otilde;es do bordado</label>
+                    <textarea id="configObservacao" placeholder="Ex: logo no lado esquerdo, nome na manga, bordado nas costas..."></textarea>
+                </div>
+            </section>
+        </div>
+
+        <aside class="config-resumo" aria-live="polite">
+            <h3>Resumo</h3>
+
+            <div class="config-preview">
+                <img id="configPreviewImg" src="https://via.placeholder.com/600x520?text=VestPolo" alt="Polo selecionada">
+            </div>
+
+            <div class="config-resumo-linhas">
+                <div class="config-resumo-linha"><span>Polo</span><strong id="configResumoProduto">Selecione uma base</strong></div>
+                <div class="config-resumo-linha"><span>Tamanho</span><strong id="configResumoTamanho">M</strong></div>
+                <div class="config-resumo-linha"><span>Cor</span><strong id="configResumoCor">A definir</strong></div>
+                <div class="config-resumo-linha"><span>Quantidade</span><strong id="configResumoQuantidade">1</strong></div>
+                <div class="config-resumo-linha"><span>Cliente</span><strong id="configResumoCliente">Obrigat&oacute;rio</strong></div>
+            </div>
+
+            <ul class="config-lista" id="configResumoAdicionais">
+                <li><span>Sem bordado extra</span><strong>R$ 0,00</strong></li>
+            </ul>
+
+            <div class="config-total">
+                <div><span>Subtotal por unidade</span><strong id="configSubtotalUnidade">R$ 0,00</strong></div>
+                <div><span>Total estimado</span><strong id="configTotal">R$ 0,00</strong></div>
+            </div>
+
+            <div class="config-aviso">
+                Estimativa sujeita a confirma&ccedil;&atilde;o caso a arte tenha muitos detalhes ou precise de adapta&ccedil;&atilde;o para bordado.
+            </div>
+
+            <a class="btn-whatsapp config-bloqueado"
+               id="configWhatsapp"
+               href="#"
+               target="_blank"
+               aria-disabled="true">
+                <i class="fa-brands fa-whatsapp"></i>
+                Enviar or&ccedil;amento
+            </a>
+        </aside>
     </div>
 </section>
 
@@ -857,5 +1423,223 @@
 </footer>
 
 <script src="{% static 'js/menu-mobile.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const produtos = Array.from(document.querySelectorAll('input[name="configProduto"]'));
+        const adicionais = Array.from(document.querySelectorAll(".config-adicional-input"));
+
+        if (!produtos.length) return;
+
+        const moeda = new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+        const numeroWhatsApp = "5574999087655";
+        const tamanhoInput = document.getElementById("configTamanho");
+        const corInput = document.getElementById("configCor");
+        const quantidadeInput = document.getElementById("configQuantidade");
+        const clienteInput = document.getElementById("configCliente");
+        const contatoInput = document.getElementById("configContato");
+        const cursoInput = document.getElementById("configCurso");
+        const arteInput = document.getElementById("configArte");
+        const observacaoInput = document.getElementById("configObservacao");
+        const previewImg = document.getElementById("configPreviewImg");
+        const resumoProduto = document.getElementById("configResumoProduto");
+        const resumoTamanho = document.getElementById("configResumoTamanho");
+        const resumoCor = document.getElementById("configResumoCor");
+        const resumoQuantidade = document.getElementById("configResumoQuantidade");
+        const resumoCliente = document.getElementById("configResumoCliente");
+        const resumoAdicionais = document.getElementById("configResumoAdicionais");
+        const subtotalUnidade = document.getElementById("configSubtotalUnidade");
+        const totalResumo = document.getElementById("configTotal");
+        const botaoWhatsapp = document.getElementById("configWhatsapp");
+
+        function lerPreco(valor) {
+            const texto = String(valor || "0").trim();
+
+            if (texto.includes(",") && texto.includes(".")) {
+                return Number(texto.replace(/\./g, "").replace(",", ".")) || 0;
+            }
+
+            if (texto.includes(",")) {
+                return Number(texto.replace(",", ".")) || 0;
+            }
+
+            return Number(texto) || 0;
+        }
+
+        function produtoSelecionado() {
+            return produtos.find(function (produto) {
+                return produto.checked;
+            });
+        }
+
+        function adicionaisSelecionados() {
+            return adicionais
+                .filter(function (adicional) {
+                    return adicional.checked;
+                })
+                .map(function (adicional) {
+                    return {
+                        nome: adicional.dataset.nome || "Adicional",
+                        preco: lerPreco(adicional.dataset.preco)
+                    };
+                });
+        }
+
+        function preencherListaAdicionais(selecionados) {
+            resumoAdicionais.innerHTML = "";
+
+            if (!selecionados.length) {
+                const item = document.createElement("li");
+                const nome = document.createElement("span");
+                const preco = document.createElement("strong");
+
+                nome.textContent = "Sem bordado extra";
+                preco.textContent = moeda.format(0);
+                item.append(nome, preco);
+                resumoAdicionais.appendChild(item);
+                return;
+            }
+
+            selecionados.forEach(function (adicional) {
+                const item = document.createElement("li");
+                const nome = document.createElement("span");
+                const preco = document.createElement("strong");
+
+                nome.textContent = adicional.nome;
+                preco.textContent = moeda.format(adicional.preco);
+                item.append(nome, preco);
+                resumoAdicionais.appendChild(item);
+            });
+        }
+
+        function montarMensagem(dados) {
+            const bordados = dados.adicionais.length
+                ? dados.adicionais.map(function (adicional) {
+                    return `- ${adicional.nome}: ${moeda.format(adicional.preco)}`;
+                }).join("\n")
+                : "- Sem bordados extras";
+
+            const arquivo = arteInput.files && arteInput.files.length
+                ? `Arquivo selecionado: ${arteInput.files[0].name}. Vou enviar a arte aqui no WhatsApp.`
+                : "Arte/referencia: vou enviar ou explicar no WhatsApp.";
+
+            return [
+                "Ola! Quero um orcamento de polo personalizada.",
+                "",
+                `Cliente: ${dados.cliente}`,
+                `WhatsApp: ${dados.contato}`,
+                `Curso/turma/empresa: ${dados.curso || "Nao informado"}`,
+                "",
+                `Polo base: ${dados.produtoNome} (${moeda.format(dados.precoBase)})`,
+                `Tamanho: ${dados.tamanho}`,
+                `Cor desejada: ${dados.cor}`,
+                `Quantidade: ${dados.quantidade}`,
+                "",
+                "Bordados escolhidos:",
+                bordados,
+                "",
+                `Subtotal por unidade: ${moeda.format(dados.subtotal)}`,
+                `Total estimado: ${moeda.format(dados.total)}`,
+                "",
+                arquivo,
+                `Observacoes: ${dados.observacao || "Sem observacoes"}`,
+                "",
+                "Entendo que o valor pode passar por confirmacao conforme a complexidade da arte."
+            ].join("\n");
+        }
+
+        function atualizarConfigurador() {
+            const produto = produtoSelecionado();
+            if (!produto) return;
+
+            const quantidade = Math.max(1, parseInt(quantidadeInput.value, 10) || 1);
+            quantidadeInput.value = quantidade;
+
+            const selecionados = adicionaisSelecionados();
+            const precoBase = lerPreco(produto.dataset.preco);
+            const totalAdicionais = selecionados.reduce(function (total, adicional) {
+                return total + adicional.preco;
+            }, 0);
+            const subtotal = precoBase + totalAdicionais;
+            const total = subtotal * quantidade;
+            const cliente = clienteInput.value.trim();
+            const contato = contatoInput.value.trim();
+            const curso = cursoInput.value.trim();
+            const cor = corInput.value.trim() || "A definir";
+            const tamanho = tamanhoInput.value || "M";
+            const produtoNome = produto.dataset.nome || "Polo personalizada";
+
+            previewImg.src = produto.dataset.imagem || "https://via.placeholder.com/600x520?text=VestPolo";
+            previewImg.alt = produtoNome;
+            resumoProduto.textContent = produtoNome;
+            resumoTamanho.textContent = tamanho;
+            resumoCor.textContent = cor;
+            resumoQuantidade.textContent = String(quantidade);
+            resumoCliente.textContent = cliente || "Obrigatorio";
+            subtotalUnidade.textContent = moeda.format(subtotal);
+            totalResumo.textContent = moeda.format(total);
+            preencherListaAdicionais(selecionados);
+
+            const podeEnviar = Boolean(cliente && contato);
+
+            botaoWhatsapp.classList.toggle("config-bloqueado", !podeEnviar);
+            botaoWhatsapp.setAttribute("aria-disabled", String(!podeEnviar));
+
+            if (!podeEnviar) {
+                botaoWhatsapp.href = "#";
+                return;
+            }
+
+            const mensagem = montarMensagem({
+                cliente,
+                contato,
+                curso,
+                produtoNome,
+                precoBase,
+                tamanho,
+                cor,
+                quantidade,
+                adicionais: selecionados,
+                subtotal,
+                total,
+                observacao: observacaoInput.value.trim()
+            });
+
+            botaoWhatsapp.href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+        }
+
+        [
+            tamanhoInput,
+            corInput,
+            quantidadeInput,
+            clienteInput,
+            contatoInput,
+            cursoInput,
+            arteInput,
+            observacaoInput
+        ].forEach(function (campo) {
+            if (campo) {
+                campo.addEventListener("input", atualizarConfigurador);
+                campo.addEventListener("change", atualizarConfigurador);
+            }
+        });
+
+        produtos.concat(adicionais).forEach(function (campo) {
+            campo.addEventListener("change", atualizarConfigurador);
+        });
+
+        botaoWhatsapp.addEventListener("click", function (event) {
+            if (botaoWhatsapp.getAttribute("aria-disabled") === "true") {
+                event.preventDefault();
+                clienteInput.focus();
+            }
+        });
+
+        atualizarConfigurador();
+    });
+</script>
 </body>
 </html>
