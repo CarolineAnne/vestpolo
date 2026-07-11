@@ -543,7 +543,7 @@
 
     <div class="box">
         <h1>Dados do cliente</h1>
-        <p>Preencha seus dados para finalizar o pedido pelo WhatsApp.</p>
+        <p>Preencha seus dados para finalizar o pedido.</p>
 
         {% if messages %}
             <ul class="messages">
@@ -556,13 +556,17 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <label>Nome completo</label>
+            <div class="aviso-obrigatorio">
+                Campos com * sao obrigatorios.
+            </div>
+
+            <label class="campo-obrigatorio">Nome completo</label>
             <input type="text" name="nome_cliente" required>
 
-            <label>Telefone / WhatsApp</label>
+            <label class="campo-obrigatorio">Telefone / WhatsApp</label>
             <input type="text" name="telefone" required>
 
-            <label>Forma de entrega</label>
+            <label class="campo-obrigatorio">Forma de entrega</label>
             <select name="forma_entrega" id="formaEntrega" required>
                 <option value="">Selecione</option>
                 <option value="Retirada">Retirada</option>
@@ -572,7 +576,7 @@
 
             <div class="campos-entrega" id="camposEntrega">
                 <div class="aviso-obrigatorio">
-                    Campos com * sao obrigatorios para entrega.
+                    Campos de entrega com * sao obrigatorios.
                 </div>
 
                 <label class="campo-obrigatorio">CEP de entrega</label>
@@ -614,7 +618,7 @@
                 <i class="fa-solid fa-truck-fast"></i> Calcular frete
             </button>
 
-            <label>Forma de pagamento</label>
+            <label class="campo-obrigatorio">Forma de pagamento</label>
             <div class="pagamentos-grid" id="pagamentosGrid">
                 {% for forma in formas_pagamento %}
                     <label class="pagamento-opcao">
@@ -693,6 +697,7 @@
             <label>Observação</label>
             <textarea name="observacao" placeholder="Ex: nome do curso, cor desejada, bordado, prazo..."></textarea>
 
+            {% if tem_produto_personalizado %}
             <h2>Personalização</h2>
 
             <label>Enviar arte/logo/referência</label>
@@ -709,6 +714,7 @@
 
             <label>Detalhes do bordado</label>
             <textarea name="observacao_item" placeholder="Ex: bordado no lado esquerdo, logo nas costas, manga com nome..."></textarea>
+            {% endif %}
 
             <button type="submit" id="btnFinalizarPedido">Enviar pedido pelo WhatsApp</button>
         </form>

@@ -677,6 +677,7 @@ def checkout(request):
     produtos = []
     subtotal_pedido = Decimal("0.00")
     total_itens = 0
+    tem_produto_personalizado = False
 
     for chave, dados in carrinho.items():
         produto = get_object_or_404(Produto, id=dados['produto_id'])
@@ -684,6 +685,9 @@ def checkout(request):
         subtotal = produto.preco * quantidade
         subtotal_pedido += subtotal
         total_itens += quantidade
+        tem_produto_personalizado = (
+            tem_produto_personalizado or produto.categoria == "Personalizado"
+        )
 
         produtos.append({
             'chave': chave,
@@ -708,11 +712,27 @@ def checkout(request):
         cidade = request.POST.get('cidade', '').strip()
         estado = request.POST.get('estado', '').strip().upper()[:2]
 
-        curso = request.POST.get('curso', '')
-        nome_bordado = request.POST.get('nome_bordado', '')
-        observacao_item = request.POST.get('observacao_item', '')
+        curso = request.POST.get('curso', '') if tem_produto_personalizado else ''
+        nome_bordado = request.POST.get('nome_bordado', '') if tem_produto_personalizado else ''
+        observacao_item = request.POST.get('observacao_item', '') if tem_produto_personalizado else ''
 
-        arte = request.FILES.get('arte')
+        arte = request.FILES.get('arte') if tem_produto_personalizado else None
+
+        campos_cliente = {
+            "nome completo": nome_cliente,
+            "telefone/WhatsApp": telefone,
+        }
+        campos_cliente_faltando = [
+            nome for nome, valor in campos_cliente.items() if not valor
+        ]
+
+        if campos_cliente_faltando:
+            campos = ", ".join(campos_cliente_faltando)
+            messages.error(
+                request,
+                f"Preencha os campos obrigatorios do cliente: {campos}."
+            )
+            return redirect('checkout')
 
         if forma_entrega not in FORMAS_ENTREGA:
             messages.error(request, 'Escolha uma forma de entrega valida.')
@@ -796,6 +816,11 @@ def checkout(request):
         mensagem += "\nItens:\n"
 
         for item in produtos:
+            item_personalizado = item['produto'].categoria == "Personalizado"
+            curso_item = curso if item_personalizado else ''
+            nome_bordado_item = nome_bordado if item_personalizado else ''
+            observacao_item_final = observacao_item if item_personalizado else ''
+            arte_item = arte if item_personalizado else None
 
             ItemPedido.objects.create(
                 pedido=pedido,
@@ -803,10 +828,10 @@ def checkout(request):
                 quantidade=item['quantidade'],
                 tamanho=item['tamanho'],
                 cor=item['cor'],
-                curso=curso,
-                nome_bordado=nome_bordado,
-                observacao=observacao_item,
-                arte=arte,
+                curso=curso_item,
+                nome_bordado=nome_bordado_item,
+                observacao=observacao_item_final,
+                arte=arte_item,
                 subtotal=item['subtotal']
             )
 
@@ -815,16 +840,16 @@ def checkout(request):
             mensagem += f"  Cor: {item['cor']}\n"
             mensagem += f"  Quantidade: {item['quantidade']}\n"
 
-            if curso:
-                mensagem += f"  Curso/Turma/Empresa: {curso}\n"
+            if curso_item:
+                mensagem += f"  Curso/Turma/Empresa: {curso_item}\n"
 
-            if nome_bordado:
-                mensagem += f"  Nome bordado: {nome_bordado}\n"
+            if nome_bordado_item:
+                mensagem += f"  Nome bordado: {nome_bordado_item}\n"
 
-            if observacao_item:
-                mensagem += f"  Detalhes do bordado: {observacao_item}\n"
+            if observacao_item_final:
+                mensagem += f"  Detalhes do bordado: {observacao_item_final}\n"
 
-            if arte:
+            if arte_item:
                 mensagem += "  Arte/logo enviada no pedido.\n"
 
             mensagem += f"  Subtotal: R$ {item['subtotal']:.2f}\n\n"
@@ -852,7 +877,8 @@ def checkout(request):
         'subtotal': subtotal_pedido,
         'total': subtotal_pedido,
         'total_itens': total_itens,
-        'formas_pagamento': FORMAS_PAGAMENTO
+        'formas_pagamento': FORMAS_PAGAMENTO,
+        'tem_produto_personalizado': tem_produto_personalizado,
     })
 
 
