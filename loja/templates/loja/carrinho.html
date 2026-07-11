@@ -466,6 +466,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'css/menu-mobile.css' %}">
 </head>
 
 <body>
@@ -475,7 +476,11 @@
         <img src="{% static 'img/logo_vestpolo.png' %}" alt="VestPolo">
         <span>VestPolo</span>
     </a>
-    <nav>
+    <button type="button" class="menu-toggle" data-menu-toggle="#menuLoja" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i><span>Menu</span>
+    </button>
+
+    <nav class="menu-loja" id="menuLoja">
         <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
         <a href="{% url 'universitarios' %}"><i class="fa-solid fa-graduation-cap"></i><span>Universitarios</span></a>
         <a href="{% url 'empresariais' %}"><i class="fa-solid fa-building"></i><span>Empresas</span></a>
@@ -570,5 +575,6 @@
 
 </div>
 
+<script src="{% static 'js/menu-mobile.js' %}"></script>
 </body>
 </html>

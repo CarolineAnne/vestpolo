@@ -347,6 +347,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'css/menu-mobile.css' %}">
 </head>
 
 <body>
@@ -357,7 +358,11 @@
         <span>VestPolo</span>
     </a>
 
-    <nav>
+    <button type="button" class="menu-toggle" data-menu-toggle="#menuLoja" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i><span>Menu</span>
+    </button>
+
+    <nav class="menu-loja" id="menuLoja">
         <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
         <a href="{% url 'meus_pedidos' %}"><i class="fa-solid fa-box-open"></i><span>Pedidos</span></a>
         <a href="{% url 'favoritos' %}"><i class="fa-solid fa-heart"></i><span>Favoritos</span></a>
@@ -436,5 +441,6 @@
 
 </div>
 
+<script src="{% static 'js/menu-mobile.js' %}"></script>
 </body>
 </html>

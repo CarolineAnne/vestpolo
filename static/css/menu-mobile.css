@@ -1,0 +1,86 @@
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 15px 18px;
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: auto;
+        min-height: 42px;
+        margin: 0;
+        padding: 10px 14px;
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .menu-toggle:hover {
+        background: #25D366;
+        border-color: #25D366;
+        color: #111;
+    }
+
+    .menu-toggle i {
+        color: #25D366;
+    }
+
+    .menu-toggle:hover i {
+        color: #111;
+    }
+
+    header nav.menu-loja {
+        display: none;
+        width: 100%;
+        margin-top: 4px;
+        padding: 8px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    header nav.menu-loja.ativo {
+        display: flex;
+    }
+
+    header nav.menu-loja a {
+        width: 100%;
+        justify-content: flex-start;
+        border-radius: 10px;
+        padding: 12px 13px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    header nav.menu-loja a:hover {
+        background: #25D366;
+        color: #111;
+    }
+
+    header nav.menu-loja a:hover i {
+        color: #111;
+    }
+}
