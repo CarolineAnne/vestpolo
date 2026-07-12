@@ -1,0 +1,262 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .me-page {
+        max-width: 980px;
+        margin: 20px auto 40px;
+        display: grid;
+        gap: 18px;
+    }
+
+    .me-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .me-toolbar a,
+    .me-action button,
+    .me-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 14px;
+        background: #222;
+        color: #fff !important;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .me-action button {
+        width: 100%;
+        background: #25D366;
+        color: #111 !important;
+    }
+
+    .me-action button.secundario {
+        background: #111;
+        color: #fff !important;
+    }
+
+    .me-card {
+        background: #fff;
+        color: #111;
+        border-radius: 8px;
+        padding: 22px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    }
+
+    .me-card h1,
+    .me-card h2 {
+        margin: 0 0 12px;
+    }
+
+    .me-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .me-status {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .me-status div {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+    }
+
+    .me-status span {
+        display: block;
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .me-status strong {
+        display: block;
+        font-size: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .me-actions {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .me-action {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 14px;
+    }
+
+    .me-action h3 {
+        margin: 0 0 8px;
+    }
+
+    .me-action p,
+    .me-card p,
+    .me-lista {
+        color: #555;
+        line-height: 1.45;
+    }
+
+    .me-lista {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .me-alerta {
+        border-left: 4px solid #d69e00;
+        background: #fff8e5;
+        padding: 14px;
+        border-radius: 8px;
+    }
+
+    .me-retorno {
+        max-height: 260px;
+        overflow: auto;
+        white-space: pre-wrap;
+        background: #111;
+        color: #f6f6f6;
+        border-radius: 8px;
+        padding: 14px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 800px) {
+        .me-grid,
+        .me-status,
+        .me-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="me-page">
+    <div class="me-toolbar">
+        <a href="{% url 'admin:loja_pedido_change' pedido.id %}">Voltar ao pedido</a>
+        {% if pedido.melhor_envio_etiqueta_url %}
+            <a class="me-link" href="{{ pedido.melhor_envio_etiqueta_url }}" target="_blank">Abrir etiqueta</a>
+        {% endif %}
+    </div>
+
+    <section class="me-card">
+        <h1>Melhor Envio - Pedido #{{ pedido.id }}</h1>
+        <p>Use esta tela depois que o pedido estiver confirmado. Primeiro crie o envio no carrinho, depois gere a etiqueta e por fim solicite o link de impressao.</p>
+
+        {% if not melhor_envio_configurado %}
+            <div class="me-alerta">
+                Configure <strong>MELHOR_ENVIO_TOKEN</strong> no Render antes de usar a API.
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="me-card">
+        <h2>Status da etiqueta</h2>
+
+        <div class="me-status">
+            <div>
+                <span>ID Melhor Envio</span>
+                <strong>{{ pedido.melhor_envio_id|default:"Ainda nao criado" }}</strong>
+            </div>
+            <div>
+                <span>Status</span>
+                <strong>{{ pedido.melhor_envio_status|default:"Aguardando" }}</strong>
+            </div>
+            <div>
+                <span>Rastreio</span>
+                <strong>{{ pedido.codigo_rastreio|default:"Ainda nao gerado" }}</strong>
+            </div>
+            <div>
+                <span>Atualizado</span>
+                <strong>{{ pedido.melhor_envio_atualizado_em|date:"d/m/Y H:i"|default:"-" }}</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="me-card">
+        <h2>Acoes</h2>
+
+        <div class="me-actions">
+            <form class="me-action" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="acao" value="criar_carrinho">
+                <h3>1. Criar envio</h3>
+                <p>Envia os dados do pedido para o carrinho do Melhor Envio.</p>
+                <button type="submit">Criar no carrinho</button>
+            </form>
+
+            <form class="me-action" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="acao" value="gerar_etiqueta">
+                <h3>2. Gerar etiqueta</h3>
+                <p>Solicita a geracao da etiqueta depois que o envio estiver liberado/pago.</p>
+                <button type="submit" class="secundario">Gerar etiqueta</button>
+            </form>
+
+            <form class="me-action" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="acao" value="imprimir_etiqueta">
+                <h3>3. Imprimir</h3>
+                <p>Busca o link de impressao retornado pelo Melhor Envio.</p>
+                <button type="submit" class="secundario">Buscar link</button>
+            </form>
+
+            <form class="me-action" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="acao" value="consultar">
+                <h3>Consultar</h3>
+                <p>Atualiza status, rastreio e retornos salvos no pedido.</p>
+                <button type="submit" class="secundario">Consultar</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="me-card">
+        <h2>Dados enviados</h2>
+        <div class="me-grid">
+            <div>
+                <h3>Destinatario</h3>
+                <p>
+                    <strong>{{ pedido.nome_cliente|default:"-" }}</strong><br>
+                    {{ pedido.telefone|default:"Telefone nao informado" }}<br>
+                    {{ pedido.endereco|default:"Endereco nao informado" }}, {{ pedido.numero|default:"s/n" }}<br>
+                    {{ pedido.bairro|default:"-" }} - {{ pedido.cidade|default:"-" }}/{{ pedido.estado|default:"-" }}<br>
+                    CEP: {{ pedido.cep_entrega|default:"-" }}
+                </p>
+            </div>
+
+            <div>
+                <h3>Itens</h3>
+                <ul class="me-lista">
+                    {% for item in pedido.itens.all %}
+                        <li>{{ item.quantidade }}x {{ item.produto.nome }} - R$ {{ item.produto.preco }}</li>
+                    {% empty %}
+                        <li>Nenhum item encontrado.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    {% if pedido.melhor_envio_erro %}
+        <section class="me-card">
+            <h2>Ultimo retorno</h2>
+            <div class="me-retorno">{{ pedido.melhor_envio_erro }}</div>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

@@ -134,6 +134,12 @@ MELHOR_ENVIO_TOKEN = config(
     default=''
 )
 
+MELHOR_ENVIO_SERVICE_ID = config(
+    'MELHOR_ENVIO_SERVICE_ID',
+    default=1,
+    cast=int
+)
+
 MELHOR_ENVIO_CLIENT_ID = config(
     'MELHOR_ENVIO_CLIENT_ID',
     default=''
@@ -147,6 +153,56 @@ MELHOR_ENVIO_CLIENT_SECRET = config(
 MELHOR_ENVIO_CEP_ORIGEM = config(
     'MELHOR_ENVIO_CEP_ORIGEM',
     default='48913126'
+)
+
+MELHOR_ENVIO_REMETENTE_NOME = config(
+    'MELHOR_ENVIO_REMETENTE_NOME',
+    default='VestPolo'
+)
+
+MELHOR_ENVIO_REMETENTE_TELEFONE = config(
+    'MELHOR_ENVIO_REMETENTE_TELEFONE',
+    default='74999087655'
+)
+
+MELHOR_ENVIO_REMETENTE_EMAIL = config(
+    'MELHOR_ENVIO_REMETENTE_EMAIL',
+    default='vestpolopolos@gmail.com'
+)
+
+MELHOR_ENVIO_REMETENTE_DOCUMENTO = config(
+    'MELHOR_ENVIO_REMETENTE_DOCUMENTO',
+    default=''
+)
+
+MELHOR_ENVIO_REMETENTE_ENDERECO = config(
+    'MELHOR_ENVIO_REMETENTE_ENDERECO',
+    default=''
+)
+
+MELHOR_ENVIO_REMETENTE_NUMERO = config(
+    'MELHOR_ENVIO_REMETENTE_NUMERO',
+    default=''
+)
+
+MELHOR_ENVIO_REMETENTE_COMPLEMENTO = config(
+    'MELHOR_ENVIO_REMETENTE_COMPLEMENTO',
+    default=''
+)
+
+MELHOR_ENVIO_REMETENTE_BAIRRO = config(
+    'MELHOR_ENVIO_REMETENTE_BAIRRO',
+    default=''
+)
+
+MELHOR_ENVIO_REMETENTE_CIDADE = config(
+    'MELHOR_ENVIO_REMETENTE_CIDADE',
+    default='Juazeiro'
+)
+
+MELHOR_ENVIO_REMETENTE_ESTADO = config(
+    'MELHOR_ENVIO_REMETENTE_ESTADO',
+    default='BA'
 )
 
 MELHOR_ENVIO_PESO = config(

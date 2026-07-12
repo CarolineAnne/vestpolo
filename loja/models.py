@@ -209,6 +209,40 @@ class Pedido(models.Model):
         blank=True
     )
 
+    melhor_envio_id = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='ID Melhor Envio'
+    )
+
+    melhor_envio_status = models.CharField(
+        max_length=80,
+        blank=True,
+        verbose_name='Status Melhor Envio'
+    )
+
+    codigo_rastreio = models.CharField(
+        max_length=80,
+        blank=True,
+        verbose_name='Codigo de rastreio'
+    )
+
+    melhor_envio_etiqueta_url = models.URLField(
+        blank=True,
+        verbose_name='Link da etiqueta Melhor Envio'
+    )
+
+    melhor_envio_erro = models.TextField(
+        blank=True,
+        verbose_name='Ultimo retorno/erro Melhor Envio'
+    )
+
+    melhor_envio_atualizado_em = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='Atualizado no Melhor Envio em'
+    )
+
     data_pedido = models.DateTimeField(
         auto_now_add=True
     )

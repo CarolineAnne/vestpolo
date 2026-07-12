@@ -1,9 +1,12 @@
 import hashlib
+import json
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
+from django.utils import timezone
 from django.utils.html import format_html
+from .melhor_envio import MelhorEnvioClient, MelhorEnvioError, primeiro_valor
 from .models import Produto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
 
 @admin.register(Favorito)
@@ -78,6 +81,7 @@ class PedidoAdmin(admin.ModelAdmin):
         'data_pedido',
         'imprimir_envio',
         'imprimir_etiqueta',
+        'melhor_envio_acesso',
     )
 
     list_editable = ('status', 'status_pagamento')
@@ -95,9 +99,18 @@ class PedidoAdmin(admin.ModelAdmin):
         'nome_cliente',
         'telefone',
         'observacao',
+        'codigo_rastreio',
+        'melhor_envio_id',
     )
 
-    readonly_fields = ('data_pedido', 'imprimir_envio', 'imprimir_etiqueta')
+    readonly_fields = (
+        'data_pedido',
+        'imprimir_envio',
+        'imprimir_etiqueta',
+        'melhor_envio_acesso',
+        'melhor_envio_atualizado_em',
+        'melhor_envio_erro',
+    )
 
     fieldsets = (
         ('Dados do cliente', {
@@ -138,6 +151,18 @@ class PedidoAdmin(admin.ModelAdmin):
                 'imprimir_etiqueta',
             )
         }),
+
+        ('Melhor Envio', {
+            'fields': (
+                'melhor_envio_acesso',
+                'melhor_envio_id',
+                'melhor_envio_status',
+                'codigo_rastreio',
+                'melhor_envio_etiqueta_url',
+                'melhor_envio_atualizado_em',
+                'melhor_envio_erro',
+            )
+        }),
     )
 
     inlines = [ItemPedidoInline]
@@ -158,6 +183,11 @@ class PedidoAdmin(admin.ModelAdmin):
                 '<int:pedido_id>/etiqueta-correios/',
                 self.admin_site.admin_view(self.etiqueta_correios_view),
                 name='loja_pedido_etiqueta_correios',
+            ),
+            path(
+                '<int:pedido_id>/melhor-envio/',
+                self.admin_site.admin_view(self.melhor_envio_view),
+                name='loja_pedido_melhor_envio',
             ),
         ]
         return custom_urls + urls
@@ -185,6 +215,26 @@ class PedidoAdmin(admin.ModelAdmin):
         )
 
     imprimir_etiqueta.short_description = 'Etiqueta'
+
+    def melhor_envio_acesso(self, obj):
+        if not obj or not obj.id:
+            return '-'
+
+        url = reverse('admin:loja_pedido_melhor_envio', args=[obj.id])
+        texto = 'Melhor Envio'
+
+        if obj.codigo_rastreio:
+            texto = obj.codigo_rastreio
+        elif obj.melhor_envio_status:
+            texto = obj.melhor_envio_status
+
+        return format_html(
+            '<a class="button" href="{}" target="_blank">{}</a>',
+            url,
+            texto
+        )
+
+    melhor_envio_acesso.short_description = 'Melhor Envio'
 
     def imprimir_envio_view(self, request, pedido_id):
         pedido = get_object_or_404(
@@ -241,7 +291,7 @@ class PedidoAdmin(admin.ModelAdmin):
             id=pedido_id
         )
 
-        codigo_interno = self._codigo_etiqueta_interno(pedido)
+        codigo_interno = pedido.codigo_rastreio or self._codigo_etiqueta_interno(pedido)
         cep_destino = ''.join(filter(str.isdigit, pedido.cep_entrega or ''))
 
         context = {
@@ -249,11 +299,132 @@ class PedidoAdmin(admin.ModelAdmin):
             'title': f'Etiqueta Correios - Pedido #{pedido.id}',
             'pedido': pedido,
             'codigo_interno': codigo_interno,
+            'tem_rastreio_real': bool(pedido.codigo_rastreio),
             'barras_principais': self._gerar_barras_etiqueta(codigo_interno, 92),
             'barras_destino': self._gerar_barras_etiqueta(cep_destino or codigo_interno, 58),
             'matriz_etiqueta': self._gerar_matriz_etiqueta(codigo_interno),
         }
         return render(request, 'admin/loja/pedido/etiqueta_correios.html', context)
+
+    def melhor_envio_view(self, request, pedido_id):
+        pedido = get_object_or_404(
+            Pedido.objects.prefetch_related('itens__produto'),
+            id=pedido_id
+        )
+
+        client = MelhorEnvioClient()
+
+        if request.method == 'POST':
+            acao = request.POST.get('acao')
+
+            try:
+                if acao == 'criar_carrinho':
+                    self._melhor_envio_criar_carrinho(pedido, client)
+                    messages.success(request, 'Envio criado no carrinho do Melhor Envio.')
+
+                elif acao == 'gerar_etiqueta':
+                    self._melhor_envio_gerar_etiqueta(pedido, client)
+                    messages.success(request, 'Solicitacao de geracao de etiqueta enviada.')
+
+                elif acao == 'imprimir_etiqueta':
+                    self._melhor_envio_imprimir_etiqueta(pedido, client)
+                    messages.success(request, 'Link de impressao da etiqueta atualizado.')
+
+                elif acao == 'consultar':
+                    self._melhor_envio_consultar(pedido, client)
+                    messages.success(request, 'Dados consultados no Melhor Envio.')
+
+                else:
+                    messages.warning(request, 'Acao nao reconhecida.')
+
+            except MelhorEnvioError as exc:
+                pedido.melhor_envio_erro = str(exc)
+                pedido.melhor_envio_atualizado_em = timezone.now()
+                pedido.save(update_fields=['melhor_envio_erro', 'melhor_envio_atualizado_em'])
+                messages.error(request, str(exc))
+
+            return redirect(reverse('admin:loja_pedido_melhor_envio', args=[pedido.id]))
+
+        context = {
+            **self.admin_site.each_context(request),
+            'title': f'Melhor Envio - Pedido #{pedido.id}',
+            'pedido': pedido,
+            'melhor_envio_configurado': client.configurado(),
+        }
+        return render(request, 'admin/loja/pedido/melhor_envio.html', context)
+
+    def _melhor_envio_criar_carrinho(self, pedido, client):
+        self._validar_pedido_melhor_envio(pedido)
+        data = client.criar_envio_no_carrinho(pedido)
+        self._atualizar_pedido_melhor_envio(pedido, data)
+
+    def _melhor_envio_gerar_etiqueta(self, pedido, client):
+        self._exigir_melhor_envio_id(pedido)
+        data = client.gerar_etiqueta(pedido.melhor_envio_id)
+        self._atualizar_pedido_melhor_envio(pedido, data)
+
+    def _melhor_envio_imprimir_etiqueta(self, pedido, client):
+        self._exigir_melhor_envio_id(pedido)
+        data = client.imprimir_etiqueta(pedido.melhor_envio_id)
+        self._atualizar_pedido_melhor_envio(pedido, data)
+
+    def _melhor_envio_consultar(self, pedido, client):
+        self._exigir_melhor_envio_id(pedido)
+        data = client.consultar_envio(pedido.melhor_envio_id)
+        self._atualizar_pedido_melhor_envio(pedido, data)
+
+    def _validar_pedido_melhor_envio(self, pedido):
+        if pedido.forma_entrega != 'Entrega':
+            raise MelhorEnvioError('Este pedido nao esta marcado como entrega.')
+
+        obrigatorios = {
+            'nome do cliente': pedido.nome_cliente,
+            'telefone': pedido.telefone,
+            'CEP': pedido.cep_entrega,
+            'endereco': pedido.endereco,
+            'numero': pedido.numero,
+            'bairro': pedido.bairro,
+            'cidade': pedido.cidade,
+            'estado': pedido.estado,
+        }
+
+        faltando = [nome for nome, valor in obrigatorios.items() if not valor]
+
+        if faltando:
+            raise MelhorEnvioError('Preencha antes de gerar etiqueta: ' + ', '.join(faltando) + '.')
+
+    def _exigir_melhor_envio_id(self, pedido):
+        if not pedido.melhor_envio_id:
+            raise MelhorEnvioError('Crie o envio no carrinho do Melhor Envio antes desta acao.')
+
+    def _atualizar_pedido_melhor_envio(self, pedido, data):
+        melhor_envio_id = primeiro_valor(data, ('id', 'order_id', 'protocol'))
+        status = primeiro_valor(data, ('status', 'status_name', 'state'))
+        rastreio = primeiro_valor(data, ('tracking', 'tracking_code', 'codigo_rastreio', 'tracking_number'))
+        etiqueta_url = primeiro_valor(data, ('url', 'print_url', 'label_url', 'download_url'))
+
+        if melhor_envio_id and not pedido.melhor_envio_id:
+            pedido.melhor_envio_id = melhor_envio_id
+
+        if status:
+            pedido.melhor_envio_status = status
+
+        if rastreio:
+            pedido.codigo_rastreio = rastreio
+
+        if etiqueta_url:
+            pedido.melhor_envio_etiqueta_url = etiqueta_url
+
+        pedido.melhor_envio_erro = json.dumps(data, ensure_ascii=False, indent=2)[:4000]
+        pedido.melhor_envio_atualizado_em = timezone.now()
+        pedido.save(update_fields=[
+            'melhor_envio_id',
+            'melhor_envio_status',
+            'codigo_rastreio',
+            'melhor_envio_etiqueta_url',
+            'melhor_envio_erro',
+            'melhor_envio_atualizado_em',
+        ])
 
     def response_change(self, request, obj):
         if "_salvar_imprimir_envio" in request.POST:
@@ -264,6 +435,11 @@ class PedidoAdmin(admin.ModelAdmin):
         if "_salvar_imprimir_etiqueta" in request.POST:
             return redirect(
                 reverse('admin:loja_pedido_etiqueta_correios', args=[obj.id])
+            )
+
+        if "_salvar_melhor_envio" in request.POST:
+            return redirect(
+                reverse('admin:loja_pedido_melhor_envio', args=[obj.id])
             )
 
         return super().response_change(request, obj)

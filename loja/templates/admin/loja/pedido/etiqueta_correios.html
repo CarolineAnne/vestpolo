@@ -345,7 +345,7 @@
                         {% endfor %}
                     {% endfor %}
                 </div>
-                <span class="matriz-legenda">Codigo interno<br>{{ codigo_interno }}</span>
+                <span class="matriz-legenda">{% if tem_rastreio_real %}Rastreio{% else %}Codigo interno{% endif %}<br>{{ codigo_interno }}</span>
             </div>
 
             <div class="marca">
@@ -433,7 +433,11 @@
         </section>
 
         <section class="aviso">
-            Codigo de barras e matriz usados como controle interno da VestPolo. O rastreamento oficial e a etiqueta de postagem devem ser emitidos/confirmados pelos Correios ou pelo sistema contratado.
+            {% if tem_rastreio_real %}
+                Codigo gerado a partir do rastreio salvo no pedido. Confira a etiqueta oficial emitida pelo Melhor Envio antes da postagem.
+            {% else %}
+                Codigo de barras e matriz usados como controle interno da VestPolo. O rastreamento oficial e a etiqueta de postagem devem ser emitidos/confirmados pelos Correios ou pelo sistema contratado.
+            {% endif %}
         </section>
     </main>
 </body>
