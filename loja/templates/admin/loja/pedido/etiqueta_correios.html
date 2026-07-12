@@ -14,13 +14,13 @@
         body {
             margin: 0;
             padding: 0;
-            background: #f3f3f3;
+            background: #efefef;
             color: #111;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .toolbar {
-            width: 80mm;
+            width: 100mm;
             max-width: calc(100% - 16px);
             margin: 12px auto;
             display: flex;
@@ -51,101 +51,266 @@
         }
 
         .etiqueta {
-            width: 80mm;
+            width: 100mm;
+            min-height: 74mm;
             max-width: calc(100% - 16px);
             margin: 0 auto 20px;
-            padding: 4mm;
             background: #fff;
-            border: 1px solid #111;
+            border: 1.5px solid #111;
             color: #111;
         }
 
         .topo {
-            border-bottom: 1px dashed #111;
-            padding-bottom: 3mm;
-            margin-bottom: 3mm;
-            text-align: center;
+            display: grid;
+            grid-template-columns: 25mm 1fr 25mm 12mm;
+            min-height: 28mm;
+            border-bottom: 1px solid #111;
         }
 
-        .marca {
-            font-size: 17px;
-            font-weight: 800;
-            text-transform: uppercase;
+        .matriz-wrap,
+        .marca,
+        .dados,
+        .seta {
+            padding: 2mm;
+            border-right: 1px solid #111;
         }
 
-        .pedido {
-            font-size: 12px;
-            margin-top: 2mm;
+        .seta {
+            border-right: 0;
         }
 
-        .bloco {
-            border-bottom: 1px dashed #111;
-            padding-bottom: 3mm;
-            margin-bottom: 3mm;
+        .matriz {
+            width: 21mm;
+            height: 21mm;
+            display: grid;
+            grid-template-columns: repeat(17, 1fr);
+            grid-template-rows: repeat(17, 1fr);
+            border: 1px solid #111;
+            background: #fff;
+            gap: 0;
         }
 
-        .bloco:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .matriz span {
+            display: block;
+            background: #fff;
         }
 
-        .titulo {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
+        .matriz span.ativo {
+            background: #111;
+        }
+
+        .matriz-legenda {
+            display: block;
+            margin-top: 1mm;
+            font-size: 7px;
+            line-height: 1.1;
+            color: #333;
+        }
+
+        .marca-logo {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
             margin-bottom: 2mm;
-        }
-
-        .nome {
             font-size: 18px;
-            line-height: 1.18;
             font-weight: 800;
-            text-transform: uppercase;
-            word-break: break-word;
         }
 
-        .linha {
-            font-size: 14px;
-            line-height: 1.28;
-            margin-top: 1.5mm;
-            word-break: break-word;
-        }
-
-        .cep {
+        .marca-icone {
             display: inline-block;
-            border: 2px solid #111;
-            padding: 2mm 3mm;
-            margin-top: 3mm;
-            font-size: 18px;
-            font-weight: 900;
-            letter-spacing: 1px;
+            width: 7mm;
+            height: 5mm;
+            background:
+                linear-gradient(135deg, transparent 0 42%, #111 43% 57%, transparent 58%),
+                linear-gradient(45deg, transparent 0 42%, #111 43% 57%, transparent 58%);
         }
 
-        .telefone,
-        .observacao {
-            font-size: 12px;
+        .meta {
+            font-size: 10px;
             line-height: 1.25;
         }
 
-        .aviso {
-            border: 2px solid #111;
-            padding: 3mm;
-            font-size: 14px;
-            line-height: 1.3;
-            font-weight: 700;
+        .meta strong {
+            font-size: 11px;
+        }
+
+        .dados {
+            font-size: 10px;
+            line-height: 1.25;
+        }
+
+        .dados strong {
+            font-size: 12px;
+        }
+
+        .seta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .seta span {
+            width: 9mm;
+            height: 18mm;
+            display: block;
+            background: #111;
+            clip-path: polygon(0 0, 100% 50%, 0 100%, 0 68%, 45% 50%, 0 32%);
+        }
+
+        .codigo-principal {
+            display: grid;
+            grid-template-columns: 1fr 16mm;
+            gap: 2mm;
+            padding: 1.5mm 2mm 0;
+            border-bottom: 1px solid #111;
+        }
+
+        .codigo-texto {
+            text-align: center;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            margin-bottom: 1mm;
+        }
+
+        .barcode {
+            width: 100%;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .barcode.principal {
+            height: 18mm;
+        }
+
+        .barcode.destino {
+            height: 18mm;
+            border-left: 1px solid #111;
+            padding-left: 2mm;
+        }
+
+        .barcode span {
+            display: block;
+            height: 100%;
+            flex: 0 0 auto;
+        }
+
+        .barcode span.ativo {
+            background: #111;
+        }
+
+        .barcode span.inativo {
+            background: #fff;
+        }
+
+        .servicos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8mm;
+            padding-top: 5mm;
+            font-size: 9px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .assinatura {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2mm;
+            padding: 1mm 2mm;
+            border-bottom: 1px solid #111;
+            font-size: 9px;
+        }
+
+        .linha-assinatura {
+            border-bottom: 1px solid #111;
+            min-height: 5mm;
+            padding-top: 2mm;
+        }
+
+        .destinatario-cabecalho {
+            background: #111;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+            padding: 1mm 2mm;
+            text-transform: uppercase;
+        }
+
+        .destinatario-grid {
+            display: grid;
+            grid-template-columns: 1fr 42mm;
+            min-height: 28mm;
+            border-bottom: 1px solid #111;
+        }
+
+        .destinatario-dados {
+            padding: 1.5mm 2mm;
+            font-size: 10.5px;
+            line-height: 1.2;
+        }
+
+        .destinatario-dados strong {
+            display: block;
+            font-size: 12px;
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+
+        .cep-destaque {
+            display: inline-block;
+            margin-top: 1mm;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+        }
+
+        .sem-endereco {
+            margin-top: 2mm;
+            border: 1px solid #111;
+            padding: 2mm;
+            font-weight: 800;
             text-align: center;
         }
 
+        .remetente {
+            padding: 1.5mm 2mm;
+            font-size: 9.5px;
+            line-height: 1.22;
+        }
+
+        .remetente strong {
+            font-size: 10px;
+        }
+
+        .observacao {
+            border-top: 1px dashed #111;
+            margin-top: 1mm;
+            padding-top: 1mm;
+            font-size: 8.5px;
+        }
+
+        .aviso {
+            padding: 1mm 2mm 1.5mm;
+            color: #333;
+            font-size: 7.5px;
+            line-height: 1.25;
+            border-top: 1px solid #111;
+        }
+
         @page {
-            size: 80mm auto;
-            margin: 2mm;
+            size: 100mm 74mm;
+            margin: 0;
         }
 
         @media print {
             html,
             body {
-                width: 80mm;
+                width: 100mm;
                 background: #fff;
             }
 
@@ -154,10 +319,10 @@
             }
 
             .etiqueta {
-                width: 76mm;
+                width: 100mm;
                 max-width: none;
+                min-height: 74mm;
                 margin: 0;
-                padding: 2mm;
                 border: none;
             }
         }
@@ -167,53 +332,109 @@
 <body>
     <div class="toolbar">
         <a href="{% url 'admin:loja_pedido_change' pedido.id %}">Voltar</a>
-        <button type="button" onclick="window.print()">Imprimir</button>
+        <button type="button" onclick="window.print()">Imprimir etiqueta</button>
     </div>
 
     <main class="etiqueta">
         <section class="topo">
-            <div class="marca">VestPolo</div>
-            <div class="pedido">Pedido #{{ pedido.id }} - {{ pedido.data_pedido|date:"d/m/Y H:i" }}</div>
-        </section>
-
-        <section class="bloco">
-            <div class="titulo">Destinatario</div>
-            <div class="nome">{{ pedido.nome_cliente|default:"Cliente nao informado" }}</div>
-
-            {% if pedido.forma_entrega == "Entrega" %}
-                <div class="linha">
-                    {{ pedido.endereco }}, {{ pedido.numero }}{% if pedido.complemento %}<br>{{ pedido.complemento }}{% endif %}
+            <div class="matriz-wrap">
+                <div class="matriz" aria-label="Codigo interno do pedido">
+                    {% for linha in matriz_etiqueta %}
+                        {% for ativo in linha %}
+                            <span class="{% if ativo %}ativo{% endif %}"></span>
+                        {% endfor %}
+                    {% endfor %}
                 </div>
-                <div class="linha">{{ pedido.bairro }}</div>
-                <div class="linha">{{ pedido.cidade }} / {{ pedido.estado }}</div>
-                <div class="cep">{{ pedido.cep_entrega }}</div>
-            {% else %}
-                <div class="aviso">
-                    {{ pedido.forma_entrega }}<br>
-                    Pedido sem endereco de entrega.
+                <span class="matriz-legenda">Codigo interno<br>{{ codigo_interno }}</span>
+            </div>
+
+            <div class="marca">
+                <div class="marca-logo">
+                    <span class="marca-icone"></span>
+                    <span>Correios</span>
                 </div>
-            {% endif %}
-        </section>
+                <div class="meta">Contrato: <strong>preencher</strong></div>
+                <div class="meta">Servico: <strong>{{ pedido.servico_frete|default:"a definir" }}</strong></div>
+                <div class="meta">Controle VestPolo: <strong>Pedido #{{ pedido.id }}</strong></div>
+            </div>
 
-        <section class="bloco">
-            <div class="titulo">Contato</div>
-            <div class="telefone">{{ pedido.telefone|default:"Telefone nao informado" }}</div>
-        </section>
+            <div class="dados">
+                <div>NF: <strong>---</strong></div>
+                <div>Pedido: <strong>{{ pedido.id }}</strong></div>
+                <div>Volume: <strong>1/1</strong></div>
+                <div>Peso (g): <strong>____</strong></div>
+                <div>Postagem: <strong>____/____/____</strong></div>
+            </div>
 
-        <section class="bloco">
-            <div class="titulo">Status</div>
-            <div class="telefone">
-                Pedido: {{ pedido.status }}<br>
-                Pagamento: {{ pedido.status_pagamento }}
+            <div class="seta" aria-label="Encaminhamento">
+                <span></span>
             </div>
         </section>
 
-        {% if pedido.observacao %}
-            <section class="bloco">
-                <div class="titulo">Obs.</div>
-                <div class="observacao">{{ pedido.observacao }}</div>
-            </section>
-        {% endif %}
+        <section class="codigo-principal">
+            <div>
+                <div class="codigo-texto">{{ codigo_interno }}</div>
+                <div class="barcode principal" aria-label="Codigo de barras interno">
+                    {% for barra in barras_principais %}
+                        <span class="{% if barra.ativo %}ativo{% else %}inativo{% endif %}" style="width: {{ barra.largura }}px;"></span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="servicos">
+                <span>AR __</span>
+                <span>MP __</span>
+                <span>DD __</span>
+                <span>VD __</span>
+            </div>
+        </section>
+
+        <section class="assinatura">
+            <div class="linha-assinatura">Recebedor:</div>
+            <div class="linha-assinatura">Documento:</div>
+        </section>
+
+        <section>
+            <div class="destinatario-cabecalho">Destinatario</div>
+            <div class="destinatario-grid">
+                <div class="destinatario-dados">
+                    <strong>{{ pedido.nome_cliente|default:"Cliente nao informado" }}</strong>
+
+                    {% if pedido.forma_entrega == "Entrega" %}
+                        <div>{{ pedido.endereco|default:"Endereco nao informado" }}, {{ pedido.numero|default:"s/n" }}</div>
+                        {% if pedido.complemento %}<div>{{ pedido.complemento }}</div>{% endif %}
+                        <div>{{ pedido.bairro|default:"Bairro nao informado" }}</div>
+                        <div>{{ pedido.cidade|default:"Cidade" }} / {{ pedido.estado|default:"UF" }}</div>
+                        <div class="cep-destaque">{{ pedido.cep_entrega|default:"CEP nao informado" }}</div>
+                    {% else %}
+                        <div class="sem-endereco">
+                            {{ pedido.forma_entrega|default:"Pedido sem entrega" }}<br>
+                            Endereco de entrega nao informado.
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="barcode destino" aria-label="Codigo de barras do CEP">
+                    {% for barra in barras_destino %}
+                        <span class="{% if barra.ativo %}ativo{% else %}inativo{% endif %}" style="width: {{ barra.largura }}px;"></span>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="remetente">
+            <strong>Remetente:</strong> VestPolo - Juazeiro/BA<br>
+            WhatsApp: (74) 99908-7655
+            {% if pedido.telefone %}<br><strong>Contato do cliente:</strong> {{ pedido.telefone }}{% endif %}
+
+            {% if pedido.observacao %}
+                <div class="observacao"><strong>Obs.:</strong> {{ pedido.observacao }}</div>
+            {% endif %}
+        </section>
+
+        <section class="aviso">
+            Codigo de barras e matriz usados como controle interno da VestPolo. O rastreamento oficial e a etiqueta de postagem devem ser emitidos/confirmados pelos Correios ou pelo sistema contratado.
+        </section>
     </main>
 </body>
 </html>
