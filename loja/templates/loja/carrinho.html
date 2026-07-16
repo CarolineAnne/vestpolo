@@ -509,6 +509,9 @@
 
                     <p><strong>Tamanho:</strong> {{ item.tamanho }}</p>
                     <p><strong>Cor:</strong> {{ item.cor }}</p>
+                    {% if item.modelagem %}
+                        <p><strong>Modelagem:</strong> {{ item.modelagem }}</p>
+                    {% endif %}
                     <p><strong>Subtotal:</strong> R$ {{ item.subtotal }}</p>
 
                     <div class="qtd-area">

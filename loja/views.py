@@ -205,6 +205,8 @@ def montar_mensagem_pedido(pedido):
         mensagem += f"- {item.produto.nome}\n"
         mensagem += f"  Tamanho: {item.tamanho}\n"
         mensagem += f"  Cor: {item.cor}\n"
+        if item.modelagem:
+            mensagem += f"  Modelagem: {item.modelagem}\n"
         mensagem += f"  Quantidade: {item.quantidade}\n"
 
         if item.curso:
@@ -573,11 +575,12 @@ def adicionar_carrinho(request, id):
 
     tamanho = request.GET.get('tamanho', '')
     cor = request.GET.get('cor', '')
+    modelagem = request.GET.get('modelagem', '')
 
-    if not tamanho or not cor:
+    if not tamanho or not cor or not modelagem:
         return redirect('produto_detalhe', id=id)
 
-    chave = f"{id}_{tamanho}_{cor}"
+    chave = f"{id}_{tamanho}_{cor}_{modelagem}"
 
     if chave in carrinho:
         carrinho[chave]['quantidade'] += quantidade
@@ -586,7 +589,8 @@ def adicionar_carrinho(request, id):
             'produto_id': produto.id,
             'quantidade': quantidade,
             'tamanho': tamanho,
-            'cor': cor
+            'cor': cor,
+            'modelagem': modelagem
         }
 
     request.session['carrinho'] = carrinho
@@ -623,6 +627,7 @@ def carrinho(request):
             'quantidade': quantidade,
             'tamanho': dados.get('tamanho', ''),
             'cor': dados.get('cor', ''),
+            'modelagem': dados.get('modelagem', ''),
             'subtotal': subtotal
         })
 
@@ -697,6 +702,7 @@ def checkout(request):
             'quantidade': quantidade,
             'tamanho': dados.get('tamanho', ''),
             'cor': dados.get('cor', ''),
+            'modelagem': dados.get('modelagem', ''),
             'subtotal': subtotal
         })
     if request.method == 'POST':
@@ -830,6 +836,7 @@ def checkout(request):
                 quantidade=item['quantidade'],
                 tamanho=item['tamanho'],
                 cor=item['cor'],
+                modelagem=item['modelagem'],
                 curso=curso_item,
                 nome_bordado=nome_bordado_item,
                 observacao=observacao_item_final,
@@ -840,6 +847,8 @@ def checkout(request):
             mensagem += f"- {item['produto'].nome}\n"
             mensagem += f"  Tamanho: {item['tamanho']}\n"
             mensagem += f"  Cor: {item['cor']}\n"
+            if item['modelagem']:
+                mensagem += f"  Modelagem: {item['modelagem']}\n"
             mensagem += f"  Quantidade: {item['quantidade']}\n"
 
             if curso_item:

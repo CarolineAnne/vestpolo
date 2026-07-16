@@ -268,6 +268,7 @@ class ItemPedido(models.Model):
     
     tamanho = models.CharField(max_length=5, blank=True)
     cor = models.CharField(max_length=50, blank=True)
+    modelagem = models.CharField(max_length=20, blank=True)
     curso = models.CharField(max_length=100, blank=True)
     nome_bordado = models.CharField(max_length=100, blank=True)
     observacao = models.TextField(blank=True)

@@ -227,7 +227,8 @@
                 <p class="muted">
                     Quantidade: {{ item.quantidade }} |
                     Tamanho: {{ item.tamanho|default:"-" }} |
-                    Cor: {{ item.cor|default:"-" }}
+                    Cor: {{ item.cor|default:"-" }} |
+                    Modelagem: {{ item.modelagem|default:"-" }}
                 </p>
                 {% if item.curso or item.nome_bordado or item.observacao %}
                     <p class="muted">

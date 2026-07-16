@@ -439,13 +439,15 @@
             background: #1f7a3a;
         }
 
-        .opcoes-tamanhos {
+        .opcoes-tamanhos,
+        .opcoes-modelagem {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .tamanho-opcao {
+        .tamanho-opcao,
+        .modelagem-opcao {
             min-width: 56px;
             padding: 12px 16px;
             border: 1px solid #d8d8d8;
@@ -458,11 +460,13 @@
             transition: 0.2s;
         }
 
-        .tamanho-opcao:hover {
+        .tamanho-opcao:hover,
+        .modelagem-opcao:hover {
             background: #f5f5f5;
         }
 
-        .tamanho-opcao.ativo {
+        .tamanho-opcao.ativo,
+        .modelagem-opcao.ativo {
             background: #111;
             color: #fff;
             border-color: #111;
@@ -766,7 +770,8 @@
                 height: 42px;
             }
 
-            .tamanho-opcao {
+            .tamanho-opcao,
+            .modelagem-opcao {
                 min-width: 52px;
                 padding: 10px 14px;
                 font-size: 14px;
@@ -891,7 +896,8 @@
                 height: 42px;
             }
 
-            .tamanho-opcao {
+            .tamanho-opcao,
+            .modelagem-opcao {
                 min-width: 52px;
                 padding: 10px 14px;
                 font-size: 14px;
@@ -1162,6 +1168,18 @@
         </div>
 
         <div class="tamanho-box">
+            <span class="opcao-titulo">Selecione a modelagem:</span>
+
+            <div class="opcoes-modelagem">
+                <button type="button" class="modelagem-opcao" onclick="selecionarModelagem(this, 'Feminino')">Feminino</button>
+                <button type="button" class="modelagem-opcao" onclick="selecionarModelagem(this, 'Masculino')">Masculino</button>
+                <button type="button" class="modelagem-opcao" onclick="selecionarModelagem(this, 'Unissex')">Unissex</button>
+            </div>
+
+            <input type="hidden" id="modelagemSelecionada" value="">
+        </div>
+
+        <div class="tamanho-box">
             <strong>Quantidade:</strong>
 
             <div class="quantidade-controle">
@@ -1182,6 +1200,7 @@
                 <input type="hidden" name="quantidade" id="quantidadeCarrinho" value="1">
                 <input type="hidden" name="tamanho" id="tamanhoCarrinho">
                 <input type="hidden" name="cor" id="corCarrinho">
+                <input type="hidden" name="modelagem" id="modelagemCarrinho">
 
                 <button type="submit" class="btn-carrinho">
                     <i class="fa-solid fa-cart-shopping"></i> Adicionar ao carrinho
@@ -1319,11 +1338,22 @@
 
         botao.classList.add("ativo");
     }
+
+    function selecionarModelagem(botao, modelagem) {
+        document.getElementById("modelagemSelecionada").value = modelagem;
+
+        document.querySelectorAll(".modelagem-opcao").forEach(item => {
+            item.classList.remove("ativo");
+        });
+
+        botao.classList.add("ativo");
+    }
     
     function prepararCarrinho() {
         let qtd = document.getElementById("quantidade").value;
         let tamanho = document.getElementById("tamanhoSelecionado").value;
         let cor = document.getElementById("corSelecionada").value;
+        let modelagem = document.getElementById("modelagemSelecionada").value;
 
         if (!tamanho) {
             alert("Escolha um tamanho.");
@@ -1335,9 +1365,15 @@
             return false;
         }
 
+        if (!modelagem) {
+            alert("Escolha a modelagem.");
+            return false;
+        }
+
         document.getElementById("quantidadeCarrinho").value = qtd;
         document.getElementById("tamanhoCarrinho").value = tamanho;
         document.getElementById("corCarrinho").value = cor;
+        document.getElementById("modelagemCarrinho").value = modelagem;
 
         return true;
     }
@@ -1346,6 +1382,7 @@
         let qtd = document.getElementById("quantidade").value;
         let tamanho = document.getElementById("tamanhoSelecionado").value;
         let cor = document.getElementById("corSelecionada").value;
+        let modelagem = document.getElementById("modelagemSelecionada").value;
 
         if (!tamanho) {
             alert("Escolha um tamanho.");
@@ -1357,10 +1394,16 @@
             return;
         }
 
+        if (!modelagem) {
+            alert("Escolha a modelagem.");
+            return;
+        }
+
         let mensagem =
             `Olá! Tenho interesse no produto: {{ produto.nome }}\n` +
             `Tamanho: ${tamanho}\n` +
             `Cor: ${cor}\n` +
+            `Modelagem: ${modelagem}\n` +
             `Quantidade: ${qtd}\n` +
             `Valor unitário: R$ {{ produto.preco }}`;
 

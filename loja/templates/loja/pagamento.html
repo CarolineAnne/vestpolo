@@ -384,6 +384,7 @@
                 <strong>{{ item.produto.nome }}</strong>
                 <span>Tamanho: {{ item.tamanho }}</span><br>
                 <span>Cor: {{ item.cor }}</span><br>
+                {% if item.modelagem %}<span>Modelagem: {{ item.modelagem }}</span><br>{% endif %}
                 <span>Quantidade: {{ item.quantidade }}</span><br>
                 <span>Subtotal: R$ {{ item.subtotal }}</span>
             </div>

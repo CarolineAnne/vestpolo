@@ -243,7 +243,7 @@
                 <h3>Itens</h3>
                 <ul class="me-lista">
                     {% for item in pedido.itens.all %}
-                        <li>{{ item.quantidade }}x {{ item.produto.nome }} - R$ {{ item.produto.preco }}</li>
+                        <li>{{ item.quantidade }}x {{ item.produto.nome }}{% if item.modelagem %} - {{ item.modelagem }}{% endif %} - R$ {{ item.produto.preco }}</li>
                     {% empty %}
                         <li>Nenhum item encontrado.</li>
                     {% endfor %}

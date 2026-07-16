@@ -73,8 +73,24 @@ class MelhorEnvioClient:
         produtos = []
 
         for item in pedido.itens.all():
+            detalhes = []
+
+            if item.tamanho:
+                detalhes.append(f'Tam. {item.tamanho}')
+
+            if item.cor:
+                detalhes.append(item.cor)
+
+            if item.modelagem:
+                detalhes.append(item.modelagem)
+
+            nome = item.produto.nome
+
+            if detalhes:
+                nome = f"{nome} ({' / '.join(detalhes)})"
+
             produtos.append({
-                'name': item.produto.nome,
+                'name': nome,
                 'quantity': item.quantidade,
                 'unitary_value': str(item.produto.preco),
             })

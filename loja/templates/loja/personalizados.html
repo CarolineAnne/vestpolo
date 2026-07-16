@@ -425,7 +425,7 @@
 
         .config-linha {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
             margin-top: 16px;
         }
@@ -1192,6 +1192,15 @@
                     </div>
 
                     <div class="config-field">
+                        <label for="configModelagem">Modelagem</label>
+                        <select id="configModelagem">
+                            <option value="Feminino">Feminino</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Unissex" selected>Unissex</option>
+                        </select>
+                    </div>
+
+                    <div class="config-field">
                         <label for="configCor">Cor desejada</label>
                         <input id="configCor" type="text" placeholder="Ex: preta, vinho, azul marinho">
                     </div>
@@ -1282,6 +1291,7 @@
             <div class="config-resumo-linhas">
                 <div class="config-resumo-linha"><span>Polo</span><strong id="configResumoProduto">Selecione uma base</strong></div>
                 <div class="config-resumo-linha"><span>Tamanho</span><strong id="configResumoTamanho">M</strong></div>
+                <div class="config-resumo-linha"><span>Modelagem</span><strong id="configResumoModelagem">Unissex</strong></div>
                 <div class="config-resumo-linha"><span>Cor</span><strong id="configResumoCor">A definir</strong></div>
                 <div class="config-resumo-linha"><span>Quantidade</span><strong id="configResumoQuantidade">1</strong></div>
                 <div class="config-resumo-linha"><span>Cliente</span><strong id="configResumoCliente">Obrigat&oacute;rio</strong></div>
@@ -1445,6 +1455,7 @@
 
         const numeroWhatsApp = "5574999087655";
         const tamanhoInput = document.getElementById("configTamanho");
+        const modelagemInput = document.getElementById("configModelagem");
         const corInput = document.getElementById("configCor");
         const quantidadeInput = document.getElementById("configQuantidade");
         const clienteInput = document.getElementById("configCliente");
@@ -1455,6 +1466,7 @@
         const previewImg = document.getElementById("configPreviewImg");
         const resumoProduto = document.getElementById("configResumoProduto");
         const resumoTamanho = document.getElementById("configResumoTamanho");
+        const resumoModelagem = document.getElementById("configResumoModelagem");
         const resumoCor = document.getElementById("configResumoCor");
         const resumoQuantidade = document.getElementById("configResumoQuantidade");
         const resumoCliente = document.getElementById("configResumoCliente");
@@ -1543,6 +1555,7 @@
                 "",
                 `Polo base: ${dados.produtoNome} (${moeda.format(dados.precoBase)})`,
                 `Tamanho: ${dados.tamanho}`,
+                `Modelagem: ${dados.modelagem}`,
                 `Cor desejada: ${dados.cor}`,
                 `Quantidade: ${dados.quantidade}`,
                 "",
@@ -1578,12 +1591,14 @@
             const curso = cursoInput.value.trim();
             const cor = corInput.value.trim() || "A definir";
             const tamanho = tamanhoInput.value || "M";
+            const modelagem = modelagemInput.value || "Unissex";
             const produtoNome = produto.dataset.nome || "Polo personalizada";
 
             previewImg.src = produto.dataset.imagem || "https://via.placeholder.com/600x520?text=VestPolo";
             previewImg.alt = produtoNome;
             resumoProduto.textContent = produtoNome;
             resumoTamanho.textContent = tamanho;
+            resumoModelagem.textContent = modelagem;
             resumoCor.textContent = cor;
             resumoQuantidade.textContent = String(quantidade);
             resumoCliente.textContent = cliente || "Obrigatorio";
@@ -1608,6 +1623,7 @@
                 produtoNome,
                 precoBase,
                 tamanho,
+                modelagem,
                 cor,
                 quantidade,
                 adicionais: selecionados,
@@ -1621,6 +1637,7 @@
 
         [
             tamanhoInput,
+            modelagemInput,
             corInput,
             quantidadeInput,
             clienteInput,
