@@ -1521,11 +1521,13 @@
         {% for produto in produtos %}
             <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
 
-                {% if produto.imagem %}
-                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
-                {% endif %}
+                {% with imagem_produto=produto.imagem_vitrine %}
+                    {% if imagem_produto %}
+                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                {% endwith %}
 
                 <span class="mini-badge">Mais vendido</span>
                 <h3>{{ produto.nome }}</h3>
@@ -1553,11 +1555,13 @@
         {% for produto in produtos_universitarios %}
             <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
 
-                {% if produto.imagem %}
-                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
-                {% endif %}
+                {% with imagem_produto=produto.imagem_vitrine %}
+                    {% if imagem_produto %}
+                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                {% endwith %}
 
                 <span class="mini-badge">Universitário</span>
                 <h3>{{ produto.nome }}</h3>
@@ -1585,11 +1589,13 @@
         {% for produto in produtos_empresariais %}
             <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
 
-                {% if produto.imagem %}
-                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
-                {% endif %}
+                {% with imagem_produto=produto.imagem_vitrine %}
+                    {% if imagem_produto %}
+                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                {% endwith %}
 
                 <span class="mini-badge">Empresarial</span>
                 <h3>{{ produto.nome }}</h3>
@@ -1627,11 +1633,13 @@
         <a href="{% url 'produto_detalhe' produto.id %}" class="produto-link card-click">
 
             <div class="imagem-card">
-                {% if produto.imagem %}
-                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
-                {% endif %}
+                {% with imagem_produto=produto.imagem_vitrine %}
+                    {% if imagem_produto %}
+                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                {% endwith %}
             </div>
 
             <span class="badge-novo">VestPolo</span>

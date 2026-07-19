@@ -56,8 +56,52 @@ class Produto(models.Model):
         verbose_name='Tabela de tamanhos'
     )
 
+    @property
+    def imagem_vitrine(self):
+        if self.imagem:
+            return self.imagem.url
+
+        fotos_ativas = getattr(self, 'fotos_ativas', None)
+
+        if fotos_ativas:
+            foto = fotos_ativas[0]
+        else:
+            foto = self.fotos.filter(ativo=True).order_by('ordem', 'id').first()
+
+        if foto and foto.imagem:
+            return foto.imagem.url
+
+        return ''
+
     def __str__(self):
         return self.nome
+
+
+class ProdutoFoto(models.Model):
+    produto = models.ForeignKey(
+        Produto,
+        on_delete=models.CASCADE,
+        related_name='fotos'
+    )
+    imagem = models.ImageField(upload_to='produtos/galeria/')
+    titulo = models.CharField(
+        max_length=80,
+        blank=True,
+        verbose_name='Titulo ou legenda'
+    )
+    ordem = models.PositiveIntegerField(default=0)
+    ativo = models.BooleanField(default=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('ordem', 'id')
+        verbose_name = 'Foto do produto'
+        verbose_name_plural = 'Fotos do produto'
+
+    def __str__(self):
+        if self.titulo:
+            return f'{self.produto.nome} - {self.titulo}'
+        return f'Foto de {self.produto.nome}'
 
 
 class AdicionalPersonalizacao(models.Model):

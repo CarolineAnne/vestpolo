@@ -1150,19 +1150,20 @@
 
                 <div class="config-opcoes-produtos">
                     {% for produto in produtos %}
+                        {% with imagem_produto=produto.imagem_vitrine %}
                         <label class="config-produto">
                             <input type="radio"
                                    name="configProduto"
                                    value="{{ produto.id }}"
                                    data-nome="{{ produto.nome }}"
                                    data-preco="{{ produto.preco }}"
-                                   data-imagem="{% if produto.imagem %}{{ produto.imagem.url }}{% else %}https://via.placeholder.com/600x520?text=VestPolo{% endif %}"
+                                   data-imagem="{% if imagem_produto %}{{ imagem_produto }}{% else %}https://via.placeholder.com/600x520?text=VestPolo{% endif %}"
                                    {% if forloop.first %}checked{% endif %}>
 
                             <span class="config-produto-conteudo">
                                 <span class="config-produto-imagem">
-                                    {% if produto.imagem %}
-                                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                                    {% if imagem_produto %}
+                                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
                                     {% else %}
                                         <img src="https://via.placeholder.com/600x520?text=VestPolo" alt="Produto personalizado">
                                     {% endif %}
@@ -1171,6 +1172,7 @@
                                 <span>R$ {{ produto.preco }}</span>
                             </span>
                         </label>
+                        {% endwith %}
                     {% empty %}
                         <div class="mensagem">
                             Cadastre pelo menos um produto da categoria Personalizado para ativar o configurador.
@@ -1390,11 +1392,13 @@
 
             <a href="{% url 'produto_detalhe' produto.id %}">
                 <div class="imagem-card">
-                    {% if produto.imagem %}
-                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-                    {% else %}
-                        <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
-                    {% endif %}
+                    {% with imagem_produto=produto.imagem_vitrine %}
+                        {% if imagem_produto %}
+                            <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/250x230?text=Sem+Imagem" alt="Sem imagem">
+                        {% endif %}
+                    {% endwith %}
                 </div>
 
                 <span class="badge">Personalizado</span>

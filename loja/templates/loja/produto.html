@@ -994,6 +994,18 @@
                     </button>
                 {% endif %}
 
+                {% for foto in fotos_produto %}
+                    <button type="button"
+                            class="miniatura-produto"
+                            data-slide="foto-{{ foto.id }}"
+                            onclick="mostrarSlideProduto('foto-{{ foto.id }}', this)">
+
+                        <img src="{{ foto.imagem.url }}"
+                            alt="{% if foto.titulo %}{{ foto.titulo }}{% else %}{{ produto.nome }}{% endif %}">
+
+                    </button>
+                {% endfor %}
+
             </div>
 
             <button type="button" class="miniatura-scroll" onclick="rolarMiniaturas()">
@@ -1051,6 +1063,21 @@
 
                 </div>
             {% endif %}
+
+            {% for foto in fotos_produto %}
+                <div class="slide-produto"
+                     data-slide="foto-{{ foto.id }}"
+                     data-titulo="{% if foto.titulo %}{{ foto.titulo }}{% else %}{{ produto.nome }}{% endif %}">
+
+                    {% if foto.titulo %}
+                        <span class="titulo-slide-produto">{{ foto.titulo }}</span>
+                    {% endif %}
+
+                    <img src="{{ foto.imagem.url }}"
+                        alt="{% if foto.titulo %}{{ foto.titulo }}{% else %}{{ produto.nome }}{% endif %}">
+
+                </div>
+            {% endfor %}
 
             <div class="zoom-lente" id="zoomLente"></div>
 
@@ -1588,7 +1615,7 @@
                 }
             }
 
-            let titulo = "{{ produto.nome }}";
+            let titulo = slide.getAttribute("data-titulo") || "{{ produto.nome }}";
 
             if (tipo === "logo") {
                 titulo = "Logo do bordado";

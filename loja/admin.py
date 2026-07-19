@@ -7,7 +7,7 @@ from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 from .melhor_envio import MelhorEnvioClient, MelhorEnvioError, primeiro_valor
-from .models import Produto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
+from .models import Produto, ProdutoFoto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
 
 @admin.register(Favorito)
 class FavoritoAdmin(admin.ModelAdmin):
@@ -16,12 +16,108 @@ class FavoritoAdmin(admin.ModelAdmin):
     list_filter = ('data_adicionado',)
 
 
+class ProdutoFotoInline(admin.TabularInline):
+    model = ProdutoFoto
+    extra = 1
+    fields = ('preview', 'imagem', 'titulo', 'ordem', 'ativo')
+    readonly_fields = ('preview',)
+
+    def preview(self, obj):
+        if obj and obj.imagem:
+            return format_html(
+                '<img src="{}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">',
+                obj.imagem.url
+            )
+        return 'Sem foto'
+
+    preview.short_description = 'Previa'
+
+
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'categoria', 'preco')
+    list_display = ('id', 'miniatura', 'nome', 'categoria', 'preco')
     search_fields = ('nome', 'descricao')
     list_filter = ('categoria',)
     list_per_page = 20
+    readonly_fields = ('preview_imagem',)
+    inlines = [ProdutoFotoInline]
+
+    fieldsets = (
+        ('Dados principais', {
+            'fields': (
+                'nome',
+                'preco',
+                'descricao',
+                'categoria',
+            )
+        }),
+        ('Foto principal', {
+            'fields': (
+                'preview_imagem',
+                'imagem',
+            )
+        }),
+        ('Fotos por cor', {
+            'fields': (
+                ('imagem_preta', 'imagem_preta_costas'),
+                ('imagem_branca', 'imagem_branca_costas'),
+                ('imagem_vinho', 'imagem_vinho_costas'),
+                ('imagem_marinho', 'imagem_marinho_costas'),
+                ('imagem_amarelo', 'imagem_amarelo_costas'),
+                ('imagem_verde', 'imagem_verde_costas'),
+            )
+        }),
+        ('Imagens de apoio', {
+            'fields': (
+                'imagem_logo',
+                'imagem_tamanho',
+            )
+        }),
+    )
+
+    def miniatura(self, obj):
+        imagem = obj.imagem_vitrine
+
+        if imagem:
+            return format_html(
+                '<img src="{}" style="width:54px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">',
+                imagem
+            )
+
+        return '-'
+
+    miniatura.short_description = 'Foto'
+
+    def preview_imagem(self, obj):
+        if obj and obj.imagem:
+            return format_html(
+                '<img src="{}" style="max-width:220px;max-height:220px;object-fit:contain;border-radius:8px;border:1px solid #ddd;background:#fff;">',
+                obj.imagem.url
+            )
+
+        return 'Nenhuma foto principal cadastrada.'
+
+    preview_imagem.short_description = 'Previa da foto principal'
+
+
+@admin.register(ProdutoFoto)
+class ProdutoFotoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'preview', 'produto', 'titulo', 'ordem', 'ativo')
+    list_editable = ('ordem', 'ativo')
+    search_fields = ('produto__nome', 'titulo')
+    list_filter = ('ativo', 'produto__categoria')
+    autocomplete_fields = ('produto',)
+    list_per_page = 30
+
+    def preview(self, obj):
+        if obj.imagem:
+            return format_html(
+                '<img src="{}" style="width:58px;height:58px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">',
+                obj.imagem.url
+            )
+        return '-'
+
+    preview.short_description = 'Foto'
 
 
 @admin.register(AdicionalPersonalizacao)

@@ -6,12 +6,12 @@ import requests
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from urllib.parse import quote
 from decimal import Decimal
-from .models import Produto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
+from .models import Produto, ProdutoFoto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -41,6 +41,16 @@ OBSERVACAO_PRAZO_ENTREGA = (
 )
 
 NUMERO_WHATSAPP_ATENDIMENTO = "5574999087655"
+
+
+def produtos_com_fotos(queryset):
+    return queryset.prefetch_related(
+        Prefetch(
+            'fotos',
+            queryset=ProdutoFoto.objects.filter(ativo=True).order_by('ordem', 'id'),
+            to_attr='fotos_ativas'
+        )
+    )
 
 
 def apenas_digitos(valor):
@@ -371,7 +381,7 @@ def calcular_frete(cep, quantidade_total, forma_entrega):
     }
 
 def home(request):
-    produtos = Produto.objects.all()
+    produtos = produtos_com_fotos(Produto.objects.all())
 
     busca = request.GET.get('busca')
 
@@ -381,9 +391,9 @@ def home(request):
             Q(descricao__icontains=busca)
         )
 
-    produtos_universitarios = Produto.objects.filter(categoria='Universitário')
-    produtos_empresariais = Produto.objects.filter(categoria='Empresarial')
-    produtos_personalizados = Produto.objects.filter(categoria='Personalizado')
+    produtos_universitarios = produtos_com_fotos(Produto.objects.filter(categoria='Universitário'))
+    produtos_empresariais = produtos_com_fotos(Produto.objects.filter(categoria='Empresarial'))
+    produtos_personalizados = produtos_com_fotos(Produto.objects.filter(categoria='Personalizado'))
 
     if request.user.is_authenticated:
         favoritos = list(
@@ -416,7 +426,7 @@ def home(request):
     })
 
 def personalizados(request):
-    produtos = Produto.objects.filter(categoria='Personalizado')
+    produtos = produtos_com_fotos(Produto.objects.filter(categoria='Personalizado'))
     adicionais_personalizacao = AdicionalPersonalizacao.objects.filter(ativo=True)
 
     if request.user.is_authenticated:
@@ -448,7 +458,7 @@ def personalizados(request):
     })
 
 def universitarios(request):
-    produtos = Produto.objects.filter(categoria='Universitário')
+    produtos = produtos_com_fotos(Produto.objects.filter(categoria='Universitário'))
 
     if request.user.is_authenticated:
         favoritos = list(
@@ -485,7 +495,7 @@ def universitarios(request):
 
 
 def empresariais(request):
-    produtos = Produto.objects.filter(categoria='Empresarial')
+    produtos = produtos_com_fotos(Produto.objects.filter(categoria='Empresarial'))
 
     if request.user.is_authenticated:
         favoritos = list(
@@ -521,10 +531,15 @@ def empresariais(request):
     })
 
 def produto_detalhe(request, id):
-    produto = get_object_or_404(Produto, id=id)
+    produto = get_object_or_404(
+        produtos_com_fotos(Produto.objects.all()),
+        id=id
+    )
+    fotos_produto = getattr(produto, 'fotos_ativas', [])
 
     return render(request, 'loja/produto.html', {
-        'produto': produto
+        'produto': produto,
+        'fotos_produto': fotos_produto
     })
 
 
@@ -551,7 +566,13 @@ def favoritos(request):
 
     favoritos_usuario = Favorito.objects.filter(
         usuario=request.user
-    ).select_related('produto')
+    ).select_related('produto').prefetch_related(
+        Prefetch(
+            'produto__fotos',
+            queryset=ProdutoFoto.objects.filter(ativo=True).order_by('ordem', 'id'),
+            to_attr='fotos_ativas'
+        )
+    )
 
     produtos = [fav.produto for fav in favoritos_usuario]
 

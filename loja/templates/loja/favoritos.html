@@ -364,11 +364,13 @@
         <div class="card">
             <a href="{% url 'produto_detalhe' produto.id %}">
 
-                {% if produto.imagem %}
-                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/250x200?text=Sem+Imagem" alt="Sem imagem">
-                {% endif %}
+                {% with imagem_produto=produto.imagem_vitrine %}
+                    {% if imagem_produto %}
+                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/250x200?text=Sem+Imagem" alt="Sem imagem">
+                    {% endif %}
+                {% endwith %}
 
                 <h3>{{ produto.nome }}</h3>
                 <p class="price">R$ {{ produto.preco }}</p>
