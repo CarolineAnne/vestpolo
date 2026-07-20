@@ -381,7 +381,7 @@ def calcular_frete(cep, quantidade_total, forma_entrega):
     }
 
 def home(request):
-    produtos = produtos_com_fotos(Produto.objects.all())
+    produtos = produtos_com_fotos(Produto.objects.exclude(categoria='Empresarial'))
 
     busca = request.GET.get('busca')
 
@@ -392,7 +392,6 @@ def home(request):
         )
 
     produtos_universitarios = produtos_com_fotos(Produto.objects.filter(categoria='Universitário'))
-    produtos_empresariais = produtos_com_fotos(Produto.objects.filter(categoria='Empresarial'))
     produtos_personalizados = produtos_com_fotos(Produto.objects.filter(categoria='Personalizado'))
 
     if request.user.is_authenticated:
@@ -418,7 +417,6 @@ def home(request):
     return render(request, 'loja/home.html', {
         'produtos': produtos,
         'produtos_universitarios': produtos_universitarios,
-        'produtos_empresariais': produtos_empresariais,
         'produtos_personalizados': produtos_personalizados,
         'favoritos': favoritos,
         'total_itens': total_itens,
@@ -512,40 +510,7 @@ def universitarios(request):
 
 
 def empresariais(request):
-    produtos = produtos_com_fotos(Produto.objects.filter(categoria='Empresarial'))
-
-    if request.user.is_authenticated:
-        favoritos = list(
-            Favorito.objects.filter(usuario=request.user)
-            .values_list('produto_id', flat=True)
-        )
-    else:
-        favoritos = []
-
-    total_favoritos = len(favoritos)
-
-    carrinho = request.session.get('carrinho', {})
-
-    total_itens = 0
-
-    for item in carrinho.values():
-        if isinstance(item, dict):
-            total_itens += item.get('quantidade', 0)
-        else:
-            total_itens += item
-
-    return render(request, 'loja/categoria.html', {
-        'produtos': produtos,
-        'favoritos': favoritos,
-        'total_itens': total_itens,
-        'total_favoritos': total_favoritos,
-        'titulo': 'Empresariais',
-        'subtitulo': 'Uniformes profissionais personalizados',
-        'descricao_pagina': 'Polos bordadas para empresas, equipes, instituições e eventos corporativos.',
-        'badge': 'Empresarial',
-        'icone': '🏢',
-        'banner_imagem': 'img/empresariais-destaque.png',
-    })
+    return redirect('home')
 
 def produto_detalhe(request, id):
     produto = get_object_or_404(

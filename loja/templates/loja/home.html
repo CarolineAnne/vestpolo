@@ -1343,18 +1343,14 @@
         }
 
         .menu-loja a:nth-child(2)::before {
-            content: "\f1ad";
-        }
-
-        .menu-loja a:nth-child(3)::before {
             content: "\f553";
         }
 
-        .menu-loja a:nth-child(4)::before {
+        .menu-loja a:nth-child(3)::before {
             content: "\f005";
         }
 
-        .menu-loja a:nth-child(5)::before {
+        .menu-loja a:nth-child(4)::before {
             content: "\f27a";
         }
 
@@ -1432,7 +1428,6 @@
 
     <nav class="menu-loja" id="menuLoja">
         <a href="{% url 'universitarios' %}">Universitários</a>
-        <a href="{% url 'empresariais' %}">Empresariais</a>
         <a href="{% url 'personalizados' %}">Personalizados</a>
         <a href="#produtos">Mais vendidos</a>
         <a href="https://wa.me/5574999087655" target="_blank">Contato</a>
@@ -1500,12 +1495,6 @@
         <p>Polos personalizadas para cursos, turmas e eventos acadêmicos.</p>
     </a>
 
-    <a href="{% url 'empresariais' %}" class="categoria-card">
-        <span>🏢</span>
-        <h3>Empresariais</h3>
-        <p>Uniformes profissionais para empresas, equipes e instituições.</p>
-    </a>
-
     <a href="{% url 'personalizados' %}" class="categoria-card">
         <span>✨</span>
         <h3>Personalizados</h3>
@@ -1560,39 +1549,6 @@
     <div class="carrossel-produtos">
 
         {% for produto in produtos_universitarios %}
-            <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
-
-                {% with imagem_produto=produto.imagem_vitrine %}
-                    {% if imagem_produto %}
-                        <img src="{{ imagem_produto }}" alt="{{ produto.nome }}">
-                    {% else %}
-                        <img src="https://via.placeholder.com/220x220?text=Sem+Imagem" alt="Sem imagem">
-                    {% endif %}
-                {% endwith %}
-
-                <h3>{{ produto.nome }}</h3>
-                <p>R$ {{ produto.preco }}</p>
-
-            </a>
-        {% endfor %}
-
-    </div>
-
-</section>
-
-<section class="vitrine-premium mobile-ocultar">
-
-    <div class="vitrine-topo">
-        <div>
-            <span class="subtitulo">Uniformes</span>
-            <h2>Polos empresariais</h2>
-        </div>
-        <a href="{% url 'empresariais' %}">Ver todos</a>
-    </div>
-
-    <div class="carrossel-produtos">
-
-        {% for produto in produtos_empresariais %}
             <a href="{% url 'produto_detalhe' produto.id %}" class="mini-produto">
 
                 {% with imagem_produto=produto.imagem_vitrine %}
