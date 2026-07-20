@@ -253,8 +253,7 @@
             max-width: 1180px;
             margin: 38px auto 56px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 280px));
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 24px;
         }
 
@@ -638,26 +637,14 @@
                 </div>
 
                 <div class="card-conteudo">
-                    <span class="badge">{{ badge }}</span>
-
                     <h3>{{ produto.nome }}</h3>
 
-                    <p>{{ produto.descricao }}</p>
-
-                    <div class="beneficios-card">
-                        {% if produto.curso %}
-                            <span>{{ produto.curso }}</span>
-                        {% endif %}
-                        <span>Bordado incluso</span>
-                        <span>Sob medida</span>
-                    </div>
-
-                    <div class="price">A partir de <strong>R$ {{ produto.preco }}</strong></div>
+                    <div class="price"><strong>R$ {{ produto.preco }}</strong></div>
                 </div>
             </a>
 
             <a href="{% url 'produto_detalhe' produto.id %}" class="btn-ver">
-                Personalizar polo
+                {% if produto.categoria == 'Personalizado' %}Personalizar polo{% else %}Comprar{% endif %}
             </a>
         </div>
     {% empty %}

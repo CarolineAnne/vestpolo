@@ -365,8 +365,7 @@
             max-width: 1200px;
             margin: 0 auto 30px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 22px;
         }
 
@@ -577,8 +576,7 @@
             max-width: 1200px;
             margin: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 24px;
             padding: 20px 0 50px;
         }
@@ -1539,7 +1537,6 @@
                     {% endif %}
                 {% endwith %}
 
-                <span class="mini-badge">Mais vendido</span>
                 <h3>{{ produto.nome }}</h3>
                 <p>R$ {{ produto.preco }}</p>
 
@@ -1573,7 +1570,6 @@
                     {% endif %}
                 {% endwith %}
 
-                <span class="mini-badge">Universitário</span>
                 <h3>{{ produto.nome }}</h3>
                 <p>R$ {{ produto.preco }}</p>
 
@@ -1607,7 +1603,6 @@
                     {% endif %}
                 {% endwith %}
 
-                <span class="mini-badge">Empresarial</span>
                 <h3>{{ produto.nome }}</h3>
                 <p>R$ {{ produto.preco }}</p>
 
@@ -1652,20 +1647,14 @@
                 {% endwith %}
             </div>
 
-            <span class="badge-novo">VestPolo</span>
-
             <h3>{{ produto.nome }}</h3>
-
-            <p class="descricao">{{ produto.descricao }}</p>
-
-            <span class="tag">{{ produto.categoria }}</span>
 
             <p class="price">R$ {{ produto.preco }}</p>
         </a>
 
         <div class="acoes">
             <a href="{% url 'produto_detalhe' produto.id %}">
-                <button>Ver detalhes</button>
+                <button>{% if produto.categoria == 'Personalizado' %}Personalizar polo{% else %}Comprar{% endif %}</button>
             </a>
         </div>
 
