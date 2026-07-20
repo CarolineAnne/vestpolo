@@ -17,6 +17,7 @@ class Produto(models.Model):
         choices=CATEGORIAS,
         default='Universitário'
     )
+    curso = models.CharField(max_length=80, blank=True)
 
     imagem = models.ImageField(
         upload_to='produtos/',

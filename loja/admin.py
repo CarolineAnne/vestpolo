@@ -35,9 +35,9 @@ class ProdutoFotoInline(admin.TabularInline):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'miniatura', 'nome', 'categoria', 'preco')
-    search_fields = ('nome', 'descricao')
-    list_filter = ('categoria',)
+    list_display = ('id', 'miniatura', 'nome', 'categoria', 'curso', 'preco')
+    search_fields = ('nome', 'descricao', 'curso')
+    list_filter = ('categoria', 'curso')
     list_per_page = 20
     readonly_fields = ('preview_imagem',)
     inlines = [ProdutoFotoInline]
@@ -49,6 +49,7 @@ class ProdutoAdmin(admin.ModelAdmin):
                 'preco',
                 'descricao',
                 'categoria',
+                'curso',
             )
         }),
         ('Foto principal', {

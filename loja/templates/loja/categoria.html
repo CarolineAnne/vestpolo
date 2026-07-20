@@ -155,6 +155,99 @@
             font-weight: bold;
         }
 
+        .filtro-cursos {
+            width: 92%;
+            max-width: 1180px;
+            margin: 28px auto -8px;
+            background: white;
+            border: 1px solid #e2e5e8;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(17,17,17,0.08);
+            overflow: hidden;
+        }
+
+        .filtro-cursos summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 17px 18px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .filtro-cursos summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .filtro-cursos-titulo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filtro-cursos-titulo i {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: #e8f8ee;
+            color: #128a3c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filtro-cursos summary > i {
+            color: #128a3c;
+            transition: transform 0.25s ease;
+        }
+
+        .filtro-cursos[open] summary > i {
+            transform: rotate(180deg);
+        }
+
+        .filtro-cursos-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0 18px 18px;
+            border-top: 1px solid #eef0f2;
+        }
+
+        .filtro-cursos-lista a,
+        .filtro-cursos-vazio {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 38px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: #f4f5f6;
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+            border: 1px solid transparent;
+        }
+
+        .filtro-cursos-lista a:hover,
+        .filtro-cursos-lista a.ativo {
+            background: #111;
+            color: white;
+            border-color: #111;
+        }
+
+        .filtro-cursos-lista a.ativo i,
+        .filtro-cursos-lista a:hover i {
+            color: #25D366;
+        }
+
+        .filtro-cursos-vazio {
+            color: #666;
+            font-weight: normal;
+        }
+
         .produtos {
             width: 92%;
             max-width: 1180px;
@@ -370,6 +463,27 @@
                 font-size: 15px;
             }
 
+            .filtro-cursos {
+                width: calc(100% - 24px);
+                margin-top: 18px;
+            }
+
+            .filtro-cursos summary {
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            .filtro-cursos-lista {
+                gap: 8px;
+                padding: 0 15px 15px;
+            }
+
+            .filtro-cursos-lista a,
+            .filtro-cursos-vazio {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
             .produtos {
                 width: calc(100% - 24px);
                 grid-template-columns: repeat(2, 1fr);
@@ -459,6 +573,43 @@
     </div>
 </section>
 
+{% if mostrar_filtro_cursos %}
+<details class="filtro-cursos" {% if curso_selecionado %}open{% endif %}>
+    <summary>
+        <span class="filtro-cursos-titulo">
+            <i class="fa-solid fa-filter"></i>
+            <span>
+                {% if curso_selecionado %}
+                    Curso: {{ curso_selecionado }}
+                {% else %}
+                    Filtrar por curso
+                {% endif %}
+            </span>
+        </span>
+        <i class="fa-solid fa-chevron-down"></i>
+    </summary>
+
+    <div class="filtro-cursos-lista">
+        <a href="{% url 'universitarios' %}" class="{% if not curso_selecionado %}ativo{% endif %}">
+            <i class="fa-solid fa-border-all"></i>
+            Todos os cursos
+        </a>
+
+        {% for curso in filtro_cursos %}
+            <a href="{% url 'universitarios' %}?curso={{ curso|urlencode }}" class="{% if curso == curso_selecionado %}ativo{% endif %}">
+                <i class="fa-solid fa-graduation-cap"></i>
+                {{ curso }}
+            </a>
+        {% empty %}
+            <span class="filtro-cursos-vazio">
+                <i class="fa-regular fa-clock"></i>
+                Cursos serao exibidos conforme os produtos forem cadastrados.
+            </span>
+        {% endfor %}
+    </div>
+</details>
+{% endif %}
+
 <section class="produtos">
 
     {% for produto in produtos %}
@@ -493,6 +644,9 @@
                     <p>{{ produto.descricao }}</p>
 
                     <div class="beneficios-card">
+                        {% if produto.curso %}
+                            <span>{{ produto.curso }}</span>
+                        {% endif %}
                         <span>Bordado incluso</span>
                         <span>Sob medida</span>
                     </div>

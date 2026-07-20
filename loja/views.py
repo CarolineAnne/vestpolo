@@ -458,7 +458,21 @@ def personalizados(request):
     })
 
 def universitarios(request):
-    produtos = produtos_com_fotos(Produto.objects.filter(categoria='Universitário'))
+    produtos_base = Produto.objects.filter(categoria='Universitário')
+    cursos = list(
+        produtos_base
+        .exclude(curso='')
+        .order_by('curso')
+        .values_list('curso', flat=True)
+        .distinct()
+    )
+    curso_selecionado = request.GET.get('curso', '').strip()
+    produtos = produtos_base
+
+    if curso_selecionado:
+        produtos = produtos.filter(curso__iexact=curso_selecionado)
+
+    produtos = produtos_com_fotos(produtos)
 
     if request.user.is_authenticated:
         favoritos = list(
@@ -491,6 +505,9 @@ def universitarios(request):
         'badge': 'Universitário',
         'icone': '🎓',
         'banner_imagem': 'img/universitarios-destaque.png',
+        'mostrar_filtro_cursos': True,
+        'filtro_cursos': cursos,
+        'curso_selecionado': curso_selecionado,
     })
 
 
