@@ -157,7 +157,8 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(230px, 270px));
+            justify-content: center;
             gap: 20px;
             padding: 24px 0 50px;
         }
@@ -246,7 +247,8 @@
 
             .container {
                 width: calc(100% - 24px);
-                grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(210px, 260px));
+                justify-content: center;
                 gap: 16px;
                 padding: 20px 0 40px;
             }
@@ -285,6 +287,7 @@
             .container {
                 width: calc(100% - 24px);
                 grid-template-columns: 1fr;
+                justify-content: stretch;
                 gap: 16px;
             }
 

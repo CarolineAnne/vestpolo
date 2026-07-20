@@ -188,7 +188,7 @@
         .hero {
             position: relative;
             width: 100%;
-            min-height: 65vh;
+            min-height: clamp(380px, 42vw, 520px);
             background-image:
                 linear-gradient(
                     rgba(0,0,0,0.58),
@@ -365,7 +365,8 @@
             max-width: 1200px;
             margin: 0 auto 30px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
+            justify-content: center;
             gap: 22px;
         }
 
@@ -576,7 +577,8 @@
             max-width: 1200px;
             margin: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
+            justify-content: center;
             gap: 24px;
             padding: 20px 0 50px;
         }
