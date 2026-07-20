@@ -1196,9 +1196,8 @@
                     <div class="config-field">
                         <label for="configModelagem">Modelagem</label>
                         <select id="configModelagem">
-                            <option value="Feminino">Feminino</option>
+                            <option value="Feminino" selected>Feminino</option>
                             <option value="Masculino">Masculino</option>
-                            <option value="Unissex" selected>Unissex</option>
                         </select>
                     </div>
 
@@ -1293,7 +1292,7 @@
             <div class="config-resumo-linhas">
                 <div class="config-resumo-linha"><span>Polo</span><strong id="configResumoProduto">Selecione uma base</strong></div>
                 <div class="config-resumo-linha"><span>Tamanho</span><strong id="configResumoTamanho">M</strong></div>
-                <div class="config-resumo-linha"><span>Modelagem</span><strong id="configResumoModelagem">Unissex</strong></div>
+                <div class="config-resumo-linha"><span>Modelagem</span><strong id="configResumoModelagem">Feminino</strong></div>
                 <div class="config-resumo-linha"><span>Cor</span><strong id="configResumoCor">A definir</strong></div>
                 <div class="config-resumo-linha"><span>Quantidade</span><strong id="configResumoQuantidade">1</strong></div>
                 <div class="config-resumo-linha"><span>Cliente</span><strong id="configResumoCliente">Obrigat&oacute;rio</strong></div>
@@ -1595,7 +1594,7 @@
             const curso = cursoInput.value.trim();
             const cor = corInput.value.trim() || "A definir";
             const tamanho = tamanhoInput.value || "M";
-            const modelagem = modelagemInput.value || "Unissex";
+            const modelagem = modelagemInput.value || "Feminino";
             const produtoNome = produto.dataset.nome || "Polo personalizada";
 
             previewImg.src = produto.dataset.imagem || "https://via.placeholder.com/600x520?text=VestPolo";
