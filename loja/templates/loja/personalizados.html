@@ -1317,7 +1317,7 @@
                     </div>
 
                     <div class="config-field">
-                        <label for="configCliente">Nome da pessoa ou empresa *</label>
+                        <label for="configCliente">Nome *</label>
                         <input id="configCliente" type="text" placeholder="Ex: Anne Caroline ou VestPolo">
                     </div>
 
@@ -1801,8 +1801,14 @@
             const cor = corInput.value.trim() || "A definir";
             const tamanho = tamanhoInput.value || "M";
             const modelagem = modelagemInput.value || "Feminino";
-            const formaEntrega = formaEntregaInput.value || "Combinar pelo WhatsApp";
             const cep = cepInput.value.trim();
+            let formaEntrega = formaEntregaInput.value || "Combinar pelo WhatsApp";
+
+            if (apenasDigitos(cep).length === 8 && formaEntrega === "Combinar pelo WhatsApp") {
+                formaEntrega = "Entrega";
+                formaEntregaInput.value = "Entrega";
+            }
+
             const frete = calcularFretePersonalizado(cep, quantidade, formaEntrega);
             const totalComFrete = total + frete.valor;
             const produtoNome = produto.dataset.nome || "Polo personalizada";
@@ -1859,7 +1865,7 @@
 
         function avisarCamposPendentes() {
             if (!clienteInput.value.trim()) {
-                alert("Preencha o nome da pessoa ou empresa.");
+                alert("Preencha o nome.");
                 clienteInput.focus();
                 return;
             }
