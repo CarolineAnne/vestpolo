@@ -135,6 +135,42 @@ class AdicionalPersonalizacao(models.Model):
         return self.nome
 
 
+class OrcamentoPersonalizado(models.Model):
+    produto = models.ForeignKey(
+        Produto,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    tipo_cliente = models.CharField(max_length=20, blank=True)
+    nome_cliente = models.CharField(max_length=120)
+    documento = models.CharField(max_length=30, blank=True)
+    telefone = models.CharField(max_length=20)
+    curso = models.CharField(max_length=120, blank=True)
+    tamanho = models.CharField(max_length=5, blank=True)
+    modelagem = models.CharField(max_length=20, blank=True)
+    cor = models.CharField(max_length=50, blank=True)
+    quantidade = models.PositiveIntegerField(default=1)
+    adicionais = models.TextField(blank=True)
+    subtotal_unidade = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    valor_frete = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_estimado = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    forma_entrega = models.CharField(max_length=50, blank=True)
+    cep_entrega = models.CharField(max_length=9, blank=True)
+    frete_descricao = models.CharField(max_length=220, blank=True)
+    arte = models.FileField(upload_to='artes/orcamentos/', blank=True, null=True)
+    observacao = models.TextField(blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-criado_em',)
+        verbose_name = 'Orcamento personalizado'
+        verbose_name_plural = 'Orcamentos personalizados'
+
+    def __str__(self):
+        return f'Orcamento #{self.id} - {self.nome_cliente}'
+
+
 class Pedido(models.Model):
 
     STATUS_CHOICES = [

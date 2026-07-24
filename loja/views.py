@@ -11,7 +11,15 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from urllib.parse import quote
 from decimal import Decimal
-from .models import Produto, ProdutoFoto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
+from .models import (
+    Produto,
+    ProdutoFoto,
+    Pedido,
+    ItemPedido,
+    Favorito,
+    AdicionalPersonalizacao,
+    OrcamentoPersonalizado,
+)
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -66,6 +74,13 @@ def formatar_cep(cep):
 
 def formatar_moeda(valor):
     return f"{valor:.2f}".replace('.', ',')
+
+
+def decimal_request(valor):
+    try:
+        return Decimal(str(valor or "0").strip().replace(",", "."))
+    except Exception:
+        return Decimal("0.00")
 
 
 def normalizar_texto_pagamento(valor, limite):
@@ -454,6 +469,159 @@ def personalizados(request):
         'total_itens': total_itens,
         'total_favoritos': total_favoritos
     })
+
+
+def orcamento_personalizado_whatsapp(request):
+    if request.method != "POST":
+        return JsonResponse({"erro": "metodo nao permitido"}, status=405)
+
+    tipo_cliente = request.POST.get("tipo_cliente", "Pessoa").strip() or "Pessoa"
+    nome_cliente = request.POST.get("nome_cliente", "").strip()
+    documento = request.POST.get("documento", "").strip()
+    telefone = request.POST.get("telefone", "").strip()
+    curso = request.POST.get("curso", "").strip()
+    forma_entrega = request.POST.get("forma_entrega", "").strip()
+    cep_entrega = request.POST.get("cep_entrega", "").strip()
+
+    if not nome_cliente or not telefone:
+        return JsonResponse(
+            {"erro": "Preencha nome/empresa e WhatsApp para enviar o orcamento."},
+            status=400
+        )
+
+    if forma_entrega not in FORMAS_ENTREGA:
+        return JsonResponse(
+            {"erro": "Escolha uma forma de entrega valida."},
+            status=400
+        )
+
+    try:
+        quantidade = max(int(request.POST.get("quantidade", 1) or 1), 1)
+    except ValueError:
+        quantidade = 1
+
+    frete = calcular_frete(cep_entrega, quantidade, forma_entrega)
+
+    if frete is None:
+        return JsonResponse(
+            {"erro": "Informe um CEP valido com 8 numeros para calcular o frete."},
+            status=400
+        )
+
+    produto = None
+    produto_nome = request.POST.get("produto_nome", "").strip() or "Polo personalizada"
+    produto_id = request.POST.get("produto_id", "").strip()
+
+    if produto_id:
+        try:
+            produto = Produto.objects.get(id=produto_id, categoria="Personalizado")
+            produto_nome = produto.nome
+        except (Produto.DoesNotExist, ValueError):
+            produto = None
+
+    adicionais = []
+    try:
+        adicionais_raw = json.loads(request.POST.get("adicionais", "[]"))
+    except ValueError:
+        adicionais_raw = []
+
+    if isinstance(adicionais_raw, list):
+        for adicional in adicionais_raw:
+            if not isinstance(adicional, dict):
+                continue
+
+            nome = str(adicional.get("nome", "")).strip()
+            preco = decimal_request(adicional.get("preco"))
+
+            if nome:
+                adicionais.append({
+                    "nome": nome,
+                    "preco": preco,
+                })
+
+    adicionais_texto = "\n".join(
+        f"{adicional['nome']}: R$ {formatar_moeda(adicional['preco'])}"
+        for adicional in adicionais
+    )
+
+    subtotal_unidade = decimal_request(request.POST.get("subtotal_unidade"))
+    total_estimado = decimal_request(request.POST.get("total_estimado"))
+
+    if total_estimado <= 0:
+        total_estimado = subtotal_unidade * Decimal(quantidade)
+
+    total_final = total_estimado + frete["valor"]
+
+    orcamento = OrcamentoPersonalizado.objects.create(
+        produto=produto,
+        tipo_cliente=tipo_cliente[:20],
+        nome_cliente=nome_cliente,
+        documento=documento,
+        telefone=telefone,
+        curso=curso,
+        tamanho=request.POST.get("tamanho", "").strip(),
+        modelagem=request.POST.get("modelagem", "").strip(),
+        cor=request.POST.get("cor", "").strip(),
+        quantidade=quantidade,
+        adicionais=adicionais_texto,
+        subtotal_unidade=subtotal_unidade,
+        valor_frete=frete["valor"],
+        total_estimado=total_final,
+        forma_entrega=forma_entrega,
+        cep_entrega=formatar_cep(cep_entrega) if cep_entrega else "",
+        frete_descricao=frete["descricao"],
+        arte=request.FILES.get("arte"),
+        observacao=request.POST.get("observacao", "").strip(),
+    )
+
+    mensagem = "Ola! Quero um orcamento de polo personalizada.\n\n"
+    mensagem += f"Orcamento #{orcamento.id}\n\n"
+    mensagem += "Dados do cliente:\n"
+    mensagem += f"Tipo: {orcamento.tipo_cliente}\n"
+    mensagem += f"Nome/empresa: {orcamento.nome_cliente}\n"
+    if orcamento.documento:
+        mensagem += f"CPF/CNPJ: {orcamento.documento}\n"
+    mensagem += f"WhatsApp: {orcamento.telefone}\n"
+    if orcamento.curso:
+        mensagem += f"Curso/turma/setor: {orcamento.curso}\n"
+
+    mensagem += "\nPolo personalizada:\n"
+    mensagem += f"Base: {produto_nome}\n"
+    mensagem += f"Tamanho: {orcamento.tamanho or 'Nao informado'}\n"
+    mensagem += f"Modelagem: {orcamento.modelagem or 'Nao informada'}\n"
+    mensagem += f"Cor desejada: {orcamento.cor or 'A definir'}\n"
+    mensagem += f"Quantidade: {orcamento.quantidade}\n"
+    mensagem += "\nBordados escolhidos:\n"
+    mensagem += adicionais_texto or "Sem bordados extras"
+    mensagem += "\n\nValores:\n"
+    mensagem += f"Subtotal por unidade: R$ {formatar_moeda(orcamento.subtotal_unidade)}\n"
+    mensagem += f"Produtos e bordados: R$ {formatar_moeda(total_estimado)}\n"
+    mensagem += f"Frete: R$ {formatar_moeda(orcamento.valor_frete)} ({orcamento.frete_descricao})\n"
+    mensagem += f"Total estimado com frete: R$ {formatar_moeda(orcamento.total_estimado)}\n"
+
+    mensagem += "\nEntrega:\n"
+    mensagem += f"Forma: {orcamento.forma_entrega}\n"
+    if orcamento.cep_entrega:
+        mensagem += f"CEP: {orcamento.cep_entrega}\n"
+
+    if orcamento.arte:
+        mensagem += "\nArte/logo enviada:\n"
+        mensagem += f"{request.build_absolute_uri(orcamento.arte.url)}\n"
+    else:
+        mensagem += "\nArte/logo: vou enviar ou explicar no WhatsApp.\n"
+
+    if orcamento.observacao:
+        mensagem += f"\nObservacoes: {orcamento.observacao}\n"
+
+    mensagem += "\nEntendo que o valor pode passar por confirmacao conforme a complexidade da arte."
+
+    return JsonResponse({
+        "whatsapp_url": (
+            f"https://wa.me/{NUMERO_WHATSAPP_ATENDIMENTO}"
+            f"?text={quote(mensagem)}"
+        )
+    }, status=201)
+
 
 def universitarios(request):
     produtos_base = Produto.objects.filter(categoria='Universitário')

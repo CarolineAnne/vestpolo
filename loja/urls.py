@@ -22,6 +22,7 @@ urlpatterns = [
     path('minha-conta/', views.minha_conta, name='minha_conta'),
     path('meus-pedidos/', views.meus_pedidos, name='meus_pedidos'),
     path('personalizados/', views.personalizados, name='personalizados'),
+    path('personalizados/orcamento-whatsapp/', views.orcamento_personalizado_whatsapp, name='orcamento_personalizado_whatsapp'),
     path('universitarios/', views.universitarios, name='universitarios'),
     path('empresariais/', views.empresariais, name='empresariais'),
 

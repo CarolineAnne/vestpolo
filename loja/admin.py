@@ -7,7 +7,15 @@ from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 from .melhor_envio import MelhorEnvioClient, MelhorEnvioError, primeiro_valor
-from .models import Produto, ProdutoFoto, Pedido, ItemPedido, Favorito, AdicionalPersonalizacao
+from .models import (
+    Produto,
+    ProdutoFoto,
+    Pedido,
+    ItemPedido,
+    Favorito,
+    AdicionalPersonalizacao,
+    OrcamentoPersonalizado,
+)
 
 @admin.register(Favorito)
 class FavoritoAdmin(admin.ModelAdmin):
@@ -130,6 +138,70 @@ class AdicionalPersonalizacaoAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'descricao')
     list_filter = ('ativo',)
     ordering = ('ordem', 'nome')
+
+
+@admin.register(OrcamentoPersonalizado)
+class OrcamentoPersonalizadoAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'nome_cliente',
+        'tipo_cliente',
+        'telefone',
+        'produto',
+        'forma_entrega',
+        'valor_frete',
+        'total_estimado',
+        'criado_em',
+    )
+    search_fields = ('nome_cliente', 'telefone', 'documento', 'curso', 'produto__nome')
+    list_filter = ('tipo_cliente', 'forma_entrega', 'modelagem', 'criado_em')
+    readonly_fields = ('criado_em', 'link_arte')
+    list_per_page = 30
+
+    fieldsets = (
+        ('Cliente', {
+            'fields': (
+                'tipo_cliente',
+                'nome_cliente',
+                'documento',
+                'telefone',
+                'curso',
+            )
+        }),
+        ('Polo personalizada', {
+            'fields': (
+                'produto',
+                'tamanho',
+                'modelagem',
+                'cor',
+                'quantidade',
+                'adicionais',
+                'observacao',
+                'link_arte',
+                'arte',
+            )
+        }),
+        ('Frete e valores', {
+            'fields': (
+                'forma_entrega',
+                'cep_entrega',
+                'frete_descricao',
+                'subtotal_unidade',
+                'valor_frete',
+                'total_estimado',
+            )
+        }),
+        ('Registro', {
+            'fields': ('criado_em',)
+        }),
+    )
+
+    def link_arte(self, obj):
+        if obj and obj.arte:
+            return format_html('<a href="{}" target="_blank">Abrir arte enviada</a>', obj.arte.url)
+        return 'Nenhuma arte enviada.'
+
+    link_arte.short_description = 'Arte enviada'
 
 
 class ItemPedidoInline(admin.TabularInline):

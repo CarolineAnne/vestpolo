@@ -596,6 +596,11 @@
             color: #128a3c;
         }
 
+        .config-total div:not(.config-total-final) strong {
+            font-size: 16px;
+            color: #111;
+        }
+
         .config-aviso {
             background: #fff8e5;
             border: 1px solid #f0d999;
@@ -661,6 +666,9 @@
 
         .config-bloqueado {
             opacity: 0.58;
+        }
+
+        .config-enviando {
             pointer-events: none;
         }
 
@@ -1173,6 +1181,8 @@
 </section>
 
 <section class="configurador-personalizados" id="monte-sua-polo">
+    <input type="hidden" id="configCsrfToken" value="{{ csrf_token }}">
+
     <div class="configurador-head">
         <div>
             <span>Monte sua polo</span>
@@ -1299,7 +1309,15 @@
 
                 <div class="config-linha">
                     <div class="config-field">
-                        <label for="configCliente">Nome / empresa *</label>
+                        <label for="configTipoCliente">Cliente *</label>
+                        <select id="configTipoCliente">
+                            <option value="Pessoa" selected>Pessoa</option>
+                            <option value="Empresa">Empresa</option>
+                        </select>
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configCliente">Nome da pessoa ou empresa *</label>
                         <input id="configCliente" type="text" placeholder="Ex: Anne Caroline ou VestPolo">
                     </div>
 
@@ -1307,10 +1325,31 @@
                         <label for="configContato">WhatsApp para contato *</label>
                         <input id="configContato" type="tel" placeholder="Ex: (74) 99908-7655">
                     </div>
+                </div>
+
+                <div class="config-linha">
+                    <div class="config-field">
+                        <label for="configDocumento">CPF/CNPJ</label>
+                        <input id="configDocumento" type="text" placeholder="Opcional">
+                    </div>
 
                     <div class="config-field">
                         <label for="configCurso">Curso / turma / setor</label>
                         <input id="configCurso" type="text" placeholder="Ex: Zootecnia, vendas, recep&ccedil;&atilde;o">
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configFormaEntrega">Entrega / frete *</label>
+                        <select id="configFormaEntrega">
+                            <option value="Combinar pelo WhatsApp" selected>Combinar pelo WhatsApp</option>
+                            <option value="Retirada">Retirada</option>
+                            <option value="Entrega">Entrega</option>
+                        </select>
+                    </div>
+
+                    <div class="config-field">
+                        <label for="configCep">CEP para entrega</label>
+                        <input id="configCep" type="text" inputmode="numeric" maxlength="9" placeholder="Ex: 48900-000">
                     </div>
                 </div>
 
@@ -1319,7 +1358,7 @@
                     <div class="config-upload">
                         <input id="configArte" type="file" accept="image/*,.pdf">
                         <div class="config-ajuda">
-                            O arquivo n&atilde;o vai anexado automaticamente ao WhatsApp. O resumo vai avisar que voc&ecirc; enviar&aacute; a arte na conversa.
+                            A arte ser&aacute; salva no or&ccedil;amento e o link ser&aacute; enviado no WhatsApp.
                         </div>
                     </div>
                 </div>
@@ -1344,7 +1383,10 @@
                 <div class="config-resumo-linha"><span>Modelagem</span><strong id="configResumoModelagem">Feminino</strong></div>
                 <div class="config-resumo-linha"><span>Cor</span><strong id="configResumoCor">A definir</strong></div>
                 <div class="config-resumo-linha"><span>Quantidade</span><strong id="configResumoQuantidade">1</strong></div>
+                <div class="config-resumo-linha"><span>Tipo</span><strong id="configResumoTipoCliente">Pessoa</strong></div>
                 <div class="config-resumo-linha"><span>Cliente</span><strong id="configResumoCliente">Obrigat&oacute;rio</strong></div>
+                <div class="config-resumo-linha"><span>Entrega</span><strong id="configResumoEntrega">Combinar pelo WhatsApp</strong></div>
+                <div class="config-resumo-linha"><span>Frete</span><strong id="configResumoFrete">A combinar</strong></div>
             </div>
 
             <ul class="config-lista" id="configResumoAdicionais">
@@ -1353,7 +1395,9 @@
 
             <div class="config-total">
                 <div><span>Subtotal por unidade</span><strong id="configSubtotalUnidade">R$ 0,00</strong></div>
-                <div><span>Total estimado</span><strong id="configTotal">R$ 0,00</strong></div>
+                <div><span>Produtos e bordados</span><strong id="configTotalProdutos">R$ 0,00</strong></div>
+                <div><span>Frete estimado</span><strong id="configFreteValor">R$ 0,00</strong></div>
+                <div class="config-total-final"><span>Total com frete</span><strong id="configTotal">R$ 0,00</strong></div>
             </div>
 
             <div class="config-aviso">
@@ -1377,7 +1421,6 @@
             <a class="btn-whatsapp config-bloqueado"
                id="configWhatsapp"
                href="#"
-               target="_blank"
                aria-disabled="true">
                 <i class="fa-brands fa-whatsapp"></i>
                 Enviar or&ccedil;amento
@@ -1515,14 +1558,19 @@
             currency: "BRL"
         });
 
-        const numeroWhatsApp = "5574999087655";
+        const orcamentoUrl = "{% url 'orcamento_personalizado_whatsapp' %}";
+        const csrfTokenInput = document.getElementById("configCsrfToken");
         const tamanhoInput = document.getElementById("configTamanho");
         const modelagemInput = document.getElementById("configModelagem");
         const corInput = document.getElementById("configCor");
         const quantidadeInput = document.getElementById("configQuantidade");
+        const tipoClienteInput = document.getElementById("configTipoCliente");
         const clienteInput = document.getElementById("configCliente");
+        const documentoInput = document.getElementById("configDocumento");
         const contatoInput = document.getElementById("configContato");
         const cursoInput = document.getElementById("configCurso");
+        const formaEntregaInput = document.getElementById("configFormaEntrega");
+        const cepInput = document.getElementById("configCep");
         const arteInput = document.getElementById("configArte");
         const observacaoInput = document.getElementById("configObservacao");
         const previewImg = document.getElementById("configPreviewImg");
@@ -1531,9 +1579,14 @@
         const resumoModelagem = document.getElementById("configResumoModelagem");
         const resumoCor = document.getElementById("configResumoCor");
         const resumoQuantidade = document.getElementById("configResumoQuantidade");
+        const resumoTipoCliente = document.getElementById("configResumoTipoCliente");
         const resumoCliente = document.getElementById("configResumoCliente");
+        const resumoEntrega = document.getElementById("configResumoEntrega");
+        const resumoFrete = document.getElementById("configResumoFrete");
         const resumoAdicionais = document.getElementById("configResumoAdicionais");
         const subtotalUnidade = document.getElementById("configSubtotalUnidade");
+        const totalProdutosResumo = document.getElementById("configTotalProdutos");
+        const freteValorResumo = document.getElementById("configFreteValor");
         const totalResumo = document.getElementById("configTotal");
         const botaoWhatsapp = document.getElementById("configWhatsapp");
         const tabelasTamanho = document.getElementById("configTabelasTamanho");
@@ -1541,6 +1594,7 @@
         const tabelaMasculina = document.getElementById("configTabelaMasculina");
         const tabelaFemininaImg = document.getElementById("configTabelaFemininaImg");
         const tabelaMasculinaImg = document.getElementById("configTabelaMasculinaImg");
+        let dadosAtuais = null;
 
         function lerPreco(valor) {
             const texto = String(valor || "0").trim();
@@ -1554,6 +1608,96 @@
             }
 
             return Number(texto) || 0;
+        }
+
+        function apenasDigitos(valor) {
+            return String(valor || "").replace(/\D/g, "");
+        }
+
+        function formatarCep(valor) {
+            const digitos = apenasDigitos(valor);
+
+            if (digitos.length === 8) {
+                return `${digitos.slice(0, 5)}-${digitos.slice(5)}`;
+            }
+
+            return valor || "";
+        }
+
+        function obterCsrfToken() {
+            if (csrfTokenInput && csrfTokenInput.value && csrfTokenInput.value !== "NOTPROVIDED") {
+                return csrfTokenInput.value;
+            }
+
+            const encontrado = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
+            return encontrado ? decodeURIComponent(encontrado[1]) : "";
+        }
+
+        function calcularFretePersonalizado(cep, quantidade, formaEntrega) {
+            const quantidadeFinal = Math.max(1, quantidade || 1);
+
+            if (formaEntrega === "Retirada") {
+                return {
+                    valor: 0,
+                    descricao: "Retirada sem frete",
+                    valido: true
+                };
+            }
+
+            if (formaEntrega === "Combinar pelo WhatsApp") {
+                return {
+                    valor: 0,
+                    descricao: "A combinar",
+                    valido: true
+                };
+            }
+
+            const digitos = apenasDigitos(cep);
+
+            if (digitos.length !== 8) {
+                return {
+                    valor: 0,
+                    descricao: "Informe o CEP",
+                    valido: false
+                };
+            }
+
+            if (digitos.startsWith("489") || digitos.startsWith("563")) {
+                return {
+                    valor: 0,
+                    descricao: "Entrega local gratis",
+                    valido: true
+                };
+            }
+
+            const prefixo = Number(digitos[0]);
+            let base = 46.90;
+            let extra = 5.90;
+            let descricao = "PAC estimado - Norte";
+
+            if ([4, 5].includes(prefixo)) {
+                base = 32.90;
+                extra = 3.50;
+                descricao = "PAC estimado - Nordeste";
+            } else if ([0, 1, 2, 3].includes(prefixo)) {
+                base = 39.90;
+                extra = 4.50;
+                descricao = "PAC estimado - Sudeste";
+            } else if (prefixo === 7) {
+                base = 42.90;
+                extra = 4.90;
+                descricao = "PAC estimado - Centro-Oeste";
+            } else if ([8, 9].includes(prefixo)) {
+                base = 44.90;
+                extra = 5.50;
+                descricao = "PAC estimado - Sul";
+            }
+
+            return {
+                valor: base + (extra * (quantidadeFinal - 1)),
+                descricao,
+                valido: true
+            };
         }
 
         function produtoSelecionado() {
@@ -1635,43 +1779,6 @@
             }
         }
 
-        function montarMensagem(dados) {
-            const bordados = dados.adicionais.length
-                ? dados.adicionais.map(function (adicional) {
-                    return `- ${adicional.nome}: ${moeda.format(adicional.preco)}`;
-                }).join("\n")
-                : "- Sem bordados extras";
-
-            const arquivo = arteInput.files && arteInput.files.length
-                ? `Arquivo selecionado: ${arteInput.files[0].name}. Vou enviar a arte aqui no WhatsApp.`
-                : "Arte/referencia: vou enviar ou explicar no WhatsApp.";
-
-            return [
-                "Ola! Quero um orcamento de polo personalizada.",
-                "",
-                `Cliente: ${dados.cliente}`,
-                `WhatsApp: ${dados.contato}`,
-                `Curso/turma/empresa: ${dados.curso || "Nao informado"}`,
-                "",
-                `Polo base: ${dados.produtoNome} (${moeda.format(dados.precoBase)})`,
-                `Tamanho: ${dados.tamanho}`,
-                `Modelagem: ${dados.modelagem}`,
-                `Cor desejada: ${dados.cor}`,
-                `Quantidade: ${dados.quantidade}`,
-                "",
-                "Bordados escolhidos:",
-                bordados,
-                "",
-                `Subtotal por unidade: ${moeda.format(dados.subtotal)}`,
-                `Total estimado: ${moeda.format(dados.total)}`,
-                "",
-                arquivo,
-                `Observacoes: ${dados.observacao || "Sem observacoes"}`,
-                "",
-                "Entendo que o valor pode passar por confirmacao conforme a complexidade da arte."
-            ].join("\n");
-        }
-
         function atualizarConfigurador() {
             const produto = produtoSelecionado();
             if (!produto) return;
@@ -1686,12 +1793,18 @@
             }, 0);
             const subtotal = precoBase + totalAdicionais;
             const total = subtotal * quantidade;
+            const tipoCliente = tipoClienteInput.value || "Pessoa";
             const cliente = clienteInput.value.trim();
+            const documento = documentoInput.value.trim();
             const contato = contatoInput.value.trim();
             const curso = cursoInput.value.trim();
             const cor = corInput.value.trim() || "A definir";
             const tamanho = tamanhoInput.value || "M";
             const modelagem = modelagemInput.value || "Feminino";
+            const formaEntrega = formaEntregaInput.value || "Combinar pelo WhatsApp";
+            const cep = cepInput.value.trim();
+            const frete = calcularFretePersonalizado(cep, quantidade, formaEntrega);
+            const totalComFrete = total + frete.valor;
             const produtoNome = produto.dataset.nome || "Polo personalizada";
 
             previewImg.src = produto.dataset.imagem || "https://via.placeholder.com/600x520?text=VestPolo";
@@ -1702,38 +1815,140 @@
             resumoModelagem.textContent = modelagem;
             resumoCor.textContent = cor;
             resumoQuantidade.textContent = String(quantidade);
+            resumoTipoCliente.textContent = tipoCliente;
             resumoCliente.textContent = cliente || "Obrigatorio";
+            resumoEntrega.textContent = formaEntrega === "Entrega" && cep
+                ? `${formaEntrega} - ${formatarCep(cep)}`
+                : formaEntrega;
+            resumoFrete.textContent = frete.descricao;
             subtotalUnidade.textContent = moeda.format(subtotal);
-            totalResumo.textContent = moeda.format(total);
+            totalProdutosResumo.textContent = moeda.format(total);
+            freteValorResumo.textContent = moeda.format(frete.valor);
+            totalResumo.textContent = moeda.format(totalComFrete);
             preencherListaAdicionais(selecionados);
 
-            const podeEnviar = Boolean(cliente && contato);
+            const podeEnviar = Boolean(cliente && contato && frete.valido);
 
-            botaoWhatsapp.classList.toggle("config-bloqueado", !podeEnviar);
-            botaoWhatsapp.setAttribute("aria-disabled", String(!podeEnviar));
-
-            if (!podeEnviar) {
-                botaoWhatsapp.href = "#";
-                return;
-            }
-
-            const mensagem = montarMensagem({
-                cliente,
-                contato,
-                curso,
+            dadosAtuais = {
+                produtoId: produto.value,
                 produtoNome,
                 precoBase,
                 tamanho,
                 modelagem,
                 cor,
                 quantidade,
+                tipoCliente,
+                cliente,
+                documento,
+                contato,
+                curso,
+                formaEntrega,
+                cep,
                 adicionais: selecionados,
                 subtotal,
-                total,
+                totalProdutos: total,
+                freteValor: frete.valor,
+                totalComFrete,
                 observacao: observacaoInput.value.trim()
-            });
+            };
 
-            botaoWhatsapp.href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+            botaoWhatsapp.classList.toggle("config-bloqueado", !podeEnviar);
+            botaoWhatsapp.setAttribute("aria-disabled", String(!podeEnviar));
+            botaoWhatsapp.href = "#";
+        }
+
+        function avisarCamposPendentes() {
+            if (!clienteInput.value.trim()) {
+                alert("Preencha o nome da pessoa ou empresa.");
+                clienteInput.focus();
+                return;
+            }
+
+            if (!contatoInput.value.trim()) {
+                alert("Preencha o WhatsApp para contato.");
+                contatoInput.focus();
+                return;
+            }
+
+            if (formaEntregaInput.value === "Entrega" && apenasDigitos(cepInput.value).length !== 8) {
+                alert("Informe um CEP valido com 8 numeros para calcular o frete.");
+                cepInput.focus();
+                return;
+            }
+
+            alert("Confira os dados do orcamento antes de enviar.");
+        }
+
+        function atualizarTextoBotao(enviando) {
+            botaoWhatsapp.classList.toggle("config-enviando", enviando);
+            botaoWhatsapp.innerHTML = enviando
+                ? '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...'
+                : '<i class="fa-brands fa-whatsapp"></i> Enviar or&ccedil;amento';
+        }
+
+        async function enviarOrcamentoPersonalizado() {
+            if (!dadosAtuais || botaoWhatsapp.getAttribute("aria-disabled") === "true") {
+                avisarCamposPendentes();
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("produto_id", dadosAtuais.produtoId);
+            formData.append("produto_nome", dadosAtuais.produtoNome);
+            formData.append("preco_base", dadosAtuais.precoBase.toFixed(2));
+            formData.append("tipo_cliente", dadosAtuais.tipoCliente);
+            formData.append("nome_cliente", dadosAtuais.cliente);
+            formData.append("documento", dadosAtuais.documento);
+            formData.append("telefone", dadosAtuais.contato);
+            formData.append("curso", dadosAtuais.curso);
+            formData.append("tamanho", dadosAtuais.tamanho);
+            formData.append("modelagem", dadosAtuais.modelagem);
+            formData.append("cor", dadosAtuais.cor);
+            formData.append("quantidade", String(dadosAtuais.quantidade));
+            formData.append("forma_entrega", dadosAtuais.formaEntrega);
+            formData.append("cep_entrega", dadosAtuais.cep);
+            formData.append("adicionais", JSON.stringify(dadosAtuais.adicionais));
+            formData.append("subtotal_unidade", dadosAtuais.subtotal.toFixed(2));
+            formData.append("total_estimado", dadosAtuais.totalProdutos.toFixed(2));
+            formData.append("observacao", dadosAtuais.observacao);
+
+            if (arteInput.files && arteInput.files[0]) {
+                formData.append("arte", arteInput.files[0]);
+            }
+
+            atualizarTextoBotao(true);
+
+            try {
+                const resposta = await fetch(orcamentoUrl, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": obterCsrfToken()
+                    },
+                    body: formData,
+                    credentials: "same-origin"
+                });
+
+                let dados = {};
+
+                try {
+                    dados = await resposta.json();
+                } catch (erroJson) {
+                    dados = {};
+                }
+
+                if (!resposta.ok) {
+                    throw new Error(dados.erro || "Nao foi possivel enviar o orcamento.");
+                }
+
+                if (!dados.whatsapp_url) {
+                    throw new Error("O link do WhatsApp nao foi gerado.");
+                }
+
+                window.location.href = dados.whatsapp_url;
+            } catch (erro) {
+                alert(erro.message || "Nao foi possivel enviar o orcamento.");
+                atualizarTextoBotao(false);
+            }
         }
 
         [
@@ -1741,9 +1956,13 @@
             modelagemInput,
             corInput,
             quantidadeInput,
+            tipoClienteInput,
             clienteInput,
+            documentoInput,
             contatoInput,
             cursoInput,
+            formaEntregaInput,
+            cepInput,
             arteInput,
             observacaoInput
         ].forEach(function (campo) {
@@ -1758,10 +1977,8 @@
         });
 
         botaoWhatsapp.addEventListener("click", function (event) {
-            if (botaoWhatsapp.getAttribute("aria-disabled") === "true") {
-                event.preventDefault();
-                clienteInput.focus();
-            }
+            event.preventDefault();
+            enviarOrcamentoPersonalizado();
         });
 
         atualizarConfigurador();
