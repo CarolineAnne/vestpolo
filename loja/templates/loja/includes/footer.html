@@ -22,3 +22,29 @@
         </div>
     </div>
 </footer>
+
+<button type="button" class="botao-voltar-topo" aria-label="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<script>
+    (function () {
+        const botaoTopo = document.querySelector(".botao-voltar-topo");
+
+        if (!botaoTopo) return;
+
+        function alternarBotaoTopo() {
+            botaoTopo.classList.toggle("visivel", window.scrollY > 260);
+        }
+
+        botaoTopo.addEventListener("click", function () {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        alternarBotaoTopo();
+        window.addEventListener("scroll", alternarBotaoTopo, { passive: true });
+    })();
+</script>
