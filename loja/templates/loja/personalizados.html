@@ -1323,14 +1323,14 @@
 
                     <div class="config-field">
                         <label for="configContato">WhatsApp para contato *</label>
-                        <input id="configContato" type="tel" placeholder="Ex: (74) 99908-7655">
+                        <input id="configContato" type="tel" inputmode="numeric" maxlength="15" placeholder="Ex: (74) 99908-7655">
                     </div>
                 </div>
 
                 <div class="config-linha">
                     <div class="config-field">
                         <label for="configDocumento">CPF/CNPJ</label>
-                        <input id="configDocumento" type="text" placeholder="Opcional">
+                        <input id="configDocumento" type="text" inputmode="numeric" maxlength="18" placeholder="Opcional">
                     </div>
 
                     <div class="config-field">
@@ -1615,13 +1615,64 @@
         }
 
         function formatarCep(valor) {
-            const digitos = apenasDigitos(valor);
+            const digitos = apenasDigitos(valor).slice(0, 8);
 
-            if (digitos.length === 8) {
+            if (digitos.length > 5) {
                 return `${digitos.slice(0, 5)}-${digitos.slice(5)}`;
             }
 
-            return valor || "";
+            return digitos;
+        }
+
+        function formatarTelefone(valor) {
+            let digitos = apenasDigitos(valor);
+
+            if (digitos.length > 11 && digitos.startsWith("55")) {
+                digitos = digitos.slice(2);
+            }
+
+            digitos = digitos.slice(0, 11);
+
+            if (!digitos) {
+                return "";
+            }
+
+            if (digitos.length <= 2) {
+                return `(${digitos}`;
+            }
+
+            if (digitos.length <= 6) {
+                return `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
+            }
+
+            if (digitos.length <= 10) {
+                return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 6)}-${digitos.slice(6)}`;
+            }
+
+            return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7)}`;
+        }
+
+        function formatarDocumento(valor) {
+            const digitos = apenasDigitos(valor).slice(0, 14);
+
+            if (digitos.length > 11) {
+                if (digitos.length <= 2) return digitos;
+                if (digitos.length <= 5) return `${digitos.slice(0, 2)}.${digitos.slice(2)}`;
+                if (digitos.length <= 8) return `${digitos.slice(0, 2)}.${digitos.slice(2, 5)}.${digitos.slice(5)}`;
+                if (digitos.length <= 12) return `${digitos.slice(0, 2)}.${digitos.slice(2, 5)}.${digitos.slice(5, 8)}/${digitos.slice(8)}`;
+                return `${digitos.slice(0, 2)}.${digitos.slice(2, 5)}.${digitos.slice(5, 8)}/${digitos.slice(8, 12)}-${digitos.slice(12)}`;
+            }
+
+            if (digitos.length <= 3) return digitos;
+            if (digitos.length <= 6) return `${digitos.slice(0, 3)}.${digitos.slice(3)}`;
+            if (digitos.length <= 9) return `${digitos.slice(0, 3)}.${digitos.slice(3, 6)}.${digitos.slice(6)}`;
+            return `${digitos.slice(0, 3)}.${digitos.slice(3, 6)}.${digitos.slice(6, 9)}-${digitos.slice(9)}`;
+        }
+
+        function aplicarMascarasConfigurador() {
+            contatoInput.value = formatarTelefone(contatoInput.value);
+            documentoInput.value = formatarDocumento(documentoInput.value);
+            cepInput.value = formatarCep(cepInput.value);
         }
 
         function obterCsrfToken() {
@@ -1782,6 +1833,8 @@
         function atualizarConfigurador() {
             const produto = produtoSelecionado();
             if (!produto) return;
+
+            aplicarMascarasConfigurador();
 
             const quantidade = Math.max(1, parseInt(quantidadeInput.value, 10) || 1);
             quantidadeInput.value = quantidade;

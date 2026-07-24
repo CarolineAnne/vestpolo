@@ -72,6 +72,36 @@ def formatar_cep(cep):
     return cep
 
 
+def formatar_telefone(telefone):
+    digitos = apenas_digitos(telefone)
+
+    if len(digitos) > 11 and digitos.startswith("55"):
+        digitos = digitos[2:]
+
+    if len(digitos) == 11:
+        return f"({digitos[:2]}) {digitos[2:7]}-{digitos[7:]}"
+
+    if len(digitos) == 10:
+        return f"({digitos[:2]}) {digitos[2:6]}-{digitos[6:]}"
+
+    return telefone
+
+
+def formatar_documento(documento):
+    digitos = apenas_digitos(documento)
+
+    if len(digitos) == 11:
+        return f"{digitos[:3]}.{digitos[3:6]}.{digitos[6:9]}-{digitos[9:]}"
+
+    if len(digitos) == 14:
+        return (
+            f"{digitos[:2]}.{digitos[2:5]}.{digitos[5:8]}/"
+            f"{digitos[8:12]}-{digitos[12:]}"
+        )
+
+    return documento
+
+
 def formatar_moeda(valor):
     return f"{valor:.2f}".replace('.', ',')
 
@@ -477,8 +507,8 @@ def orcamento_personalizado_whatsapp(request):
 
     tipo_cliente = request.POST.get("tipo_cliente", "Pessoa").strip() or "Pessoa"
     nome_cliente = request.POST.get("nome_cliente", "").strip()
-    documento = request.POST.get("documento", "").strip()
-    telefone = request.POST.get("telefone", "").strip()
+    documento = formatar_documento(request.POST.get("documento", "").strip())
+    telefone = formatar_telefone(request.POST.get("telefone", "").strip())
     curso = request.POST.get("curso", "").strip()
     forma_entrega = request.POST.get("forma_entrega", "").strip()
     cep_entrega = request.POST.get("cep_entrega", "").strip()
@@ -878,7 +908,7 @@ def checkout(request):
         })
     if request.method == 'POST':
         nome_cliente = request.POST.get('nome_cliente', '').strip()
-        telefone = request.POST.get('telefone', '').strip()
+        telefone = formatar_telefone(request.POST.get('telefone', '').strip())
         forma_entrega = request.POST.get('forma_entrega', '').strip()
         forma_pagamento = request.POST.get('forma_pagamento', '').strip()
         observacao = request.POST.get('observacao', '').strip()

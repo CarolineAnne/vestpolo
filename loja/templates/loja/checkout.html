@@ -565,7 +565,7 @@
             <input type="text" name="nome_cliente" required>
 
             <label class="campo-obrigatorio">Telefone / WhatsApp</label>
-            <input type="text" name="telefone" required>
+            <input type="text" name="telefone" id="telefoneCliente" inputmode="numeric" maxlength="15" placeholder="Ex: (74) 99908-7655" required>
 
             <label class="campo-obrigatorio">Forma de entrega</label>
             <select name="forma_entrega" id="formaEntrega" required>
@@ -761,6 +761,7 @@
 <script>
     const formaEntrega = document.getElementById('formaEntrega');
     const camposEntrega = document.getElementById('camposEntrega');
+    const telefoneCliente = document.getElementById('telefoneCliente');
     const cepEntrega = document.getElementById('cepEntrega');
     const enderecoEntrega = document.getElementById('enderecoEntrega');
     const bairroEntrega = document.getElementById('bairroEntrega');
@@ -785,7 +786,45 @@
     let ultimoCepBuscado = '';
 
     function apenasDigitos(valor) {
-        return valor.replace(/\D/g, '');
+        return String(valor || '').replace(/\D/g, '');
+    }
+
+    function formatarCep(valor) {
+        const digitos = apenasDigitos(valor).slice(0, 8);
+
+        if (digitos.length > 5) {
+            return `${digitos.slice(0, 5)}-${digitos.slice(5)}`;
+        }
+
+        return digitos;
+    }
+
+    function formatarTelefone(valor) {
+        let digitos = apenasDigitos(valor);
+
+        if (digitos.length > 11 && digitos.startsWith('55')) {
+            digitos = digitos.slice(2);
+        }
+
+        digitos = digitos.slice(0, 11);
+
+        if (!digitos) {
+            return '';
+        }
+
+        if (digitos.length <= 2) {
+            return `(${digitos}`;
+        }
+
+        if (digitos.length <= 6) {
+            return `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
+        }
+
+        if (digitos.length <= 10) {
+            return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 6)}-${digitos.slice(6)}`;
+        }
+
+        return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7)}`;
     }
 
     function formatarMoeda(valor) {
@@ -1055,7 +1094,12 @@
     });
 
     formaEntrega.addEventListener('change', atualizarCamposEntrega);
+    telefoneCliente.addEventListener('input', () => {
+        telefoneCliente.value = formatarTelefone(telefoneCliente.value);
+    });
     cepEntrega.addEventListener('input', () => {
+        cepEntrega.value = formatarCep(cepEntrega.value);
+
         if (formaEntrega.value === 'Entrega') {
             resetarResumoFrete('CEP alterado. Clique em Calcular frete para atualizar o valor.');
 
