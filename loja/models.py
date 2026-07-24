@@ -57,6 +57,20 @@ class Produto(models.Model):
         verbose_name='Tabela de tamanhos'
     )
 
+    imagem_tamanho_feminino = models.ImageField(
+        upload_to='produtos/tamanhos/',
+        blank=True,
+        null=True,
+        verbose_name='Tabela de tamanhos feminino'
+    )
+
+    imagem_tamanho_masculino = models.ImageField(
+        upload_to='produtos/tamanhos/',
+        blank=True,
+        null=True,
+        verbose_name='Tabela de tamanhos masculino'
+    )
+
     @property
     def imagem_vitrine(self):
         if self.imagem:

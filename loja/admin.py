@@ -72,6 +72,8 @@ class ProdutoAdmin(admin.ModelAdmin):
             'fields': (
                 'imagem_logo',
                 'imagem_tamanho',
+                'imagem_tamanho_feminino',
+                'imagem_tamanho_masculino',
             )
         }),
     )

@@ -607,6 +607,54 @@
             margin: 16px 0;
         }
 
+        .tabelas-tamanho {
+            display: grid;
+            gap: 12px;
+            margin: 16px 0;
+            border-top: 1px solid #e7e8ea;
+            padding-top: 16px;
+        }
+
+        .tabelas-tamanho[hidden] {
+            display: none;
+        }
+
+        .tabelas-tamanho h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #111;
+        }
+
+        .tabela-tamanho-card {
+            border: 1px solid #e1e3e6;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f7f8f9;
+        }
+
+        .tabela-tamanho-card[hidden] {
+            display: none;
+        }
+
+        .tabela-tamanho-card span {
+            display: block;
+            padding: 10px 12px;
+            background: white;
+            color: #128a3c;
+            font-size: 13px;
+            font-weight: bold;
+            border-bottom: 1px solid #e7e8ea;
+        }
+
+        .tabela-tamanho-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 360px;
+            object-fit: contain;
+            background: white;
+        }
+
         .config-resumo .btn-whatsapp {
             width: 100%;
         }
@@ -1157,6 +1205,8 @@
                                    data-nome="{{ produto.nome }}"
                                    data-preco="{{ produto.preco }}"
                                    data-imagem="{% if imagem_produto %}{{ imagem_produto }}{% else %}https://via.placeholder.com/600x520?text=VestPolo{% endif %}"
+                                   data-tabela-feminino="{% if produto.imagem_tamanho_feminino %}{{ produto.imagem_tamanho_feminino.url }}{% endif %}"
+                                   data-tabela-masculino="{% if produto.imagem_tamanho_masculino %}{{ produto.imagem_tamanho_masculino.url }}{% endif %}"
                                    {% if forloop.first %}checked{% endif %}>
 
                             <span class="config-produto-conteudo">
@@ -1308,6 +1358,20 @@
 
             <div class="config-aviso">
                 Estimativa sujeita a confirma&ccedil;&atilde;o caso a arte tenha muitos detalhes ou precise de adapta&ccedil;&atilde;o para bordado.
+            </div>
+
+            <div class="tabelas-tamanho" id="configTabelasTamanho" hidden>
+                <h4>Tabelas de tamanho</h4>
+
+                <div class="tabela-tamanho-card" id="configTabelaFeminina" hidden>
+                    <span>Feminino</span>
+                    <img id="configTabelaFemininaImg" alt="Tabela de tamanho feminino">
+                </div>
+
+                <div class="tabela-tamanho-card" id="configTabelaMasculina" hidden>
+                    <span>Masculino</span>
+                    <img id="configTabelaMasculinaImg" alt="Tabela de tamanho masculino">
+                </div>
             </div>
 
             <a class="btn-whatsapp config-bloqueado"
@@ -1472,6 +1536,11 @@
         const subtotalUnidade = document.getElementById("configSubtotalUnidade");
         const totalResumo = document.getElementById("configTotal");
         const botaoWhatsapp = document.getElementById("configWhatsapp");
+        const tabelasTamanho = document.getElementById("configTabelasTamanho");
+        const tabelaFeminina = document.getElementById("configTabelaFeminina");
+        const tabelaMasculina = document.getElementById("configTabelaMasculina");
+        const tabelaFemininaImg = document.getElementById("configTabelaFemininaImg");
+        const tabelaMasculinaImg = document.getElementById("configTabelaMasculinaImg");
 
         function lerPreco(valor) {
             const texto = String(valor || "0").trim();
@@ -1531,6 +1600,39 @@
                 item.append(nome, preco);
                 resumoAdicionais.appendChild(item);
             });
+        }
+
+        function atualizarTabelasTamanho(produto) {
+            const imagemFeminina = produto.dataset.tabelaFeminino || "";
+            const imagemMasculina = produto.dataset.tabelaMasculino || "";
+
+            if (tabelaFemininaImg) {
+                if (imagemFeminina) {
+                    tabelaFemininaImg.src = imagemFeminina;
+                } else {
+                    tabelaFemininaImg.removeAttribute("src");
+                }
+            }
+
+            if (tabelaMasculinaImg) {
+                if (imagemMasculina) {
+                    tabelaMasculinaImg.src = imagemMasculina;
+                } else {
+                    tabelaMasculinaImg.removeAttribute("src");
+                }
+            }
+
+            if (tabelaFeminina) {
+                tabelaFeminina.hidden = !imagemFeminina;
+            }
+
+            if (tabelaMasculina) {
+                tabelaMasculina.hidden = !imagemMasculina;
+            }
+
+            if (tabelasTamanho) {
+                tabelasTamanho.hidden = !(imagemFeminina || imagemMasculina);
+            }
         }
 
         function montarMensagem(dados) {
@@ -1594,6 +1696,7 @@
 
             previewImg.src = produto.dataset.imagem || "https://via.placeholder.com/600x520?text=VestPolo";
             previewImg.alt = produtoNome;
+            atualizarTabelasTamanho(produto);
             resumoProduto.textContent = produtoNome;
             resumoTamanho.textContent = tamanho;
             resumoModelagem.textContent = modelagem;
